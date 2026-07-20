@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 plyegh
+Copyright (c) 2026 동준 팍
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,14 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+이 라이선스는 코드(index.html, style.css, script.js의 구조/로직)에만 적용됩니다.
+블로그에 게시된 글(POSTS 데이터의 title/summary/body)과 이미지는 별도이며,
+아래 "콘텐츠 라이선스"를 따릅니다.
+
+## 콘텐츠 라이선스
+
+별도 표기가 없는 한, 이 블로그의 글과 이미지의 저작권은 동준 팍에게 있으며
+무단 전재 및 재배포를 금합니다. 인용 시 출처(블로그 링크)를 표기해주세요.
