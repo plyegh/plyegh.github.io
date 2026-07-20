@@ -145,3 +145,21 @@ h1, h2, h3, h4 { font-family: var(--font-heading); }
   .main { border-left: none; padding-left: 0; border-top: 1px solid var(--color-divider); padding-top: 32px; }
   .site-header .inner { padding: 16px 20px; flex-wrap: wrap; }
 }
+
+/* ===== 관리자 모드 ===== */
+.admin-link { font-size: 11px; color: color-mix(in srgb, var(--color-text) 40%, transparent); text-decoration: none; margin-left: 12px; }
+.admin-link:hover { color: var(--color-accent); }
+.admin-panel { padding: 20px 0; }
+.form-grid { display: flex; flex-direction: column; gap: 10px; max-width: 720px; }
+.form-row { display: flex; gap: 10px; }
+.form-row > * { flex: 1; }
+.form-row > button { flex: none; }
+.input { background: var(--color-surface); border: 1px solid var(--color-divider); border-radius: var(--radius-md); color: var(--color-text); padding: 9px 12px; font-size: 14px; font-family: var(--font-body); }
+.input:focus { outline: none; border-color: var(--color-accent); }
+textarea.input { resize: vertical; line-height: 1.6; font-family: ui-monospace, monospace; font-size: 13px; }
+select.input { cursor: pointer; }
+.btn-danger:hover { border-color: #e5534b; color: #e5534b; }
+.admin-msg { font-size: 13.5px; color: var(--color-accent-700); background: var(--color-accent-100); border: 1px solid var(--color-accent-200); border-radius: var(--radius-md); padding: 10px 14px; margin: 12px 0 0; }
+.admin-row { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--color-divider); font-size: 14px; }
+.admin-row-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-row .btn { flex: none; }

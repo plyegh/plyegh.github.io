@@ -4,6 +4,7 @@ layout: null
 [
 {% for post in site.posts %}  {
     "id": {{ forloop.index }},
+    "path": {{ post.path | jsonify }},
     "date": {{ post.date | date: "%Y.%m.%d" | jsonify }},
     "cat": {{ post.cat | jsonify }},
     "tags": {{ post.tags | jsonify }},
