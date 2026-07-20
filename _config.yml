@@ -1,17 +1,54 @@
 title: 나만의 공부 블로그
+tagline: "My Blog"
 description: 클라우드와 보안을 공부하며, 배운 것을 기록합니다.
-url: https://plyegh.github.io
+url: "https://plyegh.github.io"
 baseurl: ""
+lang: ko
+author: 동준 팍
+
+# 프로필 (사이드바)
+profile:
+  bio: "클라우드와 보안을 공부하며, 배운 것을 조용히 기록합니다."
+  photo: /assets/profile.png   # assets/profile.png 에 사진을 넣어주세요
+  email: "your-email@example.com"          # 실제 이메일로 교체
+  github: "https://github.com/plyegh"
+  instagram: "https://instagram.com/"      # 실제 계정으로 교체
+
+# 글 URL / 페이지네이션 (YAT과 동일하게 jekyll-paginate 사용)
+permalink: /posts/:year/:month/:day/:title/
+paginate: 5
+paginate_path: "/page:num/"
 
 markdown: kramdown
 
-# 글(_posts)은 개별 페이지를 만들지 않고 posts.json 데이터로만 사용합니다
+plugins:
+  - jekyll-feed        # RSS 피드 (/feed.xml)
+  - jekyll-seo-tag     # SEO 메타 태그
+  - jekyll-sitemap     # 사이트맵 (/sitemap.xml)
+  - jekyll-paginate    # 홈 페이지네이션
+
+# utterances 댓글 (GitHub Issues 기반) — 켜려면 enabled: true 로 바꾸고
+# https://github.com/apps/utterances 앱을 저장소에 설치하세요
+utterances:
+  enabled: false
+  repo: "plyegh/plyegh.github.io"
+  issue_term: "title"
+  label: "comment"
+  theme: "github-dark"
+
+# Google Analytics — GA4 측정 ID(G-XXXX)를 넣으면 활성화됩니다
+google_analytics: ""
+
+# 수식(MathJax) / 다이어그램(Mermaid) — 글 페이지에서 지원
+math: true
+mermaid: true
+
 defaults:
   - scope:
       path: ""
       type: posts
     values:
-      layout: null
+      layout: post
 
 exclude:
   - README.md

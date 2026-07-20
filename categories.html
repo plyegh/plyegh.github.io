@@ -1,0 +1,28 @@
+---
+layout: default
+nav: categories
+permalink: /categories/
+title: Categories
+---
+<section>
+  <div class="section-title-row"><h2>Categories</h2></div>
+  {% for group in site.data.groups %}
+  <div class="archive-year">
+    <h3 class="archive-year-title">{{ group.name }}</h3>
+    {% for sub in group.subs %}
+    {% assign posts = site.categories[sub] %}
+    <h4 class="cat-sub-title" id="{{ sub | slugify }}">{{ sub }} <span class="text-muted archive-count">({{ posts | size }})</span></h4>
+    {% if posts %}
+      {% for post in posts %}
+      <div class="archive-row">
+        <span class="text-muted archive-date">{{ post.date | date: "%Y.%m.%d" }}</span>
+        <a href="{{ post.url | relative_url }}" class="archive-link">{{ post.title }}</a>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-muted" style="font-size:13px;padding:4px 0 8px;">아직 글이 없습니다.</p>
+    {% endif %}
+    {% endfor %}
+  </div>
+  {% endfor %}
+</section>

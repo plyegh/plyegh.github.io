@@ -1,0 +1,22 @@
+---
+layout: default
+nav: archives
+permalink: /archives/
+title: Archives
+---
+<section>
+  <div class="section-title-row"><h2>Archives</h2></div>
+  {% assign by_year = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
+  {% for year in by_year %}
+  <div class="archive-year">
+    <h3 class="archive-year-title">{{ year.name }} <span class="text-muted archive-count">({{ year.items | size }})</span></h3>
+    {% for post in year.items %}
+    <div class="archive-row">
+      <span class="text-muted archive-date">{{ post.date | date: "%m.%d" }}</span>
+      <a href="{{ post.url | relative_url }}" class="archive-link">{{ post.title }}</a>
+      <span class="tag">{{ post.categories | first }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</section>

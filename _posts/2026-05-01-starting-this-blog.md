@@ -1,6 +1,6 @@
 ---
 title: "이 블로그를 시작하며 — GitHub Pages 세팅 기록"
-cat: "Misc"
+categories: ["Misc"]
 tags: [Blog, GitHub Pages]
 summary: >
   저장소 생성부터 커스텀 도메인 연결까지, 블로그를 여는 데 필요한 최소 단계들.

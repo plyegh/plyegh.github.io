@@ -1,6 +1,6 @@
 ---
 title: "RAG 파이프라인 구성 요소 뜯어보기"
-cat: "LLM 구축"
+categories: ["LLM 구축"]
 tags: [RAG, Embedding, LLM]
 summary: >
   청킹 전략, 임베딩 모델 선택, 리랭커 유무가 검색 품질에 미치는 영향을 실험했다.

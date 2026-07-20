@@ -1,6 +1,6 @@
 ---
 title: "[워게임] 입력 검증 취약점 학습 노트"
-cat: "Web"
+categories: ["Web"]
 tags: [Web, Wargame, Secure Coding]
 summary: >
   연습용 워게임 환경에서 입력 검증이 왜 중요한지 확인하고, 파라미터 바인딩으로 안전하게 고치는 방법까지 정리했다.

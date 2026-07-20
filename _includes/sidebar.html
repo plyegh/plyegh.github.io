@@ -1,0 +1,23 @@
+<aside class="sidebar">
+  <img src="{{ site.profile.photo | relative_url }}" alt="profile" class="plate" onerror="this.style.display='none'">
+  <h3>{{ site.author }}</h3>
+  <p class="text-muted bio">{{ site.profile.bio }}</p>
+  <div class="contact-list">
+    <a href="mailto:{{ site.profile.email }}">{% include icon-mail.html %}Email</a>
+    <a href="{{ site.profile.github }}" target="_blank" rel="noopener">{% include icon-github.html %}GitHub</a>
+    <a href="{{ site.profile.instagram }}" target="_blank" rel="noopener">{% include icon-insta.html %}Instagram</a>
+  </div>
+  <hr class="hr" style="margin:20px 0;">
+  <p class="text-muted total-count">전체 글 {{ site.posts | size }} 개</p>
+  {% for group in site.data.groups %}
+  <div class="group-block">
+    <h4>{{ group.name }}</h4>
+    <div class="group-subs">
+      {% for sub in group.subs %}
+      {% assign cnt = site.categories[sub] | size %}
+      <a class="sub-link" href="{{ '/categories/' | relative_url }}#{{ sub | slugify }}">{{ sub }} ({{ cnt }})</a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</aside>

@@ -1,6 +1,6 @@
 ---
 title: "[CTF] 리버싱 입문 — 정적 분석 도구 익히기"
-cat: "Rev"
+categories: ["Rev"]
 tags: [Reversing, CTF, Assembly]
 summary: >
   연습 문제 바이너리를 Ghidra로 열어 함수 흐름을 따라가며, 디컴파일 결과를 읽는 요령을 정리했다.

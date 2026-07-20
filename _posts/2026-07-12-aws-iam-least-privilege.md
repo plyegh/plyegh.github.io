@@ -1,6 +1,6 @@
 ---
 title: "AWS IAM 최소 권한 정책 설계 정리"
-cat: "클라우드 보안"
+categories: ["클라우드 보안"]
 tags: [AWS, IAM, Cloud Security]
 summary: >
   와일드카드 권한을 걷어내고 리소스 단위로 정책을 좁혀가는 과정과, Access Analyzer로 검증한 결과를 정리했다.

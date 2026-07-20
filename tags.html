@@ -1,0 +1,26 @@
+---
+layout: default
+nav: tags
+permalink: /tags/
+title: Tags
+---
+<section>
+  <div class="section-title-row"><h2>Tags</h2></div>
+  <div class="tag-cloud">
+    {% assign sorted_tags = site.tags | sort %}
+    {% for tag in sorted_tags %}
+    <a class="tag" href="#{{ tag[0] | slugify }}">{{ tag[0] }} ({{ tag[1] | size }})</a>
+    {% endfor %}
+  </div>
+  {% for tag in sorted_tags %}
+  <div class="archive-year">
+    <h4 class="cat-sub-title" id="{{ tag[0] | slugify }}">#{{ tag[0] }}</h4>
+    {% for post in tag[1] %}
+    <div class="archive-row">
+      <span class="text-muted archive-date">{{ post.date | date: "%Y.%m.%d" }}</span>
+      <a href="{{ post.url | relative_url }}" class="archive-link">{{ post.title }}</a>
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</section>

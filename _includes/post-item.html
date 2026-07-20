@@ -1,0 +1,8 @@
+<article class="post-item">
+  <p class="text-muted post-meta">{% include icon-calendar.html %}{{ include.post.date | date: "%Y.%m.%d" }} · {{ include.post.categories | first }}</p>
+  <h3><a href="{{ include.post.url | relative_url }}">{{ include.post.title }}</a></h3>
+  <p class="post-summary">{{ include.post.summary }}</p>
+  <div class="tag-row">
+    {% for t in include.post.tags %}<span class="tag">{{ t }}</span>{% endfor %}
+  </div>
+</article>

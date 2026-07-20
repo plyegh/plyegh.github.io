@@ -1,0 +1,43 @@
+---
+layout: default
+---
+<article>
+  <a href="{{ '/' | relative_url }}" class="back-link">← 목록으로</a>
+  <p class="text-muted post-detail-meta">{{ page.date | date: "%Y.%m.%d" }} · {{ page.categories | first }}</p>
+  <h1 class="post-title">{{ page.title }}</h1>
+  <div class="post-tag-row">
+    {% for t in page.tags %}<a class="tag" href="{{ '/tags/' | relative_url }}#{{ t | slugify }}">{{ t }}</a>{% endfor %}
+  </div>
+  <div class="post-body">
+    {{ content }}
+  </div>
+  <hr class="hr" style="margin:40px 0 20px;">
+  <a href="{{ '/' | relative_url }}" class="btn-secondary">← 목록으로 돌아가기</a>
+  {% if site.utterances.enabled %}
+  <div class="comments-box">
+    <script src="https://utteranc.es/client.js"
+      repo="{{ site.utterances.repo }}"
+      issue-term="{{ site.utterances.issue_term }}"
+      label="{{ site.utterances.label }}"
+      theme="{{ site.utterances.theme }}"
+      crossorigin="anonymous" async></script>
+  </div>
+  {% endif %}
+</article>
+{% if site.math %}
+<script>
+  window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+{% endif %}
+{% if site.mermaid %}
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  document.querySelectorAll('pre code.language-mermaid, div.language-mermaid pre code').forEach(el => {
+    const pre = el.closest('pre'); const wrap = el.closest('div[class*="language-mermaid"]') || pre;
+    const d = document.createElement('pre'); d.className = 'mermaid'; d.textContent = el.textContent;
+    wrap.replaceWith(d);
+  });
+  mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+</script>
+{% endif %}

@@ -1,6 +1,6 @@
 ---
 title: "GCP IAM은 AWS와 무엇이 다른가"
-cat: "GCP"
+categories: ["GCP"]
 tags: [GCP, IAM, Cloud]
 summary: >
   리소스 계층 구조와 역할 상속 개념을 AWS와 비교하며 정리한 노트.

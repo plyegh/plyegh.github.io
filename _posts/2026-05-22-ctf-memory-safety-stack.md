@@ -1,6 +1,6 @@
 ---
 title: "[CTF] 메모리 안전성 기초 — 스택 구조 이해하기"
-cat: "Pwn"
+categories: ["Pwn"]
 tags: [Pwnable, CTF, Memory Safety]
 summary: >
   포너블 입문 전에 반드시 알아야 할 스택 프레임 구조와, 컴파일러 보호 기법들을 정리했다.

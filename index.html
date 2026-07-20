@@ -1,18 +1,31 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>나만의 공부 블로그 : My Blog</title>
-<meta name="description" content="클라우드와 보안을 공부하며 배운 것을 기록하는 블로그">
-<meta name="color-scheme" content="dark">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700&family=Noto+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div id="app"></div>
-<script src="script.js"></script>
-</body>
-</html>
+---
+layout: default
+nav: home
+---
+<section>
+  <div class="section-title-row"><h2>Recent Posts</h2></div>
+  {% for post in paginator.posts %}
+    {% include post-item.html post=post %}
+  {% endfor %}
+  <nav class="pagination">
+    {% if paginator.previous_page %}
+      <a class="btn btn-ghost" href="{{ paginator.previous_page_path | relative_url }}">이전</a>
+    {% else %}
+      <span class="btn btn-ghost btn-disabled">이전</span>
+    {% endif %}
+    {% for i in (1..paginator.total_pages) %}
+      {% if i == paginator.page %}
+        <span class="btn page-btn active">{{ i }}</span>
+      {% elsif i == 1 %}
+        <a class="btn page-btn" href="{{ '/' | relative_url }}">1</a>
+      {% else %}
+        <a class="btn page-btn" href="{{ site.paginate_path | relative_url | replace: ':num', i }}">{{ i }}</a>
+      {% endif %}
+    {% endfor %}
+    {% if paginator.next_page %}
+      <a class="btn btn-ghost" href="{{ paginator.next_page_path | relative_url }}">다음</a>
+    {% else %}
+      <span class="btn btn-ghost btn-disabled">다음</span>
+    {% endif %}
+  </nav>
+</section>

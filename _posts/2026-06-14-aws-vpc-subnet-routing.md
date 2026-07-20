@@ -1,6 +1,6 @@
 ---
 title: "VPC 설계 기본기 — 서브넷과 라우팅 테이블"
-cat: "AWS"
+categories: ["AWS"]
 tags: [AWS, VPC, Network]
 summary: >
   퍼블릭/프라이빗 서브넷을 나누는 기준과, NAT 게이트웨이 비용을 아끼는 구성 두 가지를 비교했다.

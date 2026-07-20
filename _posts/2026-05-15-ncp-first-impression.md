@@ -1,6 +1,6 @@
 ---
 title: "네이버 클라우드 첫인상 — VPC와 서버 생성까지"
-cat: "NCP"
+categories: ["NCP"]
 tags: [NCP, Cloud, Korea]
 summary: >
   국내 공공·금융 프로젝트에서 자주 만나는 NCP의 기본 리소스 구성을 따라해 본 기록.

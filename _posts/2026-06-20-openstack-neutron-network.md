@@ -1,6 +1,6 @@
 ---
 title: "Openstack Neutron 네트워크 구조 한 장 정리"
-cat: "Openstack"
+categories: ["Openstack"]
 tags: [Openstack, Neutron, Network]
 summary: >
   ML2 플러그인, OVS 브리지, 네임스페이스가 패킷을 어떻게 흘려보내는지 흐름 중심으로 정리했다.

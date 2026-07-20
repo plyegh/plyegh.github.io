@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+{% seo %}
+{% feed_meta %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700&family=Noto+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+{% if site.google_analytics != "" %}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{ site.google_analytics }}');
+</script>
+{% endif %}
+</head>
+<body>
+<div id="app">
+  <header class="site-header">
+    <div class="inner wrap">
+      <a href="{{ '/' | relative_url }}" class="brand">나만의 공부 블로그 <em>: My Blog</em></a>
+      <nav class="site-nav">
+        <a href="{{ '/' | relative_url }}" class="nav-link {% if page.nav == 'home' %}active{% endif %}">Posts</a>
+        <a href="{{ '/archives/' | relative_url }}" class="nav-link {% if page.nav == 'archives' %}active{% endif %}">Archives</a>
+        <a href="{{ '/categories/' | relative_url }}" class="nav-link {% if page.nav == 'categories' %}active{% endif %}">Categories</a>
+        <a href="{{ '/tags/' | relative_url }}" class="nav-link {% if page.nav == 'tags' %}active{% endif %}">Tags</a>
+        <a href="{{ '/about/' | relative_url }}" class="nav-link {% if page.nav == 'about' %}active{% endif %}">About</a>
+      </nav>
+    </div>
+  </header>
+  <div class="layout wrap">
+    {% include sidebar.html %}
+    <main class="main">
+{{ content }}
+    </main>
+  </div>
+  <footer class="site-footer">
+    <p class="text-muted">© 2026 {{ site.author }} · {{ site.title }}
+      <a href="{{ '/feed.xml' | relative_url }}" class="admin-link">RSS</a>
+      <a href="{{ '/admin/' | relative_url }}" class="admin-link">관리</a>
+    </p>
+  </footer>
+</div>
+</body>
+</html>

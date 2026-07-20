@@ -1,0 +1,8 @@
+# 사이드바/카테고리 페이지의 그룹 구조.
+# 글의 categories 값은 아래 subs 중 하나와 정확히 일치해야 합니다.
+- name: 클라우드
+  subs: ["클라우드 보안", "Openstack", "AWS", "NCP", "GCP"]
+- name: AI & Sec
+  subs: ["LLM 구축", "OWASP AI"]
+- name: Hacking
+  subs: ["Web", "Rev", "Pwn", "Misc"]

@@ -1,6 +1,6 @@
 ---
 title: "OWASP LLM Top 10 훑어보기 — LLM01 방어 정리"
-cat: "OWASP AI"
+categories: ["OWASP AI"]
 tags: [OWASP, LLM, AI Security]
 summary: >
   프롬프트 인젝션 항목을 중심으로, RAG 서비스에 적용할 수 있는 계층별 방어 체크리스트를 만들었다.

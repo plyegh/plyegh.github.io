@@ -1,6 +1,6 @@
 ---
 title: "로컬 LLM 서빙 환경 구축 기록 (vLLM)"
-cat: "LLM 구축"
+categories: ["LLM 구축"]
 tags: [LLM, vLLM, Infra]
 summary: >
   단일 GPU 서버에 vLLM을 올리고, OpenAI 호환 API로 사내 도구에 연결하기까지의 시행착오.
