@@ -1,0 +1,35 @@
+# Sveltia CMS 설정 — Chirpy 블로그(_posts)에 맞춰짐
+# 로그인은 PAT 방식이라 여기에 토큰/OAuth 설정을 넣지 않습니다.
+
+backend:
+  name: github
+  repo: plyegh/plyegh.github.io   # <소유자>/<레포>
+  branch: main
+
+# 에디터에서 올린 이미지 저장 위치
+media_folder: "assets/img/posts"    # 실제 커밋되는 폴더
+public_folder: "/assets/img/posts"  # 글 안에서 참조되는 경로
+
+collections:
+  - name: "posts"
+    label: "게시글"
+    label_singular: "게시글"
+    folder: "_posts"
+    create: true
+    # Chirpy 파일명 규칙: YYYY-MM-DD-제목.md
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "제목", name: "title", widget: "string" }
+      # Chirpy는 타임존이 붙은 날짜를 씀 (예: 2026-09-17 21:00:00 +0900)
+      - {
+          label: "작성일",
+          name: "date",
+          widget: "datetime",
+          format: "YYYY-MM-DD HH:mm:ss Z",
+        }
+      # 자유 입력 리스트. 고정 목록으로 바꾸려면 사용법 md의 4번 참고.
+      - { label: "카테고리", name: "categories", widget: "list", required: false }
+      - { label: "태그", name: "tags", widget: "list", required: false }
+      - { label: "상단 고정", name: "pin", widget: "boolean", required: false, default: false }
+      - { label: "요약 설명", name: "description", widget: "string", required: false }
+      - { label: "본문", name: "body", widget: "markdown" }
