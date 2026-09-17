@@ -3,12 +3,12 @@
 
 backend:
   name: github
-  repo: plyegh/plyegh.github.io   # <소유자>/<레포>
+  repo: plyegh/plyegh.github.io # <소유자>/<레포>
   branch: main
 
 # 에디터에서 올린 이미지 저장 위치
-media_folder: "assets/img/posts"    # 실제 커밋되는 폴더
-public_folder: "/assets/img/posts"  # 글 안에서 참조되는 경로
+media_folder: "assets/img/posts" # 실제 커밋되는 폴더
+public_folder: "/assets/img/posts" # 글 안에서 참조되는 경로
 
 collections:
   - name: "posts"
@@ -28,8 +28,63 @@ collections:
           format: "YYYY-MM-DD HH:mm:ss Z",
         }
       # 자유 입력 리스트. 고정 목록으로 바꾸려면 사용법 md의 4번 참고.
-      - { label: "카테고리", name: "categories", widget: "list", required: false }
+      - {
+          label: "카테고리",
+          name: "categories",
+          widget: "list",
+          required: false,
+        }
       - { label: "태그", name: "tags", widget: "list", required: false }
-      - { label: "상단 고정", name: "pin", widget: "boolean", required: false, default: false }
-      - { label: "요약 설명", name: "description", widget: "string", required: false }
+      - {
+          label: "상단 고정",
+          name: "pin",
+          widget: "boolean",
+          required: false,
+          default: false,
+        }
+      - {
+          label: "요약 설명",
+          name: "description",
+          widget: "string",
+          required: false,
+        }
       - { label: "본문", name: "body", widget: "markdown" }
+
+comments:
+  provider: giscus
+  giscus:
+    repo: plyegh/plyegh.github.io
+    repo_id: <script src="https://giscus.app/client.js"
+      data-repo="plyegh/plyegh.github.io"
+      data-repo-id="R_kgDOTj67Qg"
+      data-category="Announcements"
+      data-category-id="DIC_kwDOTj67Qs4DFyL6"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="preferred_color_scheme"
+      data-lang="ko"
+      crossorigin="anonymous"
+      async></script>
+    category: Announcements
+    category_id: <script src="https://giscus.app/client.js"
+      data-repo="plyegh/plyegh.github.io"
+      data-repo-id="R_kgDOTj67Qg"
+      data-category="Announcements"
+      data-category-id="DIC_kwDOTj67Qs4DFyL6"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="preferred_color_scheme"
+      data-lang="ko"
+      crossorigin="anonymous"
+      async></script>
+    mapping: pathname
+    strict: 0
+    input_position: bottom
+    lang: ko
+    reactions_enabled: 1
