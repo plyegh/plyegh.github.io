@@ -14,7 +14,7 @@ timezone:
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: plyegh study room # the main title
+title: plyegh # the main title
 
 tagline: A text-focused Jekyll theme # it will display as the subtitle
 
@@ -32,18 +32,13 @@ twitter:
   username: twitter_username # change to your Twitter username
 
 social:
-  # Change to your full name.
-  # It will be displayed as the default author of the posts and the copyright owner in the Footer
   name: plyegh
-  email: bdongjun343@gmail.com # change to your email address
-  fediverse_handle: # fill in your fediverse handle. E.g. "@username@domain.com"
+  email: bdongjun343@gmail.com
+  fediverse_handle:
   links:
-    # The first element serves as the copyright owner's link
-    - https://twitter.com/username # change to your Twitter homepage
-    - https://github.com/username # change to your GitHub homepage
-    # Uncomment below to add more social links
-    # - https://www.facebook.com/username
-    # - https://www.linkedin.com/in/username
+    - https://github.com/plyegh
+    - https://www.instagram.com/d_zun0210/
+    - https://www.linkedin.com/in/%EC%A4%80-%EB%B0%95%EB%8F%99-648450432
 
 # Site Verification Settings
 webmaster_verifications:
@@ -99,7 +94,7 @@ theme_mode: # [light | dark]
 cdn:
 
 # the avatar on sidebar, support local or CORS resources
-avatar:
+avatar: /assets/img/avatar.png
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.
