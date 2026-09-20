@@ -1,14 +1,23 @@
 #  The contact options.
 
-- type: github
-  icon: "fab fa-github"
-
-- type: twitter
-  icon: "fa-brands fa-x-twitter"
+- type: google
+  icon: "fab fa-google"
+  url: "mailto:bdongjun343@gmail.com"
 
 - type: email
   icon: "fas fa-envelope"
-  noblank: true # open link in current tab
+  noblank: true
+
+- type: github
+  icon: "fab fa-github"
+
+- type: instagram
+  icon: "fab fa-instagram"
+  url: "https://www.instagram.com/d_zun0210/"
+
+- type: linkedin
+  icon: "fab fa-linkedin"
+  url: "https://www.linkedin.com/in/%EC%A4%80-%EB%B0%95%EB%8F%99-648450432"
 
 - type: rss
   icon: "fas fa-rss"
