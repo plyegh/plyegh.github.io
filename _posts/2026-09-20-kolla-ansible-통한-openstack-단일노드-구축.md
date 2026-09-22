@@ -15,10 +15,8 @@ pin: false
 description: 본 실습과정은 VMware에서 진행합니다.
 ---
 
-````plain
+````markdown
 # 단일노드 Kolla 구축
-
-
 1. https://docs.openstack.org/kolla-ansible/latest/user/quickstart.html?utm_source=chatgpt.com
 2. https://github.com/openstack/kolla-ansible?utm_source=chatgpt.com
 
@@ -177,12 +175,12 @@ network:
   ethernets:
     ens33:
       addresses:
-                - 10.0.0.11/24     #고정 ip
+                                - 10.0.0.11/24     #고정 ip
       nameservers:
         addresses:
-                    - 8.8.8.8
+                                        - 8.8.8.8
       routes:
-                - to: default
+                                - to: default
           via: 10.0.0.2
 
 
@@ -903,10 +901,10 @@ OpenStack Glance에 이미지 등록:
 
 ```bash
 openstack image create "cirros-0.6.3" \
-    --file /tmp/cirros-0.6.3-x86_64-disk.img \
-    --disk-format qcow2 \
-    --container-format bare \
-    --public
+        --file /tmp/cirros-0.6.3-x86_64-disk.img \
+        --disk-format qcow2 \
+        --container-format bare \
+        --public
 ```
 
 
@@ -931,14 +929,14 @@ cirros-0.6.3 이미지가 보이고 status가 active
 
 ```bash
 openstack image show cirros-0.6.3 \
-    -c id \
-    -c name \
-    -c status \
-    -c visibility \
-    -c protected \
-    -c disk_format \
-    -c container_format \
-    -c size
+        -c id \
+        -c name \
+        -c status \
+        -c visibility \
+        -c protected \
+        -c disk_format \
+        -c container_format \
+        -c size
 ```
 
 
@@ -1343,10 +1341,10 @@ Provider Network를 생성한다.
 
 ```bash
 openstack network create \
-    --external \
-    --share \
-    --provider-network-type flat \
-    --provider-physical-network physnet1 \
+        --external \
+        --share \
+        --provider-network-type flat \
+        --provider-physical-network physnet1 \
   provider
 ```
 
@@ -1382,10 +1380,10 @@ Provider Network의 Subnet을 생성한다.
 
 ```bash
 openstack subnet create --network provider \
-    --allocation-pool start=192.168.2.200,end=192.168.2.250 \
-    --dns-nameserver 8.8.4.4 \
-    --gateway 192.168.2.1 \
-    --subnet-range 192.168.2.0/24 \
+        --allocation-pool start=192.168.2.200,end=192.168.2.250 \
+        --dns-nameserver 8.8.4.4 \
+        --gateway 192.168.2.1 \
+        --subnet-range 192.168.2.0/24 \
   provider
 ```
 
@@ -1437,9 +1435,9 @@ Self-Service Subnet을 생성한다.
 
 ```bash
 openstack subnet create --network selfservice \
-    --dns-nameserver 8.8.4.4 \
-    --gateway 172.16.1.1 \
-    --subnet-range 172.16.1.0/24 \
+        --dns-nameserver 8.8.4.4 \
+        --gateway 172.16.1.1 \
+        --subnet-range 172.16.1.0/24 \
   selfservice
 ```
 
@@ -1583,10 +1581,10 @@ ICMP 허용:
 
 ```bash
 openstack security group rule create default \
-    --ingress \
-    --ethertype IPv4 \
-    --protocol icmp \
-    --remote-ip 0.0.0.0/0
+        --ingress \
+        --ethertype IPv4 \
+        --protocol icmp \
+        --remote-ip 0.0.0.0/0
 ```
 
 
@@ -1595,11 +1593,11 @@ SSH 허용:
 
 ```bash
 openstack security group rule create default \
-    --ingress \
-    --ethertype IPv4 \
-    --protocol tcp \
-    --dst-port 22 \
-    --remote-ip 0.0.0.0/0
+        --ingress \
+        --ethertype IPv4 \
+        --protocol tcp \
+        --dst-port 22 \
+        --remote-ip 0.0.0.0/0
 ```
 
 
@@ -1648,10 +1646,10 @@ https://download.cirros-cloud.net/0.6.3/cirros-0.6.3-x86_64-disk.img
 
 ```bash
 openstack image create "cirros-0.6.3" \
-    --file /tmp/cirros-0.6.3-x86_64-disk.img \
-    --disk-format qcow2 \
-    --container-format bare \
-    --public
+        --file /tmp/cirros-0.6.3-x86_64-disk.img \
+        --disk-format qcow2 \
+        --container-format bare \
+        --public
 ```
 
 
@@ -1697,10 +1695,10 @@ Self-Service Network에 CirrOS 인스턴스를 생성한다.
 
 ```bash
 openstack server create cirros-test \
-    --image cirros-0.6.3 \
-    --flavor m1.tiny \
-    --network selfservice \
-    --security-group default
+        --image cirros-0.6.3 \
+        --flavor m1.tiny \
+        --network selfservice \
+        --security-group default
 ```
 
 
