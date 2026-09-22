@@ -17,8 +17,6 @@ description: 본 실습과정은 VMware에서 진행합니다.
 
 ## 구축이전 학습자료들
 
-<aside>
-
 1. Ansible 이해
 
 - [https://cwpack0730.tistory.com/6](https://cwpack0730.tistory.com/6)
@@ -30,13 +28,9 @@ description: 본 실습과정은 VMware에서 진행합니다.
 2. Docker 이해
 ⇒ [https://docs.docker.com/](https://docs.docker.com/)
 
-</aside>
-
 ***
 
 ## 호스트 시스템 요구 사항
-
-<aside>
 
 지원 운영 체제
 
@@ -44,28 +38,22 @@ description: 본 실습과정은 VMware에서 진행합니다.
 - 데비안 트릭시(13)
 - 록키 리눅스 10
 - 우분투 노블(24.04)
-</aside>
 
 ***
 
 ## 실습 VMware 설정 내용
-
-<aside>
 
 - 2개의 네트워크 인터페이스 (NIC)
 - 8GB 메인 메모리
 - 6 CPU core 할당
 → Virtualize Intel VT-x/EPT or AMD-V/RVI 설정 완료 해야함.
 - 100GB 디스크 공간
-</aside>
 
 ***
 
 —> 본 실습은 VMware로 진행됨을 알아주세요.
 
 —> SSH 못하는 사람 없을거라 믿습니다. ssh 못하면 복붙 안됨&&&&&&
-
-<aside>
 
 # Kolla-Ansible 기반 단일 노드 실습
 
@@ -527,7 +515,7 @@ ls -l /etc/kolla/admin-openrc.sh
 ## 2-6. OpenStack CLI 설치
 
 ```plain
-pip install python-openstackclient -c <https://releases.openstack.org/constraints/upper/master>
+pip install python-openstackclient -c https://releases.openstack.org/constraints/upper/master
 ```
 
 ***
@@ -591,13 +579,13 @@ Neutron agent가 Alive :-) / UP
 브라우저에서 접속:
 
 ```plain
-<http://10.0.0.50>
+http://10.0.0.50
 ```
 
 또는 다음 주소로 직접 접근:
 
 ```plain
-<http://10.0.0.50/auth/login/>
+http://10.0.0.50/auth/login/
 ```
 
 admin 비밀번호 확인:
@@ -614,7 +602,7 @@ User: admin
 Password: OS_PASSWORD 값
 ```
 
-`curl -I <http://10.0.0.50`> 결과가 `302 Found`이면 Horizon은 정상 응답 중이다.
+`curl -I http://10.0.0.50` 결과가 `302 Found`이면 Horizon은 정상 응답 중이다.
 
 ***
 
@@ -674,7 +662,7 @@ openstack service list
 cd /tmp
 
 wget -O cirros-0.6.3-x86_64-disk.img \
-<https://download.cirros-cloud.net/0.6.3/cirros-0.6.3-x86_64-disk.img>
+https://download.cirros-cloud.net/0.6.3/cirros-0.6.3-x86_64-disk.img
 ```
 
 주의사항:
@@ -687,7 +675,7 @@ wget 명령어에서 \ 뒤에 공백을 넣으면 안 된다.
 위에 실패 했다면 한 줄 버전 사용:
 
 ```plain
-wget -O /tmp/cirros-0.6.3-x86_64-disk.img <https://download.cirros-cloud.net/0.6.3/cirros-0.6.3-x86_64-disk.img>
+wget -O /tmp/cirros-0.6.3-x86_64-disk.img https://download.cirros-cloud.net/0.6.3/cirros-0.6.3-x86_64-disk.img
 ```
 
 OpenStack Glance에 이미지 등록:
@@ -766,7 +754,7 @@ floating ip
 OpenStack 배포 후 Horizon 접속은 아래 주소로 확인한다.
 
 ```plain
-<http://10.0.0.50>
+http://10.0.0.50
 ```
 
 접속이 안 되는 경우 Ubuntu VM 내부에서 VIP와 Horizon 상태를 확인한다.
@@ -774,10 +762,10 @@ OpenStack 배포 후 Horizon 접속은 아래 주소로 확인한다.
 ```plain
 ip -br a | egrep 'ens33|ens37'
 ping -c 3 10.0.0.50
-curl -I <http://10.0.0.50>
+curl -I http://10.0.0.50
 ```
 
-`curl -I <http://10.0.0.50`> 결과가 `302 Found` 또는 로그인 페이지로 리다이렉트되면 Horizon은 정상적으로 살아 있는 것이다.
+`curl -I http://10.0.0.50` 결과가 `302 Found` 또는 로그인 페이지로 리다이렉트되면 Horizon은 정상적으로 살아 있는 것이다.
 
 admin pw확인은 다음과 같다.
 
@@ -882,7 +870,7 @@ echo $OS_AUTH_URL
 정상 예시는 다음과 같다.
 
 ```plain
-<http://10.0.0.50:5000>
+http://10.0.0.50:5000
 ```
 
 ***
@@ -1266,7 +1254,7 @@ openstack image list
 cd /tmp
 
 wget -O cirros-0.6.3-x86_64-disk.img \
-<https://download.cirros-cloud.net/0.6.3/cirros-0.6.3-x86_64-disk.img>
+https://download.cirros-cloud.net/0.6.3/cirros-0.6.3-x86_64-disk.img
 ```
 
 ```plain
@@ -1576,5 +1564,3 @@ Floating IP 연결 유지
 ```
 
 ***
-
-</aside>
