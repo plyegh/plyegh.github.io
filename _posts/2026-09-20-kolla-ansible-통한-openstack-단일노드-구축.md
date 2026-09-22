@@ -20,14 +20,15 @@ description: 본 실습과정은 VMware에서 진행합니다.
 <aside>
 
 1. Ansible 이해
+
 - [https://cwpack0730.tistory.com/6](https://cwpack0730.tistory.com/6)
 - [https://docs.openstack.org/kolla-ansible/latest/index.html](https://docs.openstack.org/kolla-ansible/latest/index.html)
 - [https://tech.osci.kr/kolla-ansible/](https://tech.osci.kr/kolla-ansible/)
 - [https://docs.openstack.org/kolla-ansible/latest/user/quickstart.html?utm_source=chatgpt.com](https://docs.openstack.org/kolla-ansible/latest/user/quickstart.html?utm_source=chatgpt.com)
 - [https://github.com/openstack/kolla-ansible?utm_source=chatgpt.com](https://github.com/openstack/kolla-ansible?utm_source=chatgpt.com)
+
 2. Docker 이해
 ⇒ [https://docs.docker.com/](https://docs.docker.com/)
-
 
 </aside>
 
@@ -97,7 +98,6 @@ cd ~
 #패키지 업데이트 및 업그레이드
 apt update | apt upgrade -y
 apt install net-tools
-
 ```
 
 ***
@@ -118,14 +118,12 @@ ens37
 → Neutron external interface 외부망
 → br-ex에 연결되는 외부망 포트
 → IP 없어야 함
-
 ```
 
 Netplan 설정 파일 수정:
 
 ```plain
 vi /etc/netplan/50-cloud-init.yaml
-
 ```
 
 예시 설정:
@@ -153,21 +151,18 @@ network:
       
 #환경 돌아오기 -> esc
 #저장 및 나가기 -> :wq
-
 ```
 
 적용:
 
 ```plain
 netplan apply
-
 ```
 
 확인:
 
 ```plain
 ip -br a
-
 ```
 
 정상 기준:
@@ -175,7 +170,6 @@ ip -br a
 ```plain
 ens33      UP     10.0.0.11/24       #뒤에 IPv6는 무시
 ens37      UP                        #뒤에 IPv6는 무시
-
 ```
 
 ***
@@ -184,7 +178,6 @@ ens37      UP                        #뒤에 IPv6는 무시
 
 ```plain
 apt install -y git python3-dev libffi-dev gcc libssl-dev libdbus-glib-1-dev python3-venv
-
 ```
 
 ***
@@ -194,21 +187,18 @@ apt install -y git python3-dev libffi-dev gcc libssl-dev libdbus-glib-1-dev pyth
 ```plain
 python3 -m venv ~/kolla-venv
 source ~/kolla-venv/bin/activate
-
 ```
 
 pip 업데이트:
 
 ```plain
 pip install -U pip
-
 ```
 
 Docker Python SDK 설치:
 
 ```plain
 pip install docker
-
 ```
 
 dbus 관련 의존성 설치:
@@ -216,7 +206,6 @@ dbus 관련 의존성 설치:
 ```plain
 apt install -y libdbus-1-dev libglib2.0-dev pkg-config build-essential
 pip install dbus-python
-
 ```
 
 ***
@@ -227,14 +216,12 @@ OpenStack 공식 Quick Start 방식에 맞춰 Kolla-Ansible을 설치한다.
 
 ```plain
 pip install git+https://opendev.org/openstack/kolla-ansible@master
-
 ```
 
 버전 확인:
 
 ```plain
 kolla-ansible --version   #오류 없이 버전 뜨면 성공
-
 ```
 
 ***
@@ -244,21 +231,18 @@ kolla-ansible --version   #오류 없이 버전 뜨면 성공
 ```plain
 mkdir -p /etc/kolla
 chown $USER:$USER /etc/kolla
-
 ```
 
 Kolla 예제 설정 파일 복사:
 
 ```plain
 cp -r ~/kolla-venv/share/kolla-ansible/etc_examples/kolla/* /etc/kolla/
-
 ```
 
 All-in-One 인벤토리 파일 복사:
 
 ```plain
 cp ~/kolla-venv/share/kolla-ansible/ansible/inventory/all-in-one ~/
-
 ```
 
 확인:
@@ -266,7 +250,6 @@ cp ~/kolla-venv/share/kolla-ansible/ansible/inventory/all-in-one ~/
 ```plain
 ls -al /etc/kolla
 ls -al ~/all-in-one
-
 ```
 
 `/etc/kolla` 안에는 최소한 다음 파일이 있어야 한다.
@@ -274,7 +257,6 @@ ls -al ~/all-in-one
 ```plain
 globals.yml
 passwords.yml
-
 ```
 
 ***
@@ -283,7 +265,6 @@ passwords.yml
 
 ```plain
 kolla-ansible install-deps
-
 ```
 
 ***
@@ -293,7 +274,6 @@ kolla-ansible install-deps
 ```plain
 egrep -c '(vmx|svm)' /proc/cpuinfo
 ls -l /dev/kvm
-
 ```
 
 판단 기준:
@@ -306,7 +286,6 @@ egrep 결과가 1 이상이고 /dev/kvm 존재
 egrep 결과가 0이거나 /dev/kvm 없음
 → KVM 사용 불가
 → nova_compute_virt_type: "qemu"
-
 ```
 
 이번 실습에서는 KVM 사용을 목표로 하므로, VMware 설정에서 다음 항목이 필요하다.
@@ -317,7 +296,6 @@ Virtualize Intel VT-x/EPT or AMD-V/RVI
 
 Virtualize CPU performance counters
 → 체크 해제 권장
-
 ```
 
 Windows에서 Hyper-V, VBS, Memory Integrity가 켜져 있으면 nested virtualization이 막힐 수 있다.
@@ -328,7 +306,6 @@ Windows에서 Hyper-V, VBS, Memory Integrity가 켜져 있으면 nested virtuali
 
 ```plain
 kolla-genpwd
-
 ```
 
 경고 메시지(= WARNING)가 떠도 비밀번호 파일이 생성되면 정상이다.
@@ -337,7 +314,6 @@ kolla-genpwd
 
 ```plain
 ls -l /etc/kolla/passwords.yml
-
 ```
 
 ***
@@ -346,7 +322,6 @@ ls -l /etc/kolla/passwords.yml
 
 ```plain
 vi /etc/kolla/globals.yml
-
 ```
 
 파일 아래쪽에 다음 내용을 추가한다.
@@ -368,7 +343,6 @@ enable_cinder: "no"
 nova_compute_virt_type: "kvm"
 
 # 저장 :wq
-
 ```
 
 주의사항:
@@ -377,7 +351,6 @@ nova_compute_virt_type: "kvm"
 globals.yml 안에 --- 구분자가 여러 개 생기면 YAML 오류가 날 수 있음.
 기존 예제 파일 구조를 유지한 채, 설정값만 하단에 추가하는 것이 안전하다.
 즉, 주석을 지우고 하라는 의미
-
 ```
 
 YAML 문법 확인:
@@ -386,7 +359,6 @@ YAML 문법 확인:
 python3 -c 'import yaml; yaml.safe_load(open("/etc/kolla/globals.yml")); print("YAML OK")'
 
 #YAML Ok 라고 뜨면 성공
-
 ```
 
 ***
@@ -397,14 +369,12 @@ Bootstrap
 
 ```plain
 kolla-ansible bootstrap-servers -i ./all-in-one
-
 ```
 
 Prechecks 실행:
 
 ```plain
 kolla-ansible prechecks -i ./all-in-one --use-test-images
-
 ```
 
 `failed=0`이면 정상이다.
@@ -435,7 +405,6 @@ kolla-ansible prechecks -i ./all-in-one --use-test-images
 ```plain
 apt install -y tmux
 tmux new -s kolla
-
 ```
 
 tmux 안으로 들어간 뒤 가상환경을 다시 활성화한다.
@@ -443,7 +412,6 @@ tmux 안으로 들어간 뒤 가상환경을 다시 활성화한다.
 ```plain
 source ~/kolla-venv/bin/activate
 cd ~
-
 ```
 
 ***
@@ -452,7 +420,6 @@ cd ~
 
 ```plain
 kolla-ansible deploy -i ./all-in-one
-
 ```
 
 주의사항:
@@ -460,14 +427,12 @@ kolla-ansible deploy -i ./all-in-one
 ```plain
 prechecks에서는 --use-test-images 옵션을 사용했지만,
 deploy 명령에는 --use-test-images를 붙이지 않음.
-
 ```
 
 정상 완료 기준:
 
 ```plain
 failed=0
-
 ```
 
 배포 시간은 환경에 따라 10\~50분 정도 걸릴 수 있다.
@@ -478,7 +443,6 @@ failed=0
 
 ```plain
 docker ps --format "table {{.Names}}\t{{.Status}}"
-
 ```
 
 정상적으로 다음과 같은 컨테이너들이 실행되어야 한다.
@@ -519,7 +483,6 @@ haproxy
 fluentd
 cron
 kolla_toolbox
-
 ```
 
 대부분 `healthy` 상태이면 정상이다.
@@ -533,14 +496,12 @@ tmux 세션에서 빠져나오기:
 ```plain
 Ctrl + B
 D
-
 ```
 
 만약 다시 들어가고 싶다면:
 
 ```plain
 tmux attach -t kolla
-
 ```
 
 ***
@@ -552,7 +513,6 @@ source ~/kolla-venv/bin/activate
 cd ~
 
 kolla-ansible post-deploy -i ./all-in-one
-
 ```
 
 생성 파일 확인:
@@ -560,7 +520,6 @@ kolla-ansible post-deploy -i ./all-in-one
 ```plain
 ls -l /etc/kolla/clouds.yaml
 ls -l /etc/kolla/admin-openrc.sh
-
 ```
 
 ***
@@ -569,7 +528,6 @@ ls -l /etc/kolla/admin-openrc.sh
 
 ```plain
 pip install python-openstackclient -c <https://releases.openstack.org/constraints/upper/master>
-
 ```
 
 ***
@@ -581,7 +539,6 @@ pip install python-openstackclient -c <https://releases.openstack.org/constraint
 ```plain
 export OS_CLIENT_CONFIG_FILE=/etc/kolla/clouds.yaml
 openstack --os-cloud kolla-admin service list
-
 ```
 
 방법 2: admin-openrc 사용 #이게 더 편함
@@ -589,7 +546,6 @@ openstack --os-cloud kolla-admin service list
 ```plain
 source /etc/kolla/admin-openrc.sh
 openstack service list
-
 ```
 
 환경변수 확인:
@@ -598,7 +554,6 @@ openstack service list
 echo $OS_AUTH_URL
 echo $OS_USERNAME
 echo $OS_PROJECT_NAME
-
 ```
 
 ***
@@ -613,7 +568,6 @@ openstack compute service list
 openstack image list
 openstack network list
 openstack security group list
-
 ```
 
 정상 기준:
@@ -628,7 +582,6 @@ Nova compute service가 enabled/up
 Neutron agent가 Alive :-) / UP
 
 기본 security group이 보임
-
 ```
 
 ***
@@ -639,21 +592,18 @@ Neutron agent가 Alive :-) / UP
 
 ```plain
 <http://10.0.0.50>
-
 ```
 
 또는 다음 주소로 직접 접근:
 
 ```plain
 <http://10.0.0.50/auth/login/>
-
 ```
 
 admin 비밀번호 확인:
 
 ```plain
 grep OS_PASSWORD /etc/kolla/admin-openrc.sh   #pw 얻으면 어느 파일에 저장
-
 ```
 
 로그인 정보:
@@ -662,7 +612,6 @@ grep OS_PASSWORD /etc/kolla/admin-openrc.sh   #pw 얻으면 어느 파일에 저
 Domain: Default
 User: admin
 Password: OS_PASSWORD 값
-
 ```
 
 `curl -I <http://10.0.0.50`> 결과가 `302 Found`이면 Horizon은 정상 응답 중이다.
@@ -709,14 +658,12 @@ Password: OS_PASSWORD 값
 ```plain
 source ~/kolla-venv/bin/activate
 source /etc/kolla/admin-openrc.sh
-
 ```
 
 OpenStack CLI 확인:
 
 ```plain
 openstack service list
-
 ```
 
 ***
@@ -728,7 +675,6 @@ cd /tmp
 
 wget -O cirros-0.6.3-x86_64-disk.img \
 <https://download.cirros-cloud.net/0.6.3/cirros-0.6.3-x86_64-disk.img>
-
 ```
 
 주의사항:
@@ -736,14 +682,12 @@ wget -O cirros-0.6.3-x86_64-disk.img \
 ```plain
 wget 명령어에서 \ 뒤에 공백을 넣으면 안 된다.
 줄바꿈을 쓰지 않을 경우 한 줄로 작성해도 됨.
-
 ```
 
 위에 실패 했다면 한 줄 버전 사용:
 
 ```plain
 wget -O /tmp/cirros-0.6.3-x86_64-disk.img <https://download.cirros-cloud.net/0.6.3/cirros-0.6.3-x86_64-disk.img>
-
 ```
 
 OpenStack Glance에 이미지 등록:
@@ -754,21 +698,18 @@ openstack image create "cirros-0.6.3" \
   --disk-format qcow2 \
   --container-format bare \
   --public
-
 ```
 
 이미지 확인:
 
 ```plain
 openstack image list
-
 ```
 
 정상 기준:
 
 ```plain
 cirros-0.6.3 이미지가 보이고 status가 active
-
 ```
 
 상세 확인:
@@ -783,7 +724,6 @@ openstack image show cirros-0.6.3 \
   -c disk_format \
   -c container_format \
   -c size
-
 ```
 
 예상 결과:
@@ -797,7 +737,6 @@ protected: False
 size: ~~~~
 status: active
 visibility: public
-
 ```
 
 ***
@@ -816,7 +755,6 @@ security group
 keypair
 cirros-test instance
 floating ip
-
 ```
 
 이후 CSPM에서는 이 리소스들을 수집하고 보안 점검 룰을 적용한다.
@@ -829,7 +767,6 @@ OpenStack 배포 후 Horizon 접속은 아래 주소로 확인한다.
 
 ```plain
 <http://10.0.0.50>
-
 ```
 
 접속이 안 되는 경우 Ubuntu VM 내부에서 VIP와 Horizon 상태를 확인한다.
@@ -838,7 +775,6 @@ OpenStack 배포 후 Horizon 접속은 아래 주소로 확인한다.
 ip -br a | egrep 'ens33|ens37'
 ping -c 3 10.0.0.50
 curl -I <http://10.0.0.50>
-
 ```
 
 `curl -I <http://10.0.0.50`> 결과가 `302 Found` 또는 로그인 페이지로 리다이렉트되면 Horizon은 정상적으로 살아 있는 것이다.
@@ -849,7 +785,6 @@ admin pw확인은 다음과 같다.
 grep OS_PASSWORD /etc/kolla/admin-openrc.sh
 
 #ex) 4LYabl7jTfGQtBFm8NbqNbXDlwkRxMlwf1EDLQMe 이런느낌
-
 ```
 
 로그인 정보는 다음과 같다.
@@ -858,7 +793,6 @@ grep OS_PASSWORD /etc/kolla/admin-openrc.sh
 Domain: Default
 User: admin
 Password: OS_PASSWORD 값
-
 ```
 
 ***
@@ -885,7 +819,6 @@ Self-Service Network
 - OpenStack 내부 VM 네트워크
 - CIDR: 172.16.1.0/24
 - Gateway: 172.16.1.1
-
 ```
 
 ***
@@ -898,7 +831,6 @@ Self-Service Network
 network_interface: "ens33"
 neutron_external_interface: "ens37"
 kolla_internal_vip_address: "10.0.0.50"
-
 ```
 
 역할은 다음과 같다.
@@ -916,14 +848,12 @@ neutron_external_interface
 kolla_internal_vip_address
 → OpenStack 내부 VIP
 → Controller IP와 다른 비어 있는 IP 사용
-
 ```
 
 설정 확인은 다음 명령어로 한다.
 
 ```plain
 grep -E 'network_interface|neutron_external_interface|kolla_internal_vip_address' /etc/kolla/globals.yml
-
 ```
 
 ***
@@ -935,28 +865,24 @@ OpenStack CLI를 사용하기 전에 가상환경과 admin 인증 정보를 로�
 ```plain
 source ~/kolla-venv/bin/activate
 source /etc/kolla/admin-openrc.sh
-
 ```
 
 정상 확인:
 
 ```plain
 openstack token issue
-
 ```
 
 `OS_AUTH_URL`도 확인한다.
 
 ```plain
 echo $OS_AUTH_URL
-
 ```
 
 정상 예시는 다음과 같다.
 
 ```plain
 <http://10.0.0.50:5000>
-
 ```
 
 ***
@@ -967,14 +893,12 @@ Provider Network를 만들기 전에 Neutron ML2 설정에서 flat network 이�
 
 ```plain
 docker exec -it neutron_server cat /etc/neutron/plugins/ml2/ml2_conf.ini
-
 ```
 
 또는 필요한 부분만 확인한다.
 
 ```plain
 docker exec -it neutron_server cat /etc/neutron/plugins/ml2/ml2_conf.ini | grep -A5 '\[ml2_type_flat\]'
-
 ```
 
 정상 예시는 다음과 같다.
@@ -982,14 +906,12 @@ docker exec -it neutron_server cat /etc/neutron/plugins/ml2/ml2_conf.ini | grep 
 ```plain
 [ml2_type_flat]
 flat_networks = physnet1
-
 ```
 
 여기에서 확인한 `physnet1` 값을 Provider Network 생성 시 사용한다.
 
 ```plain
 --provider-physical-network physnet1
-
 ```
 
 즉, `ml2_conf.ini`에 `flat_networks = physnet1`로 되어 있으면 OpenStack Provider Network 생성 명령에서도 반드시 `physnet1`을 사용해야 한다.
@@ -1002,7 +924,6 @@ OpenStack External Network가 실제로 `ens37`과 연결되는지 확인한다.
 
 ```plain
 docker exec -it openvswitch_vswitchd ovs-vsctl show
-
 ```
 
 확인할 것:
@@ -1010,7 +931,6 @@ docker exec -it openvswitch_vswitchd ovs-vsctl show
 ```plain
 br-ex 존재 여부
 br-ex에 ens37 또는 관련 포트가 연결되어 있는지
-
 ```
 
 정상 예시는 다음과 비슷하다.
@@ -1019,7 +939,6 @@ br-ex에 ens37 또는 관련 포트가 연결되어 있는지
 Bridge br-ex
     Port ens37
         Interface ens37
-
 ```
 
 만약 `br-ex`에 `ens37`이 없다면 Provider Network와 Floating IP 통신이 정상적으로 되지 않을 수 있다.
@@ -1033,7 +952,6 @@ Bridge br-ex
 ```plain
 source ~/kolla-venv/bin/activate
 source /etc/kolla/admin-openrc.sh
-
 ```
 
 인스턴스 삭제:
@@ -1044,7 +962,6 @@ for SERVER_ID in $(openstack server list -f value -c ID); do
 done
 
 sleep 15
-
 ```
 
 Floating IP 삭제:
@@ -1053,7 +970,6 @@ Floating IP 삭제:
 for FIP_ID in $(openstack floating ip list -f value -c ID); do
   openstack floating ip delete $FIP_ID || true
 done
-
 ```
 
 Router 삭제:
@@ -1067,7 +983,6 @@ for ROUTER in $(openstack router list -f value -c Name); do
   openstack router unset $ROUTER --external-gateway || true
   openstack router delete $ROUTER || true
 done
-
 ```
 
 Subnet / Network 삭제:
@@ -1080,7 +995,6 @@ done
 for NET_ID in $(openstack network list -f value -c ID); do
   openstack network delete $NET_ID || true
 done
-
 ```
 
 실습용 Security Group이 있다면 삭제한다.
@@ -1088,7 +1002,6 @@ done
 ```plain
 openstack security group delete sg-cirros || true
 openstack security group delete sg-danger-test || true
-
 ```
 
 Keypair가 있다면 삭제한다.
@@ -1096,7 +1009,6 @@ Keypair가 있다면 삭제한다.
 ```plain
 openstack keypair delete os-test-key || true
 rm -f ~/.ssh/os_test_key ~/.ssh/os_test_key.pub
-
 ```
 
 정리 후 상태를 확인한다.
@@ -1109,7 +1021,6 @@ openstack network list
 openstack subnet list
 openstack security group list
 openstack keypair list
-
 ```
 
 정상적으로 정리되었다면 인스턴스, Floating IP, Router, Network, Subnet, Keypair는 비어 있고, Security Group에는 기본 `default`만 남아 있을 수 있다.
@@ -1129,7 +1040,6 @@ openstack network create \
   --provider-network-type flat \
   --provider-physical-network physnet1 \
   provider
-
 ```
 
 확인한다.
@@ -1137,7 +1047,6 @@ openstack network create \
 ```plain
 openstack network list
 openstack network show provider
-
 ```
 
 정상 확인 포인트:
@@ -1147,7 +1056,6 @@ provider:network_type = flat
 provider:physical_network = physnet1
 router:external = External
 shared = True
-
 ```
 
 ***
@@ -1163,14 +1071,12 @@ openstack subnet create --network provider \
   --gateway 192.168.2.1 \
   --subnet-range 192.168.2.0/24 \
   provider
-
 ```
 
 확인한다.
 
 ```plain
 openstack subnet show provider
-
 ```
 
 정상 확인 포인트:
@@ -1179,7 +1085,6 @@ openstack subnet show provider
 allocation_pools = 192.168.2.200-192.168.2.250
 cidr = 192.168.2.0/24
 gateway_ip = 192.168.2.1
-
 ```
 
 주의할 점:
@@ -1188,7 +1093,6 @@ gateway_ip = 192.168.2.1
 192.168.2.0/24는 ens37이 실제로 연결된 외부망이어야 한다.
 192.168.2.1는 실제 외부망 게이트웨이여야 한다.
 192.168.2.200~250은 다른 장비와 충돌하지 않는 Floating IP 범위여야 한다.
-
 ```
 
 ***
@@ -1199,7 +1103,6 @@ gateway_ip = 192.168.2.1
 
 ```plain
 openstack network create selfservice
-
 ```
 
 Self-Service Subnet을 생성한다.
@@ -1210,7 +1113,6 @@ openstack subnet create --network selfservice \
   --gateway 172.16.1.1 \
   --subnet-range 172.16.1.0/24 \
   selfservice
-
 ```
 
 확인한다.
@@ -1219,7 +1121,6 @@ openstack subnet create --network selfservice \
 openstack network list
 openstack subnet list
 openstack subnet show selfservice
-
 ```
 
 정상 확인 포인트:
@@ -1228,7 +1129,6 @@ openstack subnet show selfservice
 selfservice network 존재
 selfservice subnet CIDR = 172.16.1.0/24
 gateway_ip = 172.16.1.1
-
 ```
 
 ***
@@ -1239,21 +1139,18 @@ Self-Service Network와 Provider Network를 연결할 Router를 생성한다.
 
 ```plain
 openstack router create router
-
 ```
 
 Router에 selfservice subnet을 연결한다.
 
 ```plain
 openstack router add subnet router selfservice
-
 ```
 
 Router에 external gateway를 연결한다.
 
 ```plain
 openstack router set router --external-gateway provider
-
 ```
 
 확인한다.
@@ -1262,7 +1159,6 @@ openstack router set router --external-gateway provider
 openstack router list
 openstack router show router
 openstack port list --router router
-
 ```
 
 정상 구조는 다음과 같다.
@@ -1270,7 +1166,6 @@ openstack port list --router router
 ```plain
 router internal gateway: 172.16.1.1
 router external gateway: 192.168.2.x     ex)192.168.2.246
-
 ```
 
 ***
@@ -1282,7 +1177,6 @@ Router namespace를 확인한다.
 ```plain
 QR=$(ip netns | awk '/qrouter/{print $1; exit}')
 echo $QR
-
 ```
 
 Router에서 selfservice gateway를 확인한다.
@@ -1290,21 +1184,18 @@ Router에서 selfservice gateway를 확인한다.
 ```plain
 ip netns exec $QR ip a
 ip netns exec $QR ip route
-
 ```
 
 Router에서 Provider Gateway로 ping을 보낸다.
 
 ```plain
 ip netns exec $QR ping -c 3 192.168.2.1
-
 ```
 
 외부 인터넷으로 ping을 보낸다.
 
 ```plain
 ip netns exec $QR ping -c 3 8.8.8.8
-
 ```
 
 정상 기준:
@@ -1315,7 +1206,6 @@ ip netns exec $QR ping -c 3 8.8.8.8
 
 8.8.8.8 ping 성공
 → Router 외부 인터넷 통신 정상
-
 ```
 
 만약 여기서 실패하면 Provider Network, br-ex, ens37, VMware 네트워크 연결 상태를 먼저 확인한다.
@@ -1334,7 +1224,6 @@ openstack security group rule create default \
   --ethertype IPv4 \
   --protocol icmp \
   --remote-ip 0.0.0.0/0
-
 ```
 
 SSH 허용:
@@ -1346,14 +1235,12 @@ openstack security group rule create default \
   --protocol tcp \
   --dst-port 22 \
   --remote-ip 0.0.0.0/0
-
 ```
 
 확인한다.
 
 ```plain
 openstack security group rule list default --long
-
 ```
 
 이 설정은 이후 CSPM에서 다음과 같은 룰의 테스트 대상이 될 수 있다.
@@ -1361,7 +1248,6 @@ openstack security group rule list default --long
 ```plain
 SG-001: SSH open to the world
 SG-ICMP-001: ICMP open to the world
-
 ```
 
 ***
@@ -1372,7 +1258,6 @@ SG-ICMP-001: ICMP open to the world
 
 ```plain
 openstack image list
-
 ```
 
 이미지가 없다면 다운로드 후 등록한다.
@@ -1382,7 +1267,6 @@ cd /tmp
 
 wget -O cirros-0.6.3-x86_64-disk.img \
 <https://download.cirros-cloud.net/0.6.3/cirros-0.6.3-x86_64-disk.img>
-
 ```
 
 ```plain
@@ -1391,14 +1275,12 @@ openstack image create "cirros-0.6.3" \
   --disk-format qcow2 \
   --container-format bare \
   --public
-
 ```
 
 다시 확인한다.
 
 ```plain
 openstack image list
-
 ```
 
 ***
@@ -1410,14 +1292,12 @@ CirrOS 인스턴스가 사용할 작은 flavor를 생성하거나 확인한다.
 ```plain
 openstack flavor show m1.tiny >/dev/null 2>&1 || \
 openstack flavor create m1.tiny --ram 512 --disk 1 --vcpus 1
-
 ```
 
 확인한다.
 
 ```plain
 openstack flavor list
-
 ```
 
 ***
@@ -1432,7 +1312,6 @@ openstack server create cirros-test \
   --flavor m1.tiny \
   --network selfservice \
   --security-group default
-
 ```
 
 상태를 확인한다.
@@ -1440,14 +1319,12 @@ openstack server create cirros-test \
 ```plain
 openstack server list
 openstack server show cirros-test -c status -c addresses -c fault
-
 ```
 
 `ACTIVE`가 될 때까지 확인한다.
 
 ```plain
 watch -n 2 openstack server list
-
 ```
 
 정상 상태는 다음과 같다.
@@ -1457,7 +1334,6 @@ status = ACTIVE
 addresses = selfservice=172.16.1.x     #ex) 172.16.1.3
 
 #나가기 ctrl + c 2번
-
 ```
 
 ***
@@ -1468,7 +1344,6 @@ addresses = selfservice=172.16.1.x     #ex) 172.16.1.3
 
 ```plain
 openstack console url show cirros-test
-
 ```
 
 또는 Horizon에서 접속한다.
@@ -1479,7 +1354,6 @@ Project
 → Instances
 → cirros-test
 → Console
-
 ```
 
 CirrOS 로그인 정보는 다음과 같다.
@@ -1487,7 +1361,6 @@ CirrOS 로그인 정보는 다음과 같다.
 ```plain
 ID: cirros
 PW: gocubsgo
-
 ```
 
 CirrOS 내부에서 네트워크를 확인한다.
@@ -1495,7 +1368,6 @@ CirrOS 내부에서 네트워크를 확인한다.
 ```plain
 ip a
 ip route
-
 ```
 
 Ping 테스트를 수행한다.
@@ -1505,7 +1377,6 @@ ping -c 3 172.16.1.1
 ping -c 3 192.168.2.1
 ping -c 3 8.8.8.8
 ping -c 3 google.com
-
 ```
 
 정상 기준은 다음과 같다.
@@ -1522,7 +1393,6 @@ ping -c 3 google.com
 
 google.com ping 성공
 → DNS 정상
-
 ```
 
 ***
@@ -1533,21 +1403,18 @@ Floating IP를 생성한다.
 
 ```plain
 openstack floating ip create provider
-
 ```
 
 Floating IP 목록을 확인한다.
 
 ```plain
 openstack floating ip list
-
 ```
 
 예를 들어 Floating IP가 `192.168.2.2xx`이라면 인스턴스에 연결한다.
 
 ```plain
 openstack server add floating ip cirros-test 192.168.2.2xx
-
 ```
 
 확인한다.
@@ -1555,14 +1422,12 @@ openstack server add floating ip cirros-test 192.168.2.2xx
 ```plain
 openstack floating ip list
 openstack server show cirros-test -c addresses
-
 ```
 
 정상 예시는 다음과 같다.
 
 ```plain
 selfservice=172.16.1.x, 192.168.2.2xx
-
 ```
 
 ***
@@ -1573,21 +1438,18 @@ Controller에서 Floating IP로 ping한다.
 
 ```plain
 ping -c 3 192.168.2.2xx
-
 ```
 
 SSH 접속을 확인한다.
 
 ```plain
 ssh cirros@192.168.2.200
-
 ```
 
 CirrOS 비밀번호는 다음과 같다.
 
 ```plain
 gocubsgo
-
 ```
 
 ***
@@ -1599,14 +1461,12 @@ Windows가 `192.168.2.0/24` Provider Network로 직접 접근 가능한 구조�
 ```plain
 ping 192.168.2.2xx
 ssh cirros@192.168.2xx
-
 ```
 
 만약 Windows에서 `192.168.2.0/24`로 직접 라우팅되지 않는 구조라면 Windows 관리자 CMD에서 라우트를 추가한다.
 
 ```plain
 route add 192.168.2.0 mask 255.255.255.0 10.0.0.11
-
 ```
 
 그 후 다시 테스트한다.
@@ -1614,7 +1474,6 @@ route add 192.168.2.0 mask 255.255.255.0 10.0.0.11
 ```plain
 ping 192.168.2.2xx
 ssh cirros@192.168.2.2xx
-
 ```
 
 ***
@@ -1645,7 +1504,6 @@ Router
 router
 internal: 172.16.1.1
 external: 192.168.2.x
-
 ```
 
 현재 성공해야 하는 항목은 다음과 같다.
@@ -1680,7 +1538,6 @@ Floating IP 생성 및 연결 성공
 Controller에서 Floating IP ping/SSH 성공
 
 Windows에서 Floating IP ping/SSH 성공
-
 ```
 
 ***
@@ -1705,7 +1562,6 @@ openstack subnet list
 openstack router list
 openstack server list
 openstack floating ip list
-
 ```
 
 확인할 것:
@@ -1717,7 +1573,6 @@ br-ex 존재
 br-ex에 ens37 연결
 router 외부 게이트웨이 유지
 Floating IP 연결 유지
-
 ```
 
 ***
