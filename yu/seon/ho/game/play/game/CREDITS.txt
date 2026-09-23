@@ -1,0 +1,14 @@
+빨간 명찰 — 에셋 크레딧
+
+BGM / 효과음
+  Rest! — "Sound Novel: Visual Novel Music Pack" (https://rest--vgmusic.weebly.com/)
+  License: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/)
+  사용 트랙: Chat(Menu) → title_theme, rain_piano / Waiting(Night 1) → tension /
+             Bye(Dramatic 2) → silence_low / Really Good News(Dramatic 1) → hope_theme /
+             Stinger Victory 1 → stinger_victory / Stinger Defeat 1 → stinger_defeat
+
+배경
+  _source/backgrounds 의 자체 제작 플레이스홀더를 변환·가공 (barracks_night, gate_night, funeral 은 어둡게 처리한 파생본, sky_day 는 그라디언트 임시본)
+
+인물
+  유선호 스프라이트: 제공된 사진 컷아웃 / 그 외 인물: 자체 제작 실루엣 (senior_angry 는 senior 복제)

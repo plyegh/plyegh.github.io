@@ -1,0 +1,8 @@
+Game_name:빨간 명찰;
+Game_key:ITij5eIR;
+Title_img:title.png;
+Title_bgm:title_theme.mp3;
+Textbox_theme:standard;
+Enable_Appreciation:true;
+Show_Panic:false;
+Default_Language:en;

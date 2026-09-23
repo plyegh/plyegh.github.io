@@ -1,0 +1,33 @@
+{
+  "name": "빨간 명찰",
+  "short_name": "빨간 명찰",
+  "start_url": ".",
+  "display": "fullscreen",
+  "description": "어느 전우의 이야기 — WebGAL 비주얼노벨",
+  "dir": "auto",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "./icons/icon-192-maskable.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icons/icon-512-maskable.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ]
+}

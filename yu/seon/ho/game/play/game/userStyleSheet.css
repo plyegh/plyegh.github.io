@@ -1,0 +1,2 @@
+/* 빨간 명찰: 한국어 가독성을 위해 엔진 기본 중국어 폰트(서체 파일 미포함) 대신 시스템 산세리프 사용 */
+* { font-family: -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Pretendard", sans-serif !important; }
