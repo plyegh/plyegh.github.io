@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
@@ -147,6 +147,10 @@
       }
       #root, .html-body__title-enter, .html-body__effect-background { transform-origin: center center; }
     </style>
+    <!-- 초기 UI 언어를 한국어로 고정: 엔진은 localStorage "lang"이 있으면 그 값을 우선 사용 (7 = ko, WebGAL 4.6 언어표 기준) -->
+    <script>
+      (() => { try { if (!window.localStorage.getItem('lang')) { window.localStorage.setItem('lang', '7'); } } catch (e) {} })();
+    </script>
     <script type="module" crossorigin src="./assets/index-R1tKotR6.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-Dch1g2w9.css">
   </head>

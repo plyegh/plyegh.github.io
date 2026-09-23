@@ -5,4 +5,4 @@ Title_bgm:title_theme.mp3;
 Textbox_theme:standard;
 Enable_Appreciation:true;
 Show_Panic:false;
-Default_Language:en;
+Default_Language:ko;
