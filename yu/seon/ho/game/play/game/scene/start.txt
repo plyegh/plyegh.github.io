@@ -1,4 +1,6 @@
 setTextbox:hide -next;
+setVar:endcount=0 -global -when=!endcount;
+intro:이 작품은 군대 내 가혹행위와 그로 인한 죽음을 다룹니다.|자해나 자살을 직접 묘사하지 않지만 그 암시가 있습니다.|'만약'을 가정한 허구이며 특정 부대나 인물의 실제 사건이 아닙니다.|힘든 상황에 있다면 혼자 견디지 마세요.|국방헬프콜 1303 (24시간) · 자살예방상담 109 -hold -fontSize=small -animation=fadeIn -backgroundColor=rgba(8,8,10,1) -fontColor=rgba(200,196,190,1);
 intro:빨간 명찰|— 어느 전우의 이야기 -hold;
 bgm:rain_piano.mp3 -enter=1500;
 changeBg:gate_night.png -enter=enter -duration=800 -ease=easeInOut;
