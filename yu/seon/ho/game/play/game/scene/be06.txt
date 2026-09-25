@@ -9,7 +9,7 @@ changeFigure:officer.png -right -enter=enter-from-right -duration=450 -ease=ease
 간부:이게 다야? 사진은 어디서 다쳤는지 안 나오잖아.;
 간부:그리고 이거 몰래 찍은 거지. 그게 더 문제다.;
 changeFigure:none -right -exit=exit -exitDuration=400 -ease=easeIn;
-:휴대폰은 압수됐다. 사진은 돌아오지 않았다.;
+:숨겨 둔 폰은 압수됐다. 사진은 돌아오지 않았다. 투폰 소지가 내 첫 번째 죄목이 됐다.;
 :일주일 뒤 나는 무고와 군기 문란으로 조사를 받았다.;
 :선임은 피해자가 됐다. 유선호는 증인이 되기를 거부했다.;
 유선호:…나까지 끌어들이지 마. 부탁이다.;
