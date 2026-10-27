@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import { ABOUT, ABOUT_INTRO } from '../data/about';
+import { PROFILE, LINKS } from '../data/site';
+
+const email = 'bdongjun343@gmail.com';
+// friendly handle shown instead of the raw URL
+const HANDLE: Record<string, string> = {
+  github: '@plyegh',
+  dreamhack: 'plyegh',
+  linkedin: '준 박동',
+  instagram: '@d_zun0210',
+  discord: '@plyegh',
+};
+---
+<Base title="about" description={`About ${PROFILE.name} — ${PROFILE.focus}.`}>
+  <div class="wrap">
+    <header class="page-head">
+      <nav class="crumbs" aria-label="Path"><a href="/">~</a>/<span class="here">about</span>/</nav>
+      <h1>About</h1>
+      <p class="lead">{ABOUT_INTRO}</p>
+    </header>
+
+    <div class="about-layout">
+      <div class="about-timeline">
+        {ABOUT.map((section) => (
+          <section class="about-section">
+            <h2><span class={`dot dot-${section.dot}`} aria-hidden="true"></span>{section.title}</h2>
+            <ul>
+              {section.items.map((item) => (
+                <li>
+                  <p class="it-name">{item.name}</p>
+                  {item.detail && <p class="it-detail">{item.detail}</p>}
+                  {item.date && <p class="it-date mono">{item.date}</p>}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+
+      <aside class="about-side">
+        <section class="about-contact">
+          <p class="eyebrow"><span class="dim">$</span>cat ~/contact</p>
+          <ul>
+            <li><span class="k">email</span><a href={`mailto:${email}`}>{email}</a></li>
+            {LINKS.map((l) => (
+              <li><span class="k">{l.id}</span><a href={l.href} target="_blank" rel="noopener">{HANDLE[l.id] ?? l.href} ↗</a></li>
+            ))}
+          </ul>
+        </section>
+      </aside>
+    </div>
+  </div>
+</Base>

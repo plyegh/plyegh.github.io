@@ -39,6 +39,7 @@ const activeCat = inPosts ? path.split('/')[2] || '' : null;
         </div>
       </div>
       <a class="nav-link" href="/tags/" aria-current={path.startsWith('/tags') ? 'page' : undefined}><span>/</span>tags</a>
+      <a class="nav-link" href="/about/" aria-current={path.startsWith('/about') ? 'page' : undefined}><span>/</span>about</a>
     </nav>
     <div class="header-actions">
       <a class="icon-btn" href="/search/" aria-label="Search posts" aria-current={path.startsWith('/search') ? 'page' : undefined}>
