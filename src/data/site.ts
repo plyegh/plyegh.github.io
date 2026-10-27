@@ -24,8 +24,10 @@ export const PROFILE = {
 // terminal's `open` command skips it.
 export const LINKS = [
   { id: 'github', href: 'https://github.com/plyegh' },
-  { id: 'instagram', href: '' },
-  { id: 'discord', href: '' },
+  { id: 'dreamhack', href: 'https://dreamhack.io/users/28296' },
+  { id: 'linkedin', href: 'https://www.linkedin.com/in/%EC%A4%80-%EB%B0%95%EB%8F%99-648450432' },
+  { id: 'instagram', href: 'https://www.instagram.com/d_zun0210/' },
+  { id: 'discord', href: 'https://discord.com/users/373615449117556736' },
 ] as const;
 
 // Comments (giscus, backed by GitHub Discussions of a PUBLIC repo).
