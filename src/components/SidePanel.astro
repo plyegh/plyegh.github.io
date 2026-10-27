@@ -1,0 +1,88 @@
+---
+import { PROFILE, LINKS } from '../data/site';
+
+const GUIDE = [
+  ['whoami', 'who runs this place'],
+  ['ls posts', 'list categories'],
+  ['ls -t', 'latest posts'],
+  ['open 1', 'open the newest post'],
+  ['cd posts', 'open the blog'],
+  ['cat readme.md', 'about this site'],
+  ['open github', 'GitHub profile'],
+  ['theme', 'dark / light'],
+  ['clear', 'clear the screen'],
+  ['help', 'all commands'],
+];
+---
+<aside class="side">
+  <section class="identity" aria-label="Profile">
+    <p class="eyebrow"><span class="dim">$</span>cat ./identity</p>
+    <figure class="photo">
+      <img src={PROFILE.avatar} alt={PROFILE.avatarAlt} width="640" height="640" decoding="async">
+    </figure>
+    <dl class="id-fields">
+      <div><dt>USER</dt><dd>{PROFILE.user}</dd></div>
+      <div><dt>ROLE</dt><dd>{PROFILE.role}</dd></div>
+      <div><dt>FOCUS</dt><dd>{PROFILE.focus}</dd></div>
+    </dl>
+    <p class="id-tags">{PROFILE.tags.map((t) => <span>#{t}</span>)}</p>
+    <div class="id-links">
+      {LINKS.map((l) => l.href
+        ? <a href={l.href} target="_blank" rel="noopener">{l.id} ↗</a>
+        : <span class="off" title="link coming soon">{l.id}</span>)}
+    </div>
+  </section>
+
+  <section class="cmds" id="cmds" data-open="false">
+    <button class="cmds-toggle" type="button" aria-expanded="false" aria-controls="cmdsBody">
+      <span><span class="dim">$</span> man plyegh</span>
+      <span class="count">{GUIDE.length} commands</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="cmds-body" id="cmdsBody">
+      <div class="cmds-inner">
+        <div class="cmds-pad">
+          <ul class="cmd-list">
+            {GUIDE.map(([cmd, desc]) => (
+              <li><button type="button" data-run={cmd}><code>{cmd}</code><span>{desc}</span></button></li>
+            ))}
+          </ul>
+          <div class="guide-tips">
+            <span><kbd>Tab</kbd> autocomplete</span>
+            <span><kbd>↑</kbd><kbd>↓</kbd> history</span>
+            <span><kbd>Ctrl</kbd>+<kbd>L</kbd> clear</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</aside>
+
+<script>
+  const side = document.querySelector('.side')!;
+  const cmds = document.getElementById('cmds')!;
+  const toggle = cmds.querySelector<HTMLButtonElement>('.cmds-toggle')!;
+  const term = document.getElementById('term');
+
+  // command buttons type into the terminal
+  side.addEventListener('click', (e) => {
+    const b = (e.target as Element).closest<HTMLElement>('[data-run]');
+    if (b) window.dispatchEvent(new CustomEvent('plyegh:run', { detail: b.dataset.run }));
+  });
+
+  // guide starts collapsed on every visit; the toggle or `man plyegh` opens it
+  const setGuide = (open: boolean) => { cmds.dataset.open = String(open); toggle.setAttribute('aria-expanded', String(open)); };
+  toggle.addEventListener('click', () => setGuide(cmds.dataset.open !== 'true'));
+  window.addEventListener('plyegh:guide', () => setGuide(true));
+
+  // desktop: terminal height = identity card + closed guide bar, so opening the guide doesn't stretch it
+  function syncTerm() {
+    if (!term) return;
+    if (innerWidth <= 920) { term.style.height = ''; return; }
+    const h = document.querySelector<HTMLElement>('.identity')!.offsetHeight + 14 + toggle.offsetHeight + 2;
+    term.style.height = Math.max(460, h) + 'px';
+  }
+  addEventListener('resize', syncTerm);
+  document.fonts?.ready.then(syncTerm);
+  syncTerm();
+</script>

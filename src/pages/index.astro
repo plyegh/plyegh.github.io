@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import Terminal from '../components/Terminal.astro';
+import SidePanel from '../components/SidePanel.astro';
+import PostList from '../components/PostList.astro';
+import { CATEGORIES } from '../data/site';
+import { getPosts, countByCategory } from '../lib/posts';
+
+const posts = await getPosts();
+const counts = countByCategory(posts);
+const plural = (n: number) => `${n} ${n === 1 ? 'post' : 'posts'}`;
+---
+<Base>
+  <section class="hero">
+    <h1 class="sr-only">plyegh — security study log</h1>
+    <div class="wrap hero-inner">
+      <Terminal posts={posts} />
+      <SidePanel />
+    </div>
+    <a class="scroll-cue" href="#categories" aria-label="Scroll to categories">Scroll</a>
+  </section>
+
+  <section id="categories" class="section">
+    <div class="wrap">
+      <header class="section-head reveal">
+        <p class="eyebrow"><span class="dim">$</span>ls ~/posts</p>
+        <h2>Categories</h2>
+      </header>
+      <ol class="cat-grid">
+        {CATEGORIES.map((c, i) => (
+          <li class="cat-card reveal" style={`--d:${(i % 3) * 0.08}s`}>
+            <a href={`/posts/${c.slug}/`}>
+              <span class="top"><span class="no">{String(i + 1).padStart(2, '0')}</span></span>
+              <h3 class="cat-path">~/posts/<b>{c.slug}</b>/</h3>
+              <p class="cat-name">{c.name}</p>
+              <span class="more">{plural(counts[c.slug])} →</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap reveal">
+      <header class="section-head">
+        <p class="eyebrow"><span class="dim">$</span>ls -t ~/posts | head</p>
+        <h2>Latest posts</h2>
+      </header>
+      <PostList posts={posts.slice(0, 5)} />
+      {posts.length > 5 && <a class="text-link" href="/posts/">all posts →</a>}
+    </div>
+  </section>
+</Base>

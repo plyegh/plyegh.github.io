@@ -1,0 +1,19 @@
+---
+import Logo from './Logo.astro';
+import { LINKS } from '../data/site';
+const github = LINKS.find((l) => l.id === 'github')!;
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <Logo />
+      <div><span class="wordmark">plyegh<span class="cur">_</span></span><p>Security study log</p></div>
+    </div>
+    <ul class="footer-links">
+      <li><a href={github.href} target="_blank" rel="noopener">GitHub ↗</a></li>
+      <li><a href="/rss.xml">RSS</a></li>
+    </ul>
+    <p class="footer-copy"><span class="t">guest@plyegh:~$</span> exit — © {year} plyegh. session closed.</p>
+  </div>
+</footer>

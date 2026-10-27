@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import CategoryTree from '../../components/CategoryTree.astro';
+import { getPosts } from '../../lib/posts';
+
+const posts = await getPosts();
+---
+<Base title="posts" description="All posts on plyegh.">
+  <div class="wrap">
+    <header class="page-head">
+      <nav class="crumbs" aria-label="Path"><a href="/">~</a>/<span class="here">posts</span>/</nav>
+      <h1>All posts</h1>
+    </header>
+    <div class="posts-layout">
+      <CategoryTree posts={posts} active="" />
+      <div><PostList posts={posts} /></div>
+    </div>
+  </div>
+</Base>

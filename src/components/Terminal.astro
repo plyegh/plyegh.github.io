@@ -1,0 +1,241 @@
+---
+import { CATEGORIES, PROFILE, LINKS } from '../data/site';
+import { formatDate, type Post } from '../lib/posts';
+interface Props { posts: Post[] }
+const { posts } = Astro.props;
+
+const data = {
+  profile: PROFILE,
+  links: LINKS.filter((l) => l.href),
+  categories: CATEGORIES,
+  posts: posts.map((p) => ({ title: p.data.title, date: formatDate(p.data.date), cat: p.category, slug: p.slug, url: p.url })),
+};
+// escape "<" so a post title can never close the <script> tag
+const json = JSON.stringify(data).replace(/</g, '\\u003c');
+---
+<div class="term" id="term" aria-label="Terminal for navigating the site">
+  <div class="term-bar" aria-hidden="true">
+    <span class="dots"><i></i><i></i><i></i></span>
+    <span class="term-title">guest@plyegh: ~</span>
+    <span class="term-meta">bash</span>
+  </div>
+  <div class="term-body">
+    <div id="termOut" aria-live="polite"></div>
+    <div class="term-input">
+      <label for="cmd"><span class="t-ps">guest@plyegh</span><span class="t-dim">:</span><span class="t-path">~</span><span class="t-dim">$</span></label>
+      <input id="cmd" type="text" spellcheck="false" autocomplete="off" autocapitalize="off" enterkeyhint="go" aria-label="Command input — press Enter to run">
+    </div>
+  </div>
+</div>
+<script type="application/json" id="term-data" set:html={json}></script>
+
+<script>
+  type TermPost = { title: string; date: string; cat: string; slug: string; url: string };
+  type TermData = {
+    profile: Record<string, string> & { tags: string[] };
+    links: { id: string; href: string }[];
+    categories: { slug: string; name: string }[];
+    posts: TermPost[];
+  };
+  const D: TermData = JSON.parse(document.getElementById('term-data')!.textContent || '{}');
+  const CATS = D.categories.map((c) => c.slug);
+
+  const $ = <T extends Element = HTMLElement>(s: string) => document.querySelector(s) as T;
+  const out = $('#termOut'), input = $<HTMLInputElement>('#cmd'), tbody = $('.term-body'), term = $('#term');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = matchMedia('(pointer: fine)').matches;
+  const esc = (s: string) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+  const PS = '<span class="t-ps">guest@plyegh</span><span class="t-dim">:</span><span class="t-path">~</span><span class="t-dim">$</span>';
+  const dim = (s: string) => `<span class="t-dim">${s}</span>`;
+  const err = (s: string) => `<span class="t-err">${s}</span>`;
+  const ok = (s: string) => `<span class="t-ok">→</span> ${s}`;
+  const plural = (n: number) => `${n} ${n === 1 ? 'post' : 'posts'}`;
+  const countOf = (c: string) => D.posts.filter((p) => p.cat === c).length;
+
+  let busy = false, fast = false;
+  const hist: string[] = []; let hi = 0;
+  let lastList: TermPost[] = D.posts; // what `open <n>` indexes into
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, fast || reduce ? 0 : ms));
+
+  function print(html: string, cls = '') {
+    const d = document.createElement('div');
+    d.className = 'l' + (cls ? ' ' + cls : '');
+    d.innerHTML = html;
+    out.appendChild(d);
+    tbody.scrollTop = tbody.scrollHeight;
+  }
+  const go = (url: string) => sleep(380).then(() => { location.href = url; });
+
+  // "posts", "~/posts/", "posts/dev", "dev", "./dev" → 'home' | 'posts' | '<category>' | null
+  function resolve(arg = '') {
+    let t = arg.replace(/^~\/?/, '').replace(/^\.\//, '').replace(/\/+$/, '');
+    if (!t || t === '..' || t === '/' || t === '~' || t === 'home') return 'home';
+    if (t === 'posts') return 'posts';
+    if (t.startsWith('posts/')) t = t.slice(6);
+    return CATS.includes(t) ? t : null;
+  }
+  function listPosts(list: TermPost[], showCat: boolean) {
+    lastList = list;
+    print('total ' + list.length);
+    list.forEach((p, i) => print(
+      dim(`[${i + 1}]`) + ' ' + dim(p.date) + '  ' + (showCat ? `<span class="t-path">${esc(p.cat)}/</span> ` : '') + esc(p.title),
+    ));
+    print(list.length ? dim("→ 'open &lt;n&gt;' to read one") : dim('nothing here yet.'));
+  }
+
+  const COMMANDS: Record<string, (a: string[]) => void | Promise<void>> = {
+    help() {
+      print('<div class="t-grid">' + [
+        ['whoami', 'who runs this place'],
+        ['ls [dir]', 'list — ls posts, ls ctf-wargame'],
+        ['ls -t', 'latest posts, all categories'],
+        ['cd &lt;dir&gt;', 'go to a page — cd posts, cd blog-docs'],
+        ['open &lt;n|name&gt;', 'open a post from the last list, or a link'],
+        ['cat readme.md', 'about this site'],
+        ['theme [dark|light]', 'switch theme'],
+        ['history', 'commands you ran'],
+        ['clear', 'clear the screen'],
+      ].map((r) => `<span class="k">${r[0]}</span><span>${r[1]}</span>`).join('') + '</div>', 'l-block');
+    },
+    whoami() {
+      const P = D.profile;
+      print('<div class="who"><p class="who-name">' + esc(P.user) + '</p>' +
+        '<p class="who-role">' + esc(P.role) + '</p><dl>' +
+        `<dt>name</dt><dd>${esc(P.name)}</dd>` +
+        `<dt>school</dt><dd>${esc(P.school)}</dd>` +
+        `<dt>focus</dt><dd>${esc(P.focus)}</dd>` +
+        `<dt>club</dt><dd>${esc(P.club)}</dd>` +
+        `<dt>status</dt><dd><span class="live"></span>${esc(P.status)}</dd></dl></div>`, 'l-block');
+    },
+    ls(a) {
+      if (a.includes('-t')) { listPosts(D.posts, true); return; }
+      const arg = a.filter((x) => !x.startsWith('-'))[0];
+      if (!arg || arg === '.' || arg === '~' || arg === '~/') { print('<span class="t-dir">posts/</span>   readme.md'); return; }
+      if (arg === 'readme.md') { print('readme.md'); return; }
+      const r = resolve(arg);
+      if (r === 'posts') {
+        print('<div class="t-tree">' + D.categories.map((c, i) =>
+          `<span class="t-dim">${i === D.categories.length - 1 ? '└──' : '├──'}</span><span class="t-dir">${c.slug}/</span><span class="t-dim">${plural(countOf(c.slug))}</span>`,
+        ).join('') + '</div>', 'l-block');
+        print(dim("→ try 'ls " + D.categories[0].slug + "' or 'cd posts'"));
+        return;
+      }
+      if (r && r !== 'home') { listPosts(D.posts.filter((p) => p.cat === r), false); return; }
+      print(err(`ls: cannot access '${esc(arg)}': No such file or directory`));
+    },
+    cd(a) {
+      const r = resolve(a[0]);
+      if (r === 'home') { print(dim('already at ~')); return; }
+      if (r === 'posts') { print(ok('~/posts')); return go('/posts/'); }
+      if (r) { print(ok('~/posts/' + r)); return go(`/posts/${r}/`); }
+      print(err((a[0] === 'readme.md' ? 'cd: not a directory: ' : 'cd: no such file or directory: ') + esc(a[0] || '')));
+    },
+    cat(a) {
+      const t = (a[0] || '').replace(/^~\/|^\.\//, '');
+      if (!t) { print(err('cat: missing file operand') + ' ' + dim('(try: cat readme.md)')); return; }
+      if (t === 'readme.md') {
+        ['<span class="t-dir"># plyegh.github.io</span>',
+          'A security study log — what I build, break and learn.',
+          `Posts live under <span class="t-path">~/posts</span>, split into ${D.categories.length} categories.`,
+          dim('Not into terminals? Use the menu up top.')].forEach((s) => print(s));
+        return;
+      }
+      const r = resolve(t);
+      print(err(`cat: ${esc(t)}: ` + (r && r !== 'home' ? 'Is a directory' : 'No such file or directory')));
+    },
+    open(a) {
+      const t = (a[0] || '').toLowerCase();
+      if (!t) { print(err('open: missing operand') + ' ' + dim('(try: open 1, open github)')); return; }
+      const link = D.links.find((l) => l.id === t);
+      if (link) { print(ok(esc(link.href.replace(/^https?:\/\//, '')))); window.open(link.href, '_blank', 'noopener'); return; }
+      const n = Number(t);
+      const post = Number.isInteger(n) && n > 0 ? lastList[n - 1] : D.posts.find((p) => p.slug === t);
+      if (post) { print(ok(esc(post.title))); return go(post.url); }
+      const r = resolve(t);
+      if (r && r !== 'home') return COMMANDS.cd([t]);
+      print(err(`open: ${esc(t)}: not found`) + ' ' + dim("— try 'ls -t'"));
+    },
+    theme(a) {
+      window.dispatchEvent(new CustomEvent('plyegh:theme', { detail: a[0] }));
+      print('theme → <span class="t-path">' + (document.documentElement.dataset.theme || '') + '</span>');
+    },
+    history() { hist.forEach((h, i) => print(dim(('   ' + (i + 1)).slice(-4)) + '  ' + esc(h))); },
+    clear() { out.innerHTML = ''; },
+  };
+  const HIDDEN: Record<string, (a: string[]) => void> = {
+    pwd: () => print('/home/guest'),
+    echo: (a) => print(esc(a.join(' '))),
+    date: () => print(new Date().toString()),
+    sudo: () => print(err('guest is not in the sudoers file.') + ' ' + dim('This incident will be reported.')),
+    rm: () => print(err('rm: read-only file system')),
+    exit: () => print(dim('logout… just kidding. keep looking around.')),
+    man: () => { window.dispatchEvent(new CustomEvent('plyegh:guide', { detail: true })); print(ok('command guide opened')); },
+  };
+  const DIR_ARGS = ['posts', ...CATS, ...CATS.map((c) => 'posts/' + c)];
+  const ARGS: Record<string, string[]> = {
+    ls: [...DIR_ARGS, 'readme.md', '-t'], cd: DIR_ARGS, cat: ['readme.md'],
+    open: [...D.links.map((l) => l.id), ...D.posts.map((p) => p.slug)], theme: ['dark', 'light'],
+  };
+
+  function exec(raw: string) {
+    const cmd = raw.trim();
+    print(PS + ' ' + esc(raw));
+    if (!cmd) return Promise.resolve();
+    hist.push(cmd); hi = hist.length;
+    const parts = cmd.split(/\s+/), name = parts[0].toLowerCase();
+    const fn = COMMANDS[name] || HIDDEN[name];
+    if (!fn) { print(err('command not found: ') + esc(parts[0]) + ' ' + dim("— try 'help'")); return Promise.resolve(); }
+    return Promise.resolve(fn(parts.slice(1)));
+  }
+  async function typeRun(cmd: string) {
+    if (busy) return;
+    busy = true; input.readOnly = true; input.value = '';
+    for (const ch of cmd) { input.value += ch; await sleep(38 + Math.random() * 38); }
+    await sleep(150);
+    input.value = ''; busy = false; input.readOnly = false;
+    await exec(cmd);
+    if (fine) input.focus({ preventScroll: true });
+  }
+  function complete() {
+    const v = input.value, parts = v.split(/\s+/), last = parts[parts.length - 1];
+    const pool = parts.length === 1 ? Object.keys(COMMANDS) : (ARGS[parts[0]] || []);
+    const c = pool.filter((x) => x.startsWith(last));
+    if (c.length === 1) { parts[parts.length - 1] = c[0]; input.value = parts.join(' ') + (parts.length === 1 ? ' ' : ''); }
+    else if (c.length > 1) { print(PS + ' ' + esc(v)); print(c.join('   ')); }
+  }
+
+  // Enter is handled on the key itself (no <form>); isComposing guards Korean IME input.
+  input.addEventListener('keydown', (e) => {
+    if (busy) { fast = true; if (e.key === 'Enter') e.preventDefault(); return; }
+    if (e.key === 'Enter') {
+      if (e.isComposing || e.keyCode === 229) return;
+      e.preventDefault();
+      const v = input.value; input.value = ''; exec(v);
+    } else if (e.key === 'ArrowUp') { e.preventDefault(); if (hi > 0) input.value = hist[--hi]; }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); hi = Math.min(hist.length, hi + 1); input.value = hist[hi] || ''; }
+    else if (e.key === 'Tab') { e.preventDefault(); complete(); }
+    else if (e.key === 'l' && e.ctrlKey) { e.preventDefault(); out.innerHTML = ''; }
+    else if (e.key === 'c' && e.ctrlKey && !window.getSelection()?.toString()) { print(PS + ' ' + esc(input.value) + '^C'); input.value = ''; }
+  });
+  tbody.addEventListener('click', (e) => {
+    if (busy) fast = true;
+    if (!window.getSelection()?.toString() && !(e.target as Element).closest('a')) input.focus({ preventScroll: true });
+  });
+
+  // buttons anywhere on the page with data-run="<command>" type into the terminal
+  window.addEventListener('plyegh:run', (e) => {
+    if (term.getBoundingClientRect().top < 64) term.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    typeRun((e as CustomEvent<string>).detail);
+  });
+
+  // boot: one hint line, then `whoami`
+  (async () => {
+    busy = true; input.readOnly = true;
+    print(dim("Type a command and press Enter — try 'help' or 'man plyegh'."));
+    await sleep(500);
+    busy = false; input.readOnly = false;
+    await typeRun('whoami');
+    fast = false;
+    document.querySelector('.hero')?.classList.add('booted');
+  })();
+</script>
