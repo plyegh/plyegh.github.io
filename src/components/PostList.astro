@@ -1,7 +1,7 @@
 ---
 import { formatDate, type Post } from '../lib/posts';
-interface Props { posts: Post[]; showCategory?: boolean }
-const { posts, showCategory = true } = Astro.props;
+interface Props { posts: Post[]; showCategory?: boolean; emptyText?: string }
+const { posts, showCategory = true, emptyText = 'No posts yet.' } = Astro.props;
 ---
 {posts.length ? (
   <ul class="post-list">
@@ -9,8 +9,10 @@ const { posts, showCategory = true } = Astro.props;
       <li class="post-item">
         <a href={p.url}>
           <div class="post-item-meta">
+            {p.data.pinned && <span class="pin-badge">PINNED</span>}
             {showCategory && <span class="cat">/{p.category}</span>}
             <span>{formatDate(p.data.date)}</span>
+            {p.data.series && <span class="series-tag">series: {p.data.series}</span>}
             {p.data.draft && <span class="draft-badge">DRAFT</span>}
           </div>
           <h3>{p.data.title}</h3>
@@ -20,5 +22,5 @@ const { posts, showCategory = true } = Astro.props;
     ))}
   </ul>
 ) : (
-  <p class="empty-state">No posts yet.</p>
+  <p class="empty-state">{emptyText}</p>
 )}

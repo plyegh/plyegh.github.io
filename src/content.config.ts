@@ -11,6 +11,8 @@ const posts = defineCollection({
     date: z.coerce.date(),
     tags: z.array(z.string()).default([]),
     description: z.string().optional(),
+    series: z.string().optional(), // posts sharing this name are linked in reading order
+    pinned: z.boolean().default(false), // shown first in lists
     draft: z.boolean().default(false),
   }),
 });

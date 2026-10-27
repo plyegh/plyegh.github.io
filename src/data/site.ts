@@ -28,6 +28,15 @@ export const LINKS = [
   { id: 'discord', href: '' },
 ] as const;
 
+// Comments (giscus, backed by GitHub Discussions of a PUBLIC repo).
+// Fill these from https://giscus.app after creating the repo; comments stay hidden while any is empty.
+export const GISCUS = {
+  repo: '', // e.g. 'plyegh/blog-comments'
+  repoId: '',
+  category: 'Announcements',
+  categoryId: '',
+};
+
 // Folder name under src/content/posts/ = URL path = category id.
 export const CATEGORIES = [
   { slug: 'dev', name: 'Development' },

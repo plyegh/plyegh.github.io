@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getPosts, getTags } from '../../lib/posts';
+
+const tags = getTags(await getPosts());
+---
+<Base title="tags" description="All tags on plyegh.">
+  <div class="wrap">
+    <header class="page-head">
+      <nav class="crumbs" aria-label="Path"><a href="/">~</a>/<span class="here">tags</span>/</nav>
+      <h1>Tags</h1>
+    </header>
+    {tags.length ? (
+      <ul class="tag-cloud">
+        {tags.map((t) => (
+          <li><a href={`/tags/${t.slug}/`}>#{t.name}<span class="count">{t.posts.length}</span></a></li>
+        ))}
+      </ul>
+    ) : (
+      <p class="empty-state">No tags yet.</p>
+    )}
+  </div>
+</Base>

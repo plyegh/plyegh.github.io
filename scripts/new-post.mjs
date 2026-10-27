@@ -42,6 +42,8 @@ title: ${JSON.stringify(title)}
 date: ${kst}
 tags: []
 description: ""
+# series: "Series name"   # optional
+# pinned: true            # optional
 draft: true
 ---
 

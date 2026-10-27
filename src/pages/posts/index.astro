@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import PostList from '../../components/PostList.astro';
 import CategoryTree from '../../components/CategoryTree.astro';
-import { getPosts } from '../../lib/posts';
+import { getPosts, pinnedFirst } from '../../lib/posts';
 
 const posts = await getPosts();
 ---
@@ -14,7 +14,7 @@ const posts = await getPosts();
     </header>
     <div class="posts-layout">
       <CategoryTree posts={posts} active="" />
-      <div><PostList posts={posts} /></div>
+      <div><PostList posts={pinnedFirst(posts)} /></div>
     </div>
   </div>
 </Base>

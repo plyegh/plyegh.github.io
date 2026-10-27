@@ -1,45 +1,64 @@
 ---
 import { render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
+import Comments from '../../../components/Comments.astro';
 import { categoryName } from '../../../data/site';
-import { getPosts, formatDate, type Post } from '../../../lib/posts';
+import { getPosts, formatDate, seriesOf, tagUrl, type Post } from '../../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPosts(); // newest first
   return posts.map((post, i) => ({
     params: { category: post.category, slug: post.slug },
-    props: { post, newer: posts[i - 1], older: posts[i + 1] },
+    props: {
+      post,
+      newer: posts[i - 1],
+      older: posts[i + 1],
+      series: post.data.series ? seriesOf(posts, post.data.series) : [],
+    },
   }));
 }
-interface Props { post: Post; newer?: Post; older?: Post }
-const { post, newer, older } = Astro.props;
+interface Props { post: Post; newer?: Post; older?: Post; series: Post[] }
+const { post, newer, older, series } = Astro.props;
 const { Content, headings } = await render(post);
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const minutes = Math.max(1, Math.round((post.body ?? '').length / 900));
+const seriesIndex = series.findIndex((p) => p.id === post.id);
 ---
 <Base title={post.data.title} description={post.data.description} type="article" publishedTime={post.data.date}>
   <div class="progress" aria-hidden="true"><span></span></div>
-  <article class="post">
+  <article class="post" data-pagefind-body data-pagefind-meta={`date:${formatDate(post.data.date)}`} data-pagefind-filter={`category:${post.category}`}>
     <header class="wrap post-head">
       <div class="post-head-inner">
-        <nav class="crumbs" aria-label="Path">
+        <nav class="crumbs" aria-label="Path" data-pagefind-ignore>
           <a href="/">~</a>/<a href="/posts/">posts</a>/<a href={`/posts/${post.category}/`}>{post.category}</a>/<span class="here">{post.slug}</span>
         </nav>
         <h1>{post.data.title}</h1>
         {post.data.description && <p class="lead">{post.data.description}</p>}
-        <p class="post-meta">
+        <p class="post-meta" data-pagefind-ignore>
           <a class="cat" href={`/posts/${post.category}/`}>{categoryName(post.category)}</a>
           <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
           <span>{minutes} min read</span>
           {post.data.draft && <span class="draft-badge">DRAFT</span>}
         </p>
+        {series.length > 1 && (
+          <nav class="series-box" aria-label="Series" data-pagefind-ignore>
+            <p class="series-head"><span>SERIES</span> {post.data.series} <span class="dim">· {seriesIndex + 1}/{series.length}</span></p>
+            <ol>
+              {series.map((p) => (
+                <li>{p.id === post.id
+                  ? <span class="here" aria-current="page">{p.data.title}</span>
+                  : <a href={p.url}>{p.data.title}</a>}</li>
+              ))}
+            </ol>
+          </nav>
+        )}
       </div>
     </header>
 
     <div class="wrap post-grid">
       <div class="prose" id="prose"><Content /></div>
       {toc.length >= 3 && (
-        <aside class="toc" aria-label="On this page">
+        <aside class="toc" aria-label="On this page" data-pagefind-ignore>
           <p class="toc-title">ON THIS PAGE</p>
           <nav>
             {toc.map((h) => <a class={`d${h.depth}`} href={`#${h.slug}`}>{h.text}</a>)}
@@ -49,13 +68,16 @@ const minutes = Math.max(1, Math.round((post.body ?? '').length / 900));
     </div>
 
     <footer class="wrap post-foot">
-      {post.data.tags.length > 0 && <ul class="tags">{post.data.tags.map((t) => <li>#{t}</li>)}</ul>}
+      {post.data.tags.length > 0 && (
+        <ul class="tags">{post.data.tags.map((t) => <li><a href={tagUrl(t)}>#{t}</a></li>)}</ul>
+      )}
       {(older || newer) && (
-        <nav class="pager" aria-label="More posts">
+        <nav class="pager" aria-label="More posts" data-pagefind-ignore>
           {older && <a class="prev" href={older.url}><span class="mono">← older</span>{older.data.title}</a>}
           {newer && <a class="next" href={newer.url}><span class="mono">newer →</span>{newer.data.title}</a>}
         </nav>
       )}
+      <Comments />
     </footer>
   </article>
 </Base>

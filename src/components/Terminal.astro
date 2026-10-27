@@ -1,6 +1,6 @@
 ---
 import { CATEGORIES, PROFILE, LINKS } from '../data/site';
-import { formatDate, type Post } from '../lib/posts';
+import { formatDate, getTags, type Post } from '../lib/posts';
 interface Props { posts: Post[] }
 const { posts } = Astro.props;
 
@@ -8,7 +8,11 @@ const data = {
   profile: PROFILE,
   links: LINKS.filter((l) => l.href),
   categories: CATEGORIES,
-  posts: posts.map((p) => ({ title: p.data.title, date: formatDate(p.data.date), cat: p.category, slug: p.slug, url: p.url })),
+  posts: posts.map((p) => ({
+    title: p.data.title, date: formatDate(p.data.date), cat: p.category, slug: p.slug, url: p.url,
+    desc: p.data.description ?? '', tags: p.data.tags, series: p.data.series ?? '',
+  })),
+  tags: getTags(posts).map((t) => ({ name: t.name, slug: t.slug, n: t.posts.length })),
 };
 // escape "<" so a post title can never close the <script> tag
 const json = JSON.stringify(data).replace(/</g, '\\u003c');
@@ -30,12 +34,15 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
 <script type="application/json" id="term-data" set:html={json}></script>
 
 <script>
-  type TermPost = { title: string; date: string; cat: string; slug: string; url: string };
+  import { searchPosts } from '../lib/search-client';
+
+  type TermPost = { title: string; date: string; cat: string; slug: string; url: string; desc: string; tags: string[]; series: string };
   type TermData = {
     profile: Record<string, string> & { tags: string[] };
     links: { id: string; href: string }[];
     categories: { slug: string; name: string }[];
     posts: TermPost[];
+    tags: { name: string; slug: string; n: number }[];
   };
   const D: TermData = JSON.parse(document.getElementById('term-data')!.textContent || '{}');
   const CATS = D.categories.map((c) => c.slug);
@@ -70,7 +77,7 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
   function resolve(arg = '') {
     let t = arg.replace(/^~\/?/, '').replace(/^\.\//, '').replace(/\/+$/, '');
     if (!t || t === '..' || t === '/' || t === '~' || t === 'home') return 'home';
-    if (t === 'posts') return 'posts';
+    if (t === 'posts' || t === 'tags' || t === 'search') return t;
     if (t.startsWith('posts/')) t = t.slice(6);
     return CATS.includes(t) ? t : null;
   }
@@ -83,15 +90,24 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
     print(list.length ? dim("→ 'open &lt;n&gt;' to read one") : dim('nothing here yet.'));
   }
 
+  // "3" → 3rd item of the last list, otherwise a post slug
+  function findPost(t: string) {
+    const n = Number(t);
+    return Number.isInteger(n) && n > 0 ? lastList[n - 1] : D.posts.find((p) => p.slug === t);
+  }
+
   const COMMANDS: Record<string, (a: string[]) => void | Promise<void>> = {
     help() {
       print('<div class="t-grid">' + [
         ['whoami', 'who runs this place'],
         ['ls [dir]', 'list — ls posts, ls ctf-wargame'],
         ['ls -t', 'latest posts, all categories'],
-        ['cd &lt;dir&gt;', 'go to a page — cd posts, cd blog-docs'],
+        ['ls tags', 'all tags'],
+        ['tree', 'every category and its posts'],
+        ['grep &lt;word&gt;', 'full-text search across posts'],
+        ['cd &lt;dir&gt;', 'go to a page — cd posts, cd blog-docs, cd tags'],
         ['open &lt;n|name&gt;', 'open a post from the last list, or a link'],
-        ['cat readme.md', 'about this site'],
+        ['cat &lt;n|name&gt;', 'post summary — or cat readme.md'],
         ['theme [dark|light]', 'switch theme'],
         ['history', 'commands you ran'],
         ['clear', 'clear the screen'],
@@ -113,11 +129,18 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
       if (!arg || arg === '.' || arg === '~' || arg === '~/') { print('<span class="t-dir">posts/</span>   readme.md'); return; }
       if (arg === 'readme.md') { print('readme.md'); return; }
       const r = resolve(arg);
+      if (r === 'tags') {
+        if (!D.tags.length) { print(dim('no tags yet.')); return; }
+        print(D.tags.map((t) => `<span class="t-path">#${esc(t.name)}</span>${dim('(' + t.n + ')')}`).join('  '), 'l-block');
+        print(dim("→ 'cd tags' to browse them"));
+        return;
+      }
+      if (r === 'search') { print(dim("search is a command here — try 'grep &lt;word&gt;'")); return; }
       if (r === 'posts') {
         print('<div class="t-tree">' + D.categories.map((c, i) =>
           `<span class="t-dim">${i === D.categories.length - 1 ? '└──' : '├──'}</span><span class="t-dir">${c.slug}/</span><span class="t-dim">${plural(countOf(c.slug))}</span>`,
         ).join('') + '</div>', 'l-block');
-        print(dim("→ try 'ls " + D.categories[0].slug + "' or 'cd posts'"));
+        print(dim("→ try 'ls " + D.categories[0].slug + "', 'tree' or 'cd posts'"));
         return;
       }
       if (r && r !== 'home') { listPosts(D.posts.filter((p) => p.cat === r), false); return; }
@@ -126,7 +149,7 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
     cd(a) {
       const r = resolve(a[0]);
       if (r === 'home') { print(dim('already at ~')); return; }
-      if (r === 'posts') { print(ok('~/posts')); return go('/posts/'); }
+      if (r === 'posts' || r === 'tags' || r === 'search') { print(ok('~/' + r)); return go(`/${r}/`); }
       if (r) { print(ok('~/posts/' + r)); return go(`/posts/${r}/`); }
       print(err((a[0] === 'readme.md' ? 'cd: not a directory: ' : 'cd: no such file or directory: ') + esc(a[0] || '')));
     },
@@ -140,16 +163,54 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
           dim('Not into terminals? Use the menu up top.')].forEach((s) => print(s));
         return;
       }
+      const post = findPost(t);
+      if (post) {
+        print(`<span class="t-dir">${esc(post.title)}</span>`);
+        print(dim(`${post.date} · ~/posts/${post.cat}/${post.slug}`) + (post.series ? dim(` · series: ${esc(post.series)}`) : ''));
+        if (post.desc) print(esc(post.desc));
+        if (post.tags.length) print(post.tags.map((x) => `<span class="t-path">#${esc(x)}</span>`).join(' '));
+        print(dim(`→ 'open ${esc(post.slug)}' to read it`));
+        return;
+      }
       const r = resolve(t);
       print(err(`cat: ${esc(t)}: ` + (r && r !== 'home' ? 'Is a directory' : 'No such file or directory')));
+    },
+    tree() {
+      print('<span class="t-dir">~/posts</span>');
+      D.categories.forEach((c, i) => {
+        const lastCat = i === D.categories.length - 1;
+        const list = D.posts.filter((p) => p.cat === c.slug);
+        print(dim(lastCat ? '└── ' : '├── ') + `<span class="t-dir">${c.slug}/</span>`);
+        list.forEach((p, j) => print(dim((lastCat ? '    ' : '│   ') + (j === list.length - 1 ? '└── ' : '├── ')) + esc(p.slug)));
+      });
+      print(dim(`${D.categories.length} directories, ${D.posts.length} posts`));
+    },
+    async grep(a) {
+      const q = a.filter((x) => !x.startsWith('-')).join(' ');
+      if (!q) { print(err('grep: missing pattern') + ' ' + dim('(try: grep openstack)')); return; }
+      print(dim('searching…'));
+      const status = out.lastElementChild as HTMLElement;
+      try {
+        const { total, hits } = await searchPosts(q, 8);
+        status.remove();
+        if (!total) { print(dim(`no matches for "${esc(q)}"`)); return; }
+        lastList = hits.map((h) => D.posts.find((p) => p.url === h.url)).filter(Boolean) as TermPost[];
+        hits.forEach((h, i) => {
+          print(dim(`[${i + 1}]`) + ' ' + (h.cat ? `<span class="t-path">${esc(h.cat)}/</span> ` : '') + esc(h.title));
+          print('    ' + dim(h.excerpt.replace(/<mark>/g, '<span class="t-mark">').replace(/<\/mark>/g, '</span>')), 'l-block');
+        });
+        print(dim(`${total} match${total === 1 ? '' : 'es'} → 'open &lt;n&gt;'` + (total > hits.length ? ` · all results: cd search` : '')));
+      } catch {
+        status.remove();
+        print(err('grep: search index not found') + ' ' + dim('(built by npm run build)'));
+      }
     },
     open(a) {
       const t = (a[0] || '').toLowerCase();
       if (!t) { print(err('open: missing operand') + ' ' + dim('(try: open 1, open github)')); return; }
       const link = D.links.find((l) => l.id === t);
       if (link) { print(ok(esc(link.href.replace(/^https?:\/\//, '')))); window.open(link.href, '_blank', 'noopener'); return; }
-      const n = Number(t);
-      const post = Number.isInteger(n) && n > 0 ? lastList[n - 1] : D.posts.find((p) => p.slug === t);
+      const post = findPost(t);
       if (post) { print(ok(esc(post.title))); return go(post.url); }
       const r = resolve(t);
       if (r && r !== 'home') return COMMANDS.cd([t]);
@@ -171,9 +232,9 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
     exit: () => print(dim('logout… just kidding. keep looking around.')),
     man: () => { window.dispatchEvent(new CustomEvent('plyegh:guide', { detail: true })); print(ok('command guide opened')); },
   };
-  const DIR_ARGS = ['posts', ...CATS, ...CATS.map((c) => 'posts/' + c)];
+  const DIR_ARGS = ['posts', 'tags', ...CATS, ...CATS.map((c) => 'posts/' + c)];
   const ARGS: Record<string, string[]> = {
-    ls: [...DIR_ARGS, 'readme.md', '-t'], cd: DIR_ARGS, cat: ['readme.md'],
+    ls: [...DIR_ARGS, 'readme.md', '-t'], cd: [...DIR_ARGS, 'search'], cat: ['readme.md', ...D.posts.map((p) => p.slug)],
     open: [...D.links.map((l) => l.id), ...D.posts.map((p) => p.slug)], theme: ['dark', 'light'],
   };
 
