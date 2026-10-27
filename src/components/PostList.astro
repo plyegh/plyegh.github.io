@@ -1,0 +1,24 @@
+---
+import { formatDate, type Post } from '../lib/posts';
+interface Props { posts: Post[]; showCategory?: boolean }
+const { posts, showCategory = true } = Astro.props;
+---
+{posts.length ? (
+  <ul class="post-list">
+    {posts.map((p) => (
+      <li class="post-item">
+        <a href={p.url}>
+          <div class="post-item-meta">
+            {showCategory && <span class="cat">/{p.category}</span>}
+            <span>{formatDate(p.data.date)}</span>
+            {p.data.draft && <span class="draft-badge">DRAFT</span>}
+          </div>
+          <h3>{p.data.title}</h3>
+          {p.data.description && <p class="post-item-desc">{p.data.description}</p>}
+        </a>
+      </li>
+    ))}
+  </ul>
+) : (
+  <p class="empty-state">No posts yet.</p>
+)}

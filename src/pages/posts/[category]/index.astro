@@ -1,0 +1,27 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PostList from '../../../components/PostList.astro';
+import CategoryTree from '../../../components/CategoryTree.astro';
+import { CATEGORIES } from '../../../data/site';
+import { getPosts } from '../../../lib/posts';
+
+export function getStaticPaths() {
+  return CATEGORIES.map((c) => ({ params: { category: c.slug }, props: { name: c.name } }));
+}
+const { category } = Astro.params;
+const { name } = Astro.props;
+const posts = await getPosts();
+const list = posts.filter((p) => p.category === category);
+---
+<Base title={category} description={`${name} — posts on plyegh.`}>
+  <div class="wrap">
+    <header class="page-head">
+      <nav class="crumbs" aria-label="Path"><a href="/">~</a>/<a href="/posts/">posts</a>/<span class="here">{category}</span>/</nav>
+      <h1>{name}</h1>
+    </header>
+    <div class="posts-layout">
+      <CategoryTree posts={posts} active={category} />
+      <div><PostList posts={list} showCategory={false} /></div>
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,113 @@
+---
+import { render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import { categoryName } from '../../../data/site';
+import { getPosts, formatDate, type Post } from '../../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts(); // newest first
+  return posts.map((post, i) => ({
+    params: { category: post.category, slug: post.slug },
+    props: { post, newer: posts[i - 1], older: posts[i + 1] },
+  }));
+}
+interface Props { post: Post; newer?: Post; older?: Post }
+const { post, newer, older } = Astro.props;
+const { Content, headings } = await render(post);
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const minutes = Math.max(1, Math.round((post.body ?? '').length / 900));
+---
+<Base title={post.data.title} description={post.data.description} type="article" publishedTime={post.data.date}>
+  <div class="progress" aria-hidden="true"><span></span></div>
+  <article class="post">
+    <header class="wrap post-head">
+      <div class="post-head-inner">
+        <nav class="crumbs" aria-label="Path">
+          <a href="/">~</a>/<a href="/posts/">posts</a>/<a href={`/posts/${post.category}/`}>{post.category}</a>/<span class="here">{post.slug}</span>
+        </nav>
+        <h1>{post.data.title}</h1>
+        {post.data.description && <p class="lead">{post.data.description}</p>}
+        <p class="post-meta">
+          <a class="cat" href={`/posts/${post.category}/`}>{categoryName(post.category)}</a>
+          <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+          <span>{minutes} min read</span>
+          {post.data.draft && <span class="draft-badge">DRAFT</span>}
+        </p>
+      </div>
+    </header>
+
+    <div class="wrap post-grid">
+      <div class="prose" id="prose"><Content /></div>
+      {toc.length >= 3 && (
+        <aside class="toc" aria-label="On this page">
+          <p class="toc-title">ON THIS PAGE</p>
+          <nav>
+            {toc.map((h) => <a class={`d${h.depth}`} href={`#${h.slug}`}>{h.text}</a>)}
+          </nav>
+        </aside>
+      )}
+    </div>
+
+    <footer class="wrap post-foot">
+      {post.data.tags.length > 0 && <ul class="tags">{post.data.tags.map((t) => <li>#{t}</li>)}</ul>}
+      {(older || newer) && (
+        <nav class="pager" aria-label="More posts">
+          {older && <a class="prev" href={older.url}><span class="mono">← older</span>{older.data.title}</a>}
+          {newer && <a class="next" href={newer.url}><span class="mono">newer →</span>{newer.data.title}</a>}
+        </nav>
+      )}
+    </footer>
+  </article>
+</Base>
+
+<script>
+  const prose = document.getElementById('prose')!;
+
+  // tables scroll sideways instead of pushing the page wider
+  prose.querySelectorAll('table').forEach((t) => {
+    const w = document.createElement('div');
+    w.className = 'table-wrap';
+    t.replaceWith(w);
+    w.appendChild(t);
+  });
+
+  // code blocks: language label + copy button
+  prose.querySelectorAll('pre').forEach((pre) => {
+    const box = document.createElement('div');
+    box.className = 'code';
+    pre.replaceWith(box);
+    box.appendChild(pre);
+    const lang = pre.dataset.language;
+    if (lang && !['text', 'plain', 'plaintext', 'txt'].includes(lang)) {
+      const tag = document.createElement('span');
+      tag.className = 'code-lang';
+      tag.textContent = lang;
+      box.appendChild(tag);
+    }
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'copy-btn';
+    btn.textContent = 'copy';
+    btn.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(pre.innerText.replace(/\n$/, '')); } catch {}
+      btn.textContent = 'copied'; btn.classList.add('done');
+      setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('done'); }, 1600);
+    });
+    box.appendChild(btn);
+  });
+
+  // reading progress + active TOC entry
+  const bar = document.querySelector<HTMLElement>('.progress span')!;
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc a')];
+  const heads = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1)))).filter(Boolean) as HTMLElement[];
+  function onScroll() {
+    const r = prose.getBoundingClientRect();
+    const p = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight * 0.6)));
+    bar.style.transform = `scaleX(${p})`;
+    let idx = 0;
+    heads.forEach((h, i) => { if (h.getBoundingClientRect().top < 140) idx = i; });
+    links.forEach((a, i) => a.classList.toggle('active', i === idx));
+  }
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>

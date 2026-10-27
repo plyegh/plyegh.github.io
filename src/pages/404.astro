@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="404" description="Page not found.">
+  <section class="wrap notfound">
+    <div class="term">
+      <div class="term-bar" aria-hidden="true">
+        <span class="dots"><i></i><i></i><i></i></span>
+        <span class="term-title">guest@plyegh: ~</span>
+        <span class="term-meta">bash</span>
+      </div>
+      <div class="term-body">
+        <h1 class="sr-only">404 — page not found</h1>
+        <p class="l"><span class="t-ps">guest@plyegh</span><span class="t-dim">:</span><span class="t-path">~</span><span class="t-dim">$</span> cd <span id="missing"></span></p>
+        <p class="l"><span class="t-err">bash: cd: no such file or directory</span></p>
+        <p class="l t-dim">error 404 — this page doesn't exist (anymore).</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="/">cd ~</a>
+          <a class="btn" href="/posts/">ls ~/posts</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+<script>
+  document.getElementById('missing')!.textContent = decodeURI(location.pathname);
+</script>
