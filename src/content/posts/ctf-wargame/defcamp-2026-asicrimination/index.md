@@ -2,7 +2,7 @@
 title: "DefCamp 2026 Web - asicrimination"
 date: 2026-09-22T10:31:00+09:00
 tags: [CTF, DefCamp 2026, Write-up, Web]
-description: "DefCamp 2026 write-up : Web 2 problems"
+description: "DefCamp 2026 write-up"
 ---
 
 ## DefCamp 2026 Web AIscrimination 풀이.
