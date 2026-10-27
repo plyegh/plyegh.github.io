@@ -29,7 +29,7 @@ label:e2;
 changeFigure:none -right -exit=exit -exitDuration=400 -ease=easeIn;
 setTransform:{"brightness":1,"blur":0} -target=bg-main -duration=1 -next;
 changeBg:barracks_day.png -enter=enter -duration=800 -ease=easeInOut;
-changeFigure:seonho_empty.png -left -enter=enter-from-left -duration=450 -ease=easeOut;
+changeFigure:seonho_avoid.webp -left -enter=enter-from-left -duration=450 -ease=easeOut;
 setTransform:{"brightness":0.72,"saturation":0.55} -target=fig-left -duration=900 -next;
 :다음 날 세면장에서 유선호의 등을 봤다. 멍이 겹쳐 있었다. 오래된 것과 새것.;
 유선호:…보지 마.;

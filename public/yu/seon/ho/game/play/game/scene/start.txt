@@ -11,7 +11,7 @@ setTransform:{"brightness":0.8} -target=bg-main -duration=800 -next;
 changeFigure:none -left -exit=exit -exitDuration=400 -ease=easeIn;
 changeFigure:none -right -exit=exit -exitDuration=400 -ease=easeIn;
 :유선호와 나는 같은 날 이 부대 정문을 넘었다.;
-changeFigure:seonho.png -left -enter=enter-from-left -duration=450 -ease=easeOut;
+changeFigure:seonho_excited.webp -left -enter=enter-from-left -duration=450 -ease=easeOut -transform={"brightness":0.8};
 유선호:야. 우리 진짜 해병 된 거냐?;
 나:…그러게. 2년 뒤에 웃으면서 나가자.;
 유선호:빨간 명찰 달면 다 끝난 줄 알았는데. 이제 시작이네.;

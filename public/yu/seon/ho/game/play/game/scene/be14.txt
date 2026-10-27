@@ -6,7 +6,7 @@ bgm:silence_low.mp3 -enter=1500;
 changeFigure:none -left -exit=exit -exitDuration=400 -ease=easeIn;
 changeFigure:none -right -exit=exit -exitDuration=400 -ease=easeIn;
 :창고 뒤. 나는 시키는 대로 유선호 앞에 섰다.;
-changeFigure:seonho_empty.png -left -enter=enter-from-left -duration=450 -ease=easeOut;
+changeFigure:seonho_blank.webp -left -enter=enter-from-left -duration=450 -ease=easeOut;
 setTransform:{"brightness":0.72,"saturation":0.55} -target=fig-left -duration=900 -next;
 :유선호는 나를 올려다봤다. 놀라지도 않았다.;
 유선호:…너도구나.;

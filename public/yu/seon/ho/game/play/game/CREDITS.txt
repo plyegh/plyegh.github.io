@@ -11,4 +11,6 @@ BGM / 효과음
   _source/backgrounds 의 자체 제작 플레이스홀더를 변환·가공 (barracks_night, gate_night, funeral 은 어둡게 처리한 파생본, sky_day 는 그라디언트 임시본)
 
 인물
-  유선호 스프라이트: 제공된 사진 컷아웃 / 그 외 인물: 자체 제작 실루엣 (senior_angry 는 senior 복제)
+  유선호 스프라이트 7종(seonho_*.webp): 제공된 사진을 배경 제거 후 얼굴 위치·크기 기준으로 정렬, 색 보정
+    (avoid 외면 / blank 멍함 / awkward 머쓱 / excited 신남 / thumbsup 엄지척 / tease·serious 클로즈업)
+  그 외 인물: 자체 제작 실루엣 (senior_angry 는 senior 복제)
