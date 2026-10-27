@@ -39,6 +39,7 @@ export const ABOUT: Section[] = [
       { name: 'KISIA CTF 2026', detail: '팀 참가 · 본인 6문제 해결', date: '2026.08' },
       { name: 'DefCamp 2026', detail: '팀 참가 · 본인 3문제 해결', date: '2026.09' },
       { name: 'DEADFACE CTF 2026', detail: '팀 참가 · 본인 11문제 해결', date: '2026.10' },
+      { name: 'HITCON CTF 2026 (18th)', detail: '팀 참가', date: '2026.10' },
     ],
   },
   {
