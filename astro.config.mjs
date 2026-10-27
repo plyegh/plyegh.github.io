@@ -19,6 +19,36 @@ export default defineConfig({
       filter: (page) => !page.includes('/yu/') && !Object.keys(redirects).some((r) => decodeURI(page).endsWith(`${r}/`)),
     }),
   ],
+  // Content-Security-Policy as a <meta> tag on every page. Astro hashes its own inline
+  // scripts/styles; the lists below add what the site loads from elsewhere.
+  security: {
+    csp: {
+      algorithm: 'SHA-256',
+      directives: [
+        "default-src 'self'",
+        "img-src 'self' data:",
+        "font-src 'self' https://fonts.gstatic.com",
+        "connect-src 'self'",
+        "frame-src https://giscus.app",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'self'",
+      ],
+      styleDirective: {
+        resources: [
+          "'self'",
+          'https://fonts.googleapis.com',
+          'https://giscus.app',
+          // Shiki colours code tokens with style="" attributes
+          { resource: "'unsafe-inline'", kind: 'attribute' },
+        ],
+      },
+      scriptDirective: {
+        // giscus client, and WebAssembly for the Pagefind search index
+        resources: ["'self'", 'https://giscus.app', "'wasm-unsafe-eval'"],
+      },
+    },
+  },
   markdown: {
     processor: satteri({ hastPlugins: [callouts, figureCaptions] }),
     shikiConfig: {
