@@ -13,6 +13,7 @@ export const ABOUT: Section[] = [
       { name: '우석대학교', detail: '정보보안학과 26학번', date: '2026.03 ~ Present' },
       { name: 'APS 동아리', detail: 'APS 부원', date: '2026.03 ~ Present' },
       { name: 'KUCIS 2026 호남권 대표진', detail: '호남권역 대표', date: '2026.05 ~ Present' },
+      { name: 'HSPACE', detail: 'Knights Frontier 3기', date: '2026.10 ~ Present' },
     ],
   },
   {
