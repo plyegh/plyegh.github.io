@@ -39,7 +39,7 @@ changeFigure:senior_angry.png -right -enter=enter-from-right -duration=450 -ease
 setAnimation:shake -target=fig-right -next;
 선임:입 조심해라. 여기서 2년 살 거면.;
 changeFigure:none -right -exit=exit -exitDuration=400 -ease=easeIn;
-changeFigure:seonho_sad.png -left -enter=enter-from-left -duration=450 -ease=easeOut;
+changeFigure:seonho_serious.webp -left -enter=enter-from-left -duration=450 -ease=easeOut -transform={"brightness":0.8};
 :그날 밤 유선호가 조용히 물었다.;
 유선호:…소대장님한테 말했어? 나 때문에?;
 유선호:나도 같이 갈까. 내가 직접 말하면 다를까.;

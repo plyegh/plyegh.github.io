@@ -13,7 +13,7 @@ setTransform:{"brightness":1.08,"saturation":1.12} -target=bg-main -duration=150
 changeFigure:family.png -right -enter=enter-from-right -duration=450 -ease=easeOut;
 가족:…고마워요. 우리 애 살렸어요.;
 changeFigure:none -right -exit=exit -exitDuration=400 -ease=easeIn;
-changeFigure:seonho.png -left -enter=enter-from-left -duration=450 -ease=easeOut;
+changeFigure:seonho_tease.webp -left -enter=enter-from-left -duration=450 -ease=easeOut;
 :유선호는 다른 부대에서 남은 복무를 마쳤다. 계단이 없는 부대였다.;
 유선호:야. 나 이제 밥 다 먹는다.;
 :그 부대의 창고 뒤에는 이제 CCTV가 달려 있다. 작은 변화였다. 그러나 변화였다.;

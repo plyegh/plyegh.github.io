@@ -4,7 +4,7 @@ setTextbox:on -next;
 changeBg:barracks_night.png -enter=enter -duration=1500 -ease=easeInOut;
 bgm:hope_theme.mp3 -enter=1500;
 changeFigure:none -left -exit=exit -exitDuration=400 -ease=easeIn;
-changeFigure:seonho_sad.png -left -enter=enter-from-left -duration=450 -ease=easeOut;
+changeFigure:seonho_awkward.webp -left -enter=enter-from-left -duration=450 -ease=easeOut -transform={"brightness":0.8};
 :나는 아무것도 바꾸지 못했다. 선임도 부대도 계단도.;
 :다만 매일 밤 유선호 옆에 있었다. 불려 가면 기다렸고 돌아오면 말을 걸었다.;
 유선호:…너 진짜 안 지겹냐.;
@@ -13,7 +13,7 @@ changeFigure:seonho_sad.png -left -enter=enter-from-left -duration=450 -ease=eas
 changeFigure:none -left -exit=exit -exitDuration=400 -ease=easeIn;
 changeBg:sky_day.png -enter=enter -duration=800 -ease=easeInOut;
 setTransform:{"brightness":1.08,"saturation":1.12} -target=bg-main -duration=1500 -next;
-changeFigure:seonho.png -left -enter=enter-from-left -duration=450 -ease=easeOut;
+changeFigure:seonho_thumbsup.webp -left -enter=enter-from-left -duration=450 -ease=easeOut;
 :선임이 먼저 전역했다. 그날 유선호는 처음으로 밥을 다 먹었다.;
 :그리고 우리는 같은 날 정문을 걸어 나왔다. 둘 다. 걸어서.;
 유선호:…약속 지켰네.;

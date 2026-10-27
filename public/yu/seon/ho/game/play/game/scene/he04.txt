@@ -10,13 +10,14 @@ changeFigure:officer.png -right -enter=enter-from-right -duration=450 -ease=ease
 :소대장은 그 말을 지켰다. 서류는 2주 만에 내려왔다.;
 changeFigure:none -right -exit=exit -exitDuration=400 -ease=easeIn;
 changeBg:gate_night.png -enter=enter -duration=800 -ease=easeInOut;
-changeFigure:seonho_sad.png -left -enter=enter-from-left -duration=450 -ease=easeOut;
+changeFigure:seonho_serious.webp -left -enter=enter-from-left -duration=450 -ease=easeOut -transform={"brightness":0.8};
 유선호:…나만 가도 되냐. 너는.;
 나:나는 괜찮아. 선임도 조사받는대. 너 없는 동안 여기도 바뀔 거야.;
 :유선호는 정문을 걸어 나갔다. 이번에는 도망이 아니었다.;
 changeFigure:none -left -exit=exit -exitDuration=400 -ease=easeIn;
 changeBg:sky_day.png -enter=enter -duration=800 -ease=easeInOut;
 setTransform:{"brightness":1.08,"saturation":1.12} -target=bg-main -duration=1500 -next;
+changeFigure:seonho_excited.webp -left -enter=enter-from-left -duration=450 -ease=easeOut -transform={"brightness":1};
 :1년 뒤 전역식에서 우리는 다시 만났다. 유선호는 살이 좀 쪘고 잘 웃었다.;
 :전부를 바꾸지는 못했다. 그러나 한 사람은 지켰다.;
 setTextbox:hide -next;
