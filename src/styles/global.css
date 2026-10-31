@@ -594,20 +594,55 @@ main { flex: 1 0 auto; }
 /* ===== About ===== */
 .about-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 56px; padding-bottom: 96px; align-items: start; }
 @media (max-width: 860px) { .about-layout { grid-template-columns: 1fr; gap: 40px; } }
-.about-section { margin-bottom: 40px; }
-.about-section:last-child { margin-bottom: 0; }
-.about-section h2 { display: flex; align-items: center; gap: 10px; font-size: 1.15rem; margin-bottom: 18px; }
+.about-timeline { display: grid; gap: 2px; align-content: start; }
+/* each category is a collapsible <details> */
+.about-section { border-top: 1px solid var(--line); }
+.about-section:first-child { border-top: 0; }
+.about-section > summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px;
+  padding: 16px 2px; font: 600 1.15rem/1 var(--display); letter-spacing: -.01em;
+}
+.about-section > summary::-webkit-details-marker { display: none; }
+.about-section > summary:hover .sec-title { color: var(--accent); }
 .about-section .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
 .dot-green { background: #3DDC84; box-shadow: 0 0 0 4px rgba(61,220,132,.12); }
 .dot-amber { background: var(--amber); box-shadow: 0 0 0 4px color-mix(in srgb, var(--amber) 14%, transparent); }
 .dot-blue { background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
 .dot-red { background: var(--red); box-shadow: 0 0 0 4px color-mix(in srgb, var(--red) 14%, transparent); }
 .dot-purple { background: #B197FC; box-shadow: 0 0 0 4px rgba(177,151,252,.14); }
-.about-section ul { list-style: none; display: grid; gap: 2px; margin-left: 4px; padding-left: 18px; border-left: 1px solid var(--line); }
-.about-section li { padding: 10px 0; }
+.sec-count { font: 500 .78rem var(--mono); color: var(--ink-3); }
+.about-section > summary .sec-count { margin-left: auto; }
+.chev { width: 16px; height: 16px; flex: none; fill: none; stroke: var(--ink-3); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .25s ease; }
+.about-section > summary .chev { margin-left: 10px; }
+details[open] > summary .chev { transform: rotate(180deg); }
+summary:hover .chev { stroke: var(--accent); }
+
+.about-items { list-style: none; display: grid; gap: 2px; margin: 0 0 20px 4px; padding-left: 18px; border-left: 1px solid var(--line); }
+.about-items li { padding: 10px 0; }
 .it-name { font-weight: 600; }
+.rank-badge { margin-left: 8px; font: 600 .7rem var(--mono); color: var(--accent-2); border: 1px solid color-mix(in srgb, var(--accent-2) 40%, transparent); border-radius: 5px; padding: 1px 5px; vertical-align: 1px; }
 .it-detail { color: var(--ink-2); font-size: .92rem; margin-top: 3px; line-height: 1.6; }
 .it-date { color: var(--ink-3); font-size: .78rem; margin-top: 5px; }
+
+/* CTF subgroups: Top 20 / Below 20 */
+.ctf-groups { margin: 0 0 18px 4px; padding-left: 18px; border-left: 1px solid var(--line); display: grid; gap: 2px; }
+.ctf-group > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 9px 2px; font: 600 .82rem var(--mono); color: var(--ink-2); }
+.ctf-group > summary::-webkit-details-marker { display: none; }
+.ctf-group > summary .gl { color: var(--ink); }
+.ctf-group > summary:hover .gl { color: var(--accent); }
+.ctf-group > summary .dim { font-weight: 400; }
+.ctf-group > summary .sec-count { margin-left: auto; }
+.ctf-group > summary .chev { width: 14px; height: 14px; margin-left: 8px; }
+.ctf-group .about-items { margin: 2px 0 12px 2px; padding-left: 14px; }
+.ctf-group .about-items li { padding: 8px 0; }
+.group-empty { margin: 2px 0 12px 16px; font-size: .85rem; color: var(--ink-3); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .about-section[open] > .about-items,
+  .about-section[open] > .ctf-groups,
+  .ctf-group[open] > .about-items { animation: about-reveal .28s ease; }
+  @keyframes about-reveal { from { opacity: 0; transform: translateY(-4px); } }
+}
 
 .about-side { position: sticky; top: 96px; }
 @media (max-width: 860px) { .about-side { position: static; } }

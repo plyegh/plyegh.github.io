@@ -2,8 +2,12 @@
 
 export const ABOUT_INTRO = '네트워크, 클라우드 인프라 & 보안에 관심이 많은 Plyegh입니다.';
 
-type Item = { name: string; detail?: string; date?: string };
+// rank: final placement. 1–20 → shown under CTF "Top 20"; set it on good results.
+// omit (or >20) → "Below 20 · Unplaced".
+type Item = { name: string; detail?: string; date?: string; rank?: number };
 type Section = { title: string; dot: 'green' | 'amber' | 'blue' | 'red' | 'purple'; items: Item[] };
+
+export const TOP_RANK = 20;
 
 export const ABOUT: Section[] = [
   {
