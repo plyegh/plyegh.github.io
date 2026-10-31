@@ -1,0 +1,9 @@
+---
+interface Props { item: { name: string; detail?: string; date?: string; rank?: number } }
+const { item } = Astro.props;
+---
+<li>
+  <p class="it-name">{item.name}{item.rank && <span class="rank-badge">#{item.rank}</span>}</p>
+  {item.detail && <p class="it-detail">{item.detail}</p>}
+  {item.date && <p class="it-date mono">{item.date}</p>}
+</li>
