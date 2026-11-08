@@ -48,7 +48,7 @@ export const TIMELINE: TimelineEntry[] = [
   { id: 'netadmin-2', date: '2026-06-23', title: '네트워크관리사 2급', detail: '한국정보통신자격협회 · 필기/실기 취득', kind: 'certification' },
   { id: 'fsl', date: '2026-07', title: 'FSL project', detail: '동아리 DBA 플랫폼 제작', kind: 'project', ongoing: true },
   { id: 'kisia-ctf', date: '2026-08-09', title: 'KISIA CTF 2026', detail: '팀 참가 · 본인 6문제 해결', kind: 'ctf' },
-  { id: 'codegate-booth', date: '2026-08-10', title: 'CODEGATE 2026 정보보안 부스 운영', detail: '부스 운영 · 학장님 인증서 수여', kind: 'activity' },
+  { id: 'codegate-booth', date: '2026-07-24', title: 'CODEGATE 2026 정보보안 부스 운영', detail: '부스 운영 · 학장님 인증서 수여', kind: 'activity' },
   { id: 'kucis-seminar', date: '2026-08', end: '2026-11', title: 'KUCIS 권역별 세미나 참여 및 진행', detail: '호남(기획 · 포스터 · 연사 섭외), 영남 · 충청 · 서경강 참여', kind: 'activity' },
   { id: 'defcamp', date: '2026-09-18', end: '2026-09-20', title: 'DefCamp 2026', detail: '팀 참가 · 본인 3문제 해결', kind: 'ctf' },
   { id: 'hspace', date: '2026-10', title: 'HSPACE', detail: 'Knights Frontier 3기', kind: 'affiliation', ongoing: true },
