@@ -16,7 +16,7 @@ const activeCat = inPosts ? path.split('/')[2] || '' : null;
       <span class="wordmark">plyegh<span class="cur">_</span></span>
     </a>
     <nav class="nav" aria-label="Main">
-      <a class="nav-link" href="/" aria-current={path === '/' ? 'page' : undefined}><span>/</span>home</a>
+      <a class="nav-link nav-home" href="/" aria-current={path === '/' ? 'page' : undefined}><span>/</span>home</a>
       <div class="nav-item has-menu" id="postsItem">
         <a class="nav-link" href="/posts/" aria-current={inPosts ? 'page' : undefined}><span>/</span>posts</a>
         <button class="nav-caret" type="button" aria-label="Post categories" aria-expanded="false" aria-controls="postsMenu">
@@ -39,6 +39,7 @@ const activeCat = inPosts ? path.split('/')[2] || '' : null;
         </div>
       </div>
       <a class="nav-link" href="/tags/" aria-current={path.startsWith('/tags') ? 'page' : undefined}><span>/</span>tags</a>
+      <a class="nav-link" href="/timeline/" aria-current={path.startsWith('/timeline') ? 'page' : undefined}><span>/</span>timeline</a>
       <a class="nav-link" href="/about/" aria-current={path.startsWith('/about') ? 'page' : undefined}><span>/</span>about</a>
     </nav>
     <div class="header-actions">
