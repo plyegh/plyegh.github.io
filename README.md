@@ -1,5 +1,10 @@
 # plyegh.github.io
 
+## URL
+```bash
+https://plyegh.github.io/
+```
+
 Personal security study log — built with [Astro](https://astro.build), deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to `main`.
 
 ## Writing a post
