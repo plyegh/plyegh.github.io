@@ -77,7 +77,7 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
   function resolve(arg = '') {
     let t = arg.replace(/^~\/?/, '').replace(/^\.\//, '').replace(/\/+$/, '');
     if (!t || t === '..' || t === '/' || t === '~' || t === 'home') return 'home';
-    if (t === 'posts' || t === 'tags' || t === 'search') return t;
+    if (t === 'posts' || t === 'tags' || t === 'search' || t === 'timeline' || t === 'about') return t;
     if (t.startsWith('posts/')) t = t.slice(6);
     return CATS.includes(t) ? t : null;
   }
@@ -105,7 +105,7 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
         ['ls tags', 'all tags'],
         ['tree', 'every category and its posts'],
         ['grep &lt;word&gt;', 'full-text search across posts'],
-        ['cd &lt;dir&gt;', 'go to a page — cd posts, cd blog-docs, cd tags'],
+        ['cd &lt;dir&gt;', 'go to a page — cd posts, cd blog-docs, cd timeline'],
         ['open &lt;n|name&gt;', 'open a post from the last list, or a link'],
         ['cat &lt;n|name&gt;', 'post summary — or cat readme.md'],
         ['theme [dark|light]', 'switch theme'],
@@ -129,6 +129,7 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
       if (!arg || arg === '.' || arg === '~' || arg === '~/') { print('<span class="t-dir">posts/</span>   readme.md'); return; }
       if (arg === 'readme.md') { print('readme.md'); return; }
       const r = resolve(arg);
+      if (r === 'timeline' || r === 'about' || r === 'search') { print(dim(`→ 'cd ${r}' to open it`)); return; }
       if (r === 'tags') {
         if (!D.tags.length) { print(dim('no tags yet.')); return; }
         print(D.tags.map((t) => `<span class="t-path">#${esc(t.name)}</span>${dim('(' + t.n + ')')}`).join('  '), 'l-block');
@@ -149,7 +150,7 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
     cd(a) {
       const r = resolve(a[0]);
       if (r === 'home') { print(dim('already at ~')); return; }
-      if (r === 'posts' || r === 'tags' || r === 'search') { print(ok('~/' + r)); return go(`/${r}/`); }
+      if (r === 'posts' || r === 'tags' || r === 'search' || r === 'timeline' || r === 'about') { print(ok('~/' + r)); return go(`/${r}/`); }
       if (r) { print(ok('~/posts/' + r)); return go(`/posts/${r}/`); }
       print(err((a[0] === 'readme.md' ? 'cd: not a directory: ' : 'cd: no such file or directory: ') + esc(a[0] || '')));
     },
@@ -234,7 +235,7 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
   };
   const DIR_ARGS = ['posts', 'tags', ...CATS, ...CATS.map((c) => 'posts/' + c)];
   const ARGS: Record<string, string[]> = {
-    ls: [...DIR_ARGS, 'readme.md', '-t'], cd: [...DIR_ARGS, 'search'], cat: ['readme.md', ...D.posts.map((p) => p.slug)],
+    ls: [...DIR_ARGS, 'readme.md', '-t'], cd: [...DIR_ARGS, 'search', 'timeline', 'about'], cat: ['readme.md', ...D.posts.map((p) => p.slug)],
     open: [...D.links.map((l) => l.id), ...D.posts.map((p) => p.slug)], theme: ['dark', 'light'],
   };
 

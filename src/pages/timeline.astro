@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import { ABOUT } from '../data/about';
+
+// Built from src/data/about.ts — each item lands on the month it started
+// ("2026.03 ~ Present" → 2026.03). Edit about.ts and both pages update.
+type Entry = { key: string; section: string; name: string; detail?: string; date?: string; rank?: number };
+
+const entries: Entry[] = ABOUT.flatMap((s) =>
+  s.items.flatMap((it) => {
+    const m = it.date?.match(/(\d{4})\.(\d{2})/);
+    return m ? [{ key: `${m[1]}.${m[2]}`, section: s.title, ...it }] : [];
+  }),
+);
+const months = [...new Set(entries.map((e) => e.key))].sort();
+const groups = months.map((key) => ({ key, items: entries.filter((e) => e.key === key) }));
+
+// one icon per section; a month uses the icon of its first item
+const ICON: Record<string, string> = {
+  Affiliation: '<path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"/>',
+  Projects: '<path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/>',
+  Activities: '<path d="M4 10v4h3l6 4V6L7 10H4zM17 9a4 4 0 0 1 0 6M19.5 6.5a8 8 0 0 1 0 11"/>',
+  CTF: '<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+  Certifications: '<circle cx="12" cy="9" r="5.5"/><path d="M8.5 13.2L7 21l5-2.5 5 2.5-1.5-7.8"/>',
+};
+const PALETTE = 6;
+---
+<Base title="timeline" description="Month-by-month timeline of affiliations, projects, activities, CTFs and certifications.">
+  <div class="wrap">
+    <header class="page-head">
+      <nav class="crumbs" aria-label="Path"><a href="/">~</a>/<span class="here">timeline</span>/</nav>
+      <h1>Timeline</h1>
+    </header>
+
+    <ol class="tl">
+      {groups.map((g, i) => {
+        const [yr, mo] = g.key.split('.');
+        return (
+          <li class={`tl-entry reveal ${i % 2 ? 'tl-left' : 'tl-right'}`} style={`--c: var(--tl-${(i % PALETTE) + 1})`}>
+            <span class="tl-node" aria-hidden="true"></span>
+            <div class="tl-head">
+              <span class="tl-chev" aria-hidden="true"></span>
+              <h2 class="tl-date"><span class="yr">{yr}.</span>{mo}</h2>
+              <span class="tl-rule" aria-hidden="true"></span>
+              <span class="tl-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" set:html={ICON[g.items[0].section] ?? ICON.Activities}></svg>
+              </span>
+            </div>
+            <ul class="tl-items">
+              {g.items.map((it) => (
+                <li>
+                  <p class="tl-sec">{it.section}</p>
+                  <h3 class="tl-name">{it.name}{it.rank && <span class="rank-badge">#{it.rank}</span>}</h3>
+                  {it.detail && <p class="tl-detail">{it.detail}</p>}
+                  {it.date && it.date !== g.key && <p class="tl-when">{it.date}</p>}
+                </li>
+              ))}
+            </ul>
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</Base>
