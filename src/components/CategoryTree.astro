@@ -15,7 +15,7 @@ const counts = countByCategory(posts);
       {CATEGORIES.map((c, i) => (
         <li>
           <a href={`/posts/${c.slug}/`} aria-current={active === c.slug ? 'page' : undefined}>
-            <span class="branch">{i === CATEGORIES.length - 1 ? '└─' : '├─'}</span>{c.slug}/<span class="count">{counts[c.slug]}</span>
+            <span class="branch">{i === CATEGORIES.length - 1 ? '└─' : '├─'}</span>{c.label}/<span class="count">{counts[c.slug]}</span>
           </a>
         </li>
       ))}

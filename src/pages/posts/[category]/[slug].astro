@@ -2,7 +2,7 @@
 import { render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import Comments from '../../../components/Comments.astro';
-import { categoryName } from '../../../data/site';
+import { categoryName, categoryLabel } from '../../../data/site';
 import { getPosts, formatDate, seriesOf, tagUrl, type Post } from '../../../lib/posts';
 
 export async function getStaticPaths() {
@@ -30,7 +30,7 @@ const seriesIndex = series.findIndex((p) => p.id === post.id);
     <header class="wrap post-head">
       <div class="post-head-inner">
         <nav class="crumbs" aria-label="Path" data-pagefind-ignore>
-          <a href="/">~</a>/<a href="/posts/">posts</a>/<a href={`/posts/${post.category}/`}>{post.category}</a>/<span class="here">{post.slug}</span>
+          <a href="/">~</a>/<a href="/posts/">posts</a>/<a href={`/posts/${post.category}/`}>{categoryLabel(post.category)}</a>/<span class="here">{post.slug}</span>
         </nav>
         <h1>{post.data.title}</h1>
         {post.data.description && <p class="lead">{post.data.description}</p>}

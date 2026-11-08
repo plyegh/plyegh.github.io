@@ -39,16 +39,18 @@ export const GISCUS = {
   categoryId: '',
 };
 
-// Folder name under src/content/posts/ = URL path = category id.
+// slug: folder name under src/content/posts/ = URL path = category id (keep it URL-safe).
+// label: how the category is shown on cards, the /posts menu, the tree and breadcrumbs.
 export const CATEGORIES = [
-  { slug: 'dev', name: 'Development' },
-  { slug: 'ctf-wargame', name: 'CTF / Wargame' },
-  { slug: 'bug-bounty', name: 'Bug Bounty' },
-  { slug: 'blog-docs', name: 'Blog / Tech Docs' },
-  { slug: 'paper-conf', name: 'Papers / Conferences' },
-  { slug: 'contest-cert', name: 'Contests / Certifications' },
+  { slug: 'dev', label: 'dev', name: 'Development' },
+  { slug: 'ctf-wargame', label: 'ctf&wargame', name: 'CTF / Wargame' },
+  { slug: 'bug-bounty', label: 'bug-bounty', name: 'Bug Bounty' },
+  { slug: 'blog-docs', label: 'blog&docs', name: 'Blog / Tech Docs' },
+  { slug: 'paper-conf', label: 'paper&conf', name: 'Papers / Conferences' },
+  { slug: 'contest-cert', label: 'contest&cert', name: 'Contests / Certifications' },
 ] as const;
 
 export type CategorySlug = (typeof CATEGORIES)[number]['slug'];
 export const CATEGORY_SLUGS = CATEGORIES.map((c) => c.slug) as CategorySlug[];
+export const categoryLabel = (slug: string) => CATEGORIES.find((c) => c.slug === slug)?.label ?? slug;
 export const categoryName = (slug: string) => CATEGORIES.find((c) => c.slug === slug)?.name ?? slug;

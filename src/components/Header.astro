@@ -30,7 +30,7 @@ const activeCat = inPosts ? path.split('/')[2] || '' : null;
             {CATEGORIES.map((c, i) => (
               <a href={`/posts/${c.slug}/`} style={`--i:${i + 1}`} aria-current={activeCat === c.slug ? 'page' : undefined}>
                 <span class="branch">{i === CATEGORIES.length - 1 ? '└─' : '├─'}</span>
-                <span class="slug">{c.slug}/</span>
+                <span class="slug">{c.label}/</span>
                 <span class="name">{c.name}</span>
                 <span class="count">{counts[c.slug]}</span>
               </a>

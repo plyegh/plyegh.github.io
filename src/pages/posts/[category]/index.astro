@@ -2,7 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 import PostList from '../../../components/PostList.astro';
 import CategoryTree from '../../../components/CategoryTree.astro';
-import { CATEGORIES } from '../../../data/site';
+import { CATEGORIES, categoryLabel } from '../../../data/site';
 import { getPosts, pinnedFirst } from '../../../lib/posts';
 
 export function getStaticPaths() {
@@ -16,7 +16,7 @@ const list = pinnedFirst(posts.filter((p) => p.category === category));
 <Base title={category} description={`${name} — posts on plyegh.`}>
   <div class="wrap">
     <header class="page-head">
-      <nav class="crumbs" aria-label="Path"><a href="/">~</a>/<a href="/posts/">posts</a>/<span class="here">{category}</span>/</nav>
+      <nav class="crumbs" aria-label="Path"><a href="/">~</a>/<a href="/posts/">posts</a>/<span class="here">{categoryLabel(category)}</span>/</nav>
       <h1>{name}</h1>
     </header>
     <div class="posts-layout">
