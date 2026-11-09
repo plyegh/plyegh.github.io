@@ -27,14 +27,14 @@ tags: [retrospective, knights-frontier]
 | 2026.07 ~ 진행 중 | FSL project — DBA 플랫폼 제작 | 동아리 프로젝트 |
 
 **APS-CSPM**
-- APS의 2026 KUCIS 활동 주제입니다.
-- 동아리 전용 온프레미스 클라우드인 APS-Cloud를 대상으로 CSPM(클라우드 보안 설정 점검)을 구축했습니다.
-- kolla-ansible로 OpenStack을 구성하고, 다시 실행해도 같은 결과가 나오는 멱등 스크립트를 작성했습니다.
+- APS의 2026 KUCIS 활동 주제다.
+- 동아리 전용 온프레미스 클라우드인 APS-Cloud를 대상으로 CSPM(클라우드 보안 설정 점검)을 구축했다.
+- kolla-ansible로 OpenStack을 구성하고, 다시 실행해도 같은 결과가 나오는 멱등 스크립트를 작성했다.
 - 구축 기록: [Kolla-ansible 통한 Openstack 단일노드 구축](https://plyegh.github.io/posts/dev/kolla-ansible-openstack-single-node/)
 
 **DBA (Defend & Breach Arena)**
-- 공격과 방어를 함께 겨루는 공방전 플랫폼입니다.
-- 프로젝트 제안을 주도했고, APS의 FSL-project로 제작하고 있습니다.
+- 공격과 방어를 함께 겨루는 공방전 플랫폼이다.
+- 프로젝트 제안을 주도했고, APS의 FSL-project로 제작하고 있다.
 
 ---
 
@@ -59,13 +59,13 @@ tags: [retrospective, knights-frontier]
 
 ## 03. Bug Bounty
 
-아직 제보나 수상 실적이 없습니다. 아래 회고에서 계획을 정리했습니다.
+아직 제보나 수상 실적이 없다. 아래 회고에서 계획을 정리했다.
 
 ---
 
 ## 04. Blog / Tech Docs
 
-이 블로그는 posts(6개 분야), timeline(증빙 포함 연도별 기록), about으로 구성되어 있습니다.
+이 블로그는 posts(6개 분야), timeline(증빙 포함 연도별 기록), about으로 구성되어 있다.
 
 | 날짜 | 글 |
 |---|---|
@@ -96,8 +96,8 @@ tags: [retrospective, knights-frontier]
 
 ![KUCIS 2026 호남권 대표진](/assets/proof/kucis-honam-rep-1.webp)
 
-- 호남권 대표로 호남 세미나를 직접 기획했습니다: 기획, 포스터 제작, 연사 섭외.
-- 다른 권역 세미나에도 참여했습니다.
+- 호남권 대표로 호남 세미나를 직접 기획했다: 기획, 포스터 제작, 연사 섭외.
+- 다른 권역 세미나에도 참여했다.
 
 **2026 부산 사이버보안 콘퍼런스**
 
@@ -131,8 +131,8 @@ tags: [retrospective, knights-frontier]
 - 계획: <!-- 예) 공개 프로그램 1개 선정, 오픈소스 취약점 제보 1건 -->
 
 **2. 활동에 비해 기록이 적음**
-- CTF는 6개 대회에 참가했지만 라이트업은 2개입니다.
-- 프로젝트는 2개인데 글은 1개입니다.
+- CTF는 6개 대회에 참가했지만 라이트업은 2개다.
+- 프로젝트는 2개인데 글은 1개다.
 - 계획: <!-- 예) 대회 후 1주 안에 라이트업 1개 -->
 
 **3. CTF가 웹 위주, 상위권은 1회**
