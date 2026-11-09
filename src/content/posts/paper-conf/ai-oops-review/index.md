@@ -5,7 +5,7 @@ tags: [Paper Review, USENIX Security, LLM Security, AIOps]
 description: "LLM 기반 IT 운영 자동화(AIOps)를 텔레메트리 조작으로 무너뜨리는 공격과 방어(AIOpsDoom / AIOpsShield) 리뷰"
 docs:
   - file: ai-oops-slides.pdf
-    title: "발표 자료"
+    title: "PPT 자료"
 ---
 
 ## 1. 등장 배경 및 문제 의식
