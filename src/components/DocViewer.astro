@@ -1,0 +1,116 @@
+---
+// Shows a post's `docs:` — PDFs as a page viewer, every file as a download button.
+// Files live in the post folder; scripts/render-docs.mjs copies them to /docs/<category>/<slug>/.
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props { category: string; slug: string; docs: { file: string; title?: string }[] }
+const { category, slug, docs } = Astro.props;
+
+const base = `/docs/${category}/${slug}`;
+const disk = (p: string) => path.join('public', 'docs', category, slug, p);
+const fmtSize = (n: number) => (n < 1024 * 1024 ? `${Math.max(1, Math.round(n / 1024))} KB` : `${(n / 1024 / 1024).toFixed(1)} MB`);
+
+const items = docs.map((d) => {
+  const ext = path.extname(d.file).slice(1).toLowerCase();
+  const stem = path.basename(d.file, path.extname(d.file));
+  const size = fs.existsSync(disk(d.file)) ? fmtSize(fs.statSync(disk(d.file)).size) : '';
+  const metaFile = disk(path.join(stem, 'meta.json'));
+  const pages = ext === 'pdf' && fs.existsSync(metaFile) ? (JSON.parse(fs.readFileSync(metaFile, 'utf8')).pages as number) : 0;
+  return {
+    ...d, ext, size, pages,
+    url: `${base}/${encodeURIComponent(d.file)}`,
+    pageUrl: (n: number) => `${base}/${encodeURIComponent(stem)}/p-${n}.jpg`,
+    label: d.title ?? d.file,
+  };
+});
+const viewers = items.filter((d) => d.ext === 'pdf');
+const ICON_DL = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';
+const ICON_OPEN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
+const ICON_FS = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+const CHEV = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
+---
+<section class="docs" data-pagefind-ignore aria-label="Documents">
+  {viewers.map((d) => (
+    <figure class="doc-viewer" data-pages={d.pages}>
+      <figcaption class="doc-bar">
+        <span class="doc-badge" data-ext={d.ext}>{d.ext}</span>
+        <span class="doc-name">{d.label}</span>
+        <span class="doc-meta">{d.pages > 0 && `${d.pages} pages · `}{d.size}</span>
+        <span class="doc-actions">
+          <a class="doc-btn" href={d.url} target="_blank" rel="noopener" aria-label={`Open ${d.file} in a new tab`}><Fragment set:html={ICON_OPEN} /></a>
+          <a class="doc-btn" href={d.url} download={d.file} aria-label={`Download ${d.file}`}><Fragment set:html={ICON_DL} /></a>
+          {d.pages > 0 && <button type="button" class="doc-btn doc-fs" aria-label="Fullscreen"><Fragment set:html={ICON_FS} /></button>}
+        </span>
+      </figcaption>
+      {d.pages > 0 ? (
+        <div class="doc-stage" tabindex="0" aria-label={`${d.label}, page viewer. Use arrow keys to change pages.`}>
+          <div class="doc-pages">
+            {Array.from({ length: d.pages }, (_, i) => (
+              <img class:list={['doc-page', { 'is-current': i === 0 }]} src={d.pageUrl(i + 1)} alt={`${d.label} — page ${i + 1}`} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+            ))}
+          </div>
+          <div class="doc-nav">
+            <button type="button" class="doc-btn doc-prev" aria-label="Previous page" disabled><Fragment set:html={CHEV} /></button>
+            <span class="doc-count"><b>1</b> / {d.pages}</span>
+            <button type="button" class="doc-btn doc-next" aria-label="Next page" disabled={d.pages < 2}><Fragment set:html={CHEV} /></button>
+          </div>
+        </div>
+      ) : (
+        <p class="doc-fallback">Preview isn't available — <a href={d.url} target="_blank" rel="noopener">open the PDF</a>.</p>
+      )}
+    </figure>
+  ))}
+
+  <ul class="doc-files">
+    {items.map((d) => (
+      <li>
+        <a class="doc-file" href={d.url} download={d.file}>
+          <span class="doc-badge" data-ext={d.ext}>{d.ext}</span>
+          <span class="doc-file-name">{d.file}</span>
+          <span class="doc-meta">{d.size}</span>
+          <Fragment set:html={ICON_DL} />
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.doc-viewer').forEach((v) => {
+    const pages = [...v.querySelectorAll<HTMLImageElement>('.doc-page')];
+    if (!pages.length) return;
+    const stage = v.querySelector<HTMLElement>('.doc-stage')!;
+    const count = v.querySelector('.doc-count b')!;
+    const prev = v.querySelector<HTMLButtonElement>('.doc-prev')!;
+    const next = v.querySelector<HTMLButtonElement>('.doc-next')!;
+    let cur = 0;
+    const go = (i: number) => {
+      cur = Math.max(0, Math.min(pages.length - 1, i));
+      pages.forEach((p, n) => p.classList.toggle('is-current', n === cur));
+      if (pages[cur + 1]) pages[cur + 1].loading = 'eager'; // preload the next page
+      count.textContent = String(cur + 1);
+      prev.disabled = cur === 0;
+      next.disabled = cur === pages.length - 1;
+    };
+    prev.addEventListener('click', () => go(cur - 1));
+    next.addEventListener('click', () => go(cur + 1));
+    stage.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { go(cur - 1); e.preventDefault(); }
+      if (e.key === 'ArrowRight') { go(cur + 1); e.preventDefault(); }
+    });
+    // swipe on touch screens
+    let x0: number | null = null;
+    stage.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    stage.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1));
+    });
+    v.querySelector('.doc-fs')?.addEventListener('click', () => {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else stage.requestFullscreen?.().then(() => stage.focus()).catch(() => {});
+    });
+    v.classList.add('is-paged');
+  });
+</script>

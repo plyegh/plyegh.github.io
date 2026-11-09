@@ -38,6 +38,20 @@ Callouts:
 > Text — also [!NOTE], [!WARNING], [!DANGER]
 ```
 
+Documents (PDF viewer + downloads): put the files in the post folder and list them in front matter.
+PDFs are shown page by page above the post body; every listed file gets a download button.
+HWP / DOCX can't be previewed in a browser — save a PDF copy from 한글 / Word and list both.
+
+```yaml
+docs:
+  - file: review.pdf
+    title: "AI Oops 논문 리뷰"   # optional label for the viewer
+  - file: review.hwp
+```
+
+Page images are generated at build time into `public/docs/` (gitignored) and need `pdftoppm`
+(`poppler-utils`; the deploy workflow installs it).
+
 ## Search
 
 `npm run build` runs [Pagefind](https://pagefind.app) after Astro, so search (the `/search/` page and the terminal's `grep`) only works on a build: `npm run build && npm run preview`.

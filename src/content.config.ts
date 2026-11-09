@@ -14,6 +14,8 @@ const posts = defineCollection({
     series: z.string().optional(), // posts sharing this name are linked in reading order
     pinned: z.boolean().default(false), // shown first in lists
     draft: z.boolean().default(false),
+    // files in the post folder: PDFs get a page viewer, everything (hwp, docx …) a download button
+    docs: z.array(z.object({ file: z.string(), title: z.string().optional() })).default([]),
   }),
 });
 

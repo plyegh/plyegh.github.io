@@ -26,6 +26,8 @@ jobs:
           cache: npm
       - id: pages
         uses: actions/configure-pages@v6
+      - name: Install poppler (PDF page images)
+        run: command -v pdftoppm || (sudo apt-get update && sudo apt-get install -y --no-install-recommends poppler-utils)
       - run: npm ci
       - run: npm run build
       - uses: actions/upload-pages-artifact@v5
