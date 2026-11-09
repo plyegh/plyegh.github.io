@@ -5,7 +5,8 @@ import { callouts, figureCaptions } from './src/lib/markdown-plugins.mjs';
 
 // Old Chirpy post URLs → new category paths, so links shared before the renewal keep working.
 const redirects = {
-  '/posts/kolla-ansible-통한-openstack-단일노드-구축': '/posts/blog-docs/kolla-ansible-openstack-single-node/',
+  '/posts/kolla-ansible-통한-openstack-단일노드-구축': '/posts/dev/kolla-ansible-openstack-single-node/',
+  '/posts/blog-docs/kolla-ansible-openstack-single-node': '/posts/dev/kolla-ansible-openstack-single-node/',
   '/posts/defcamp-2026': '/posts/ctf-wargame/defcamp-2026-asicrimination/',
 };
 
