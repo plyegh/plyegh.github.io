@@ -15,6 +15,8 @@ const posts = defineCollection({
     pinned: z.boolean().default(false), // shown first in lists
     draft: z.boolean().default(false),
     // files in the post folder: PDFs get a page viewer, everything (hwp, docx …) a download button
+    // cap inline image width for this post, in px (e.g. 480 for small proof photos)
+    imageWidth: z.number().optional(),
     docs: z.array(z.object({ file: z.string(), title: z.string().optional() })).default([]),
   }),
 });

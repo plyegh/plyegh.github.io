@@ -57,7 +57,7 @@ const seriesIndex = series.findIndex((p) => p.id === post.id);
     </header>
 
     <div class="wrap post-grid">
-      <div class="prose" id="prose">
+      <div class="prose" id="prose" style={post.data.imageWidth ? `--img-max: ${post.data.imageWidth}px` : undefined}>
         {post.data.docs.length > 0 && <DocViewer category={post.category} slug={post.slug} docs={post.data.docs} />}
         <Content />
       </div>
