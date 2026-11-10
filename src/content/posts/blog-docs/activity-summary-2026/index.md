@@ -29,7 +29,7 @@ tags: [retrospective, knights-frontier]
 **APS-CSPM**
 - APS의 2026 KUCIS 활동 주제다.
 - 동아리 전용 온프레미스 클라우드인 APS-Cloud를 대상으로 CSPM(클라우드 보안 설정 점검)을 구축했다.
-- kolla-ansible로 OpenStack을 구성하고, 다시 실행해도 같은 결과가 나오는 스크립트(자동 스크립트 : https://github.com/plyegh/kolla-aio-auto)를 작성했다.
+- kolla-ansible로 OpenStack을 구성하고, 다시 실행해도 같은 결과가 나오는 스크립트(자동 스크립트 : [Kolla-ansible-auto-install](https://github.com/plyegh/kolla-aio-auto/)) 를 작성했다.
 - 구축 기록: [Kolla-ansible 통한 Openstack 단일노드 구축](https://plyegh.github.io/posts/dev/kolla-ansible-openstack-single-node/)
 
 **FSL DBA Project(Defend & Breach Arena)**
