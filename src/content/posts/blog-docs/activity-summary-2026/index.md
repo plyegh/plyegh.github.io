@@ -29,12 +29,12 @@ tags: [retrospective, knights-frontier]
 **APS-CSPM**
 - APS의 2026 KUCIS 활동 주제다.
 - 동아리 전용 온프레미스 클라우드인 APS-Cloud를 대상으로 CSPM(클라우드 보안 설정 점검)을 구축했다.
-- kolla-ansible로 OpenStack을 구성하고, 다시 실행해도 같은 결과가 나오는 멱등 스크립트를 작성했다.
+- kolla-ansible로 OpenStack을 구성하고, 다시 실행해도 같은 결과가 나오는 스크립트(자동 스크립트 : https://github.com/plyegh/kolla-aio-auto)를 작성했다.
 - 구축 기록: [Kolla-ansible 통한 Openstack 단일노드 구축](https://plyegh.github.io/posts/dev/kolla-ansible-openstack-single-node/)
 
-**DBA (Defend & Breach Arena)**
+**FSL DBA Project(Defend & Breach Arena)**
 - 공격과 방어를 함께 겨루는 공방전 플랫폼이다.
-- 프로젝트 제안을 주도했고, APS의 FSL-project로 제작하고 있다.
+- 동아리 원으로써 프로젝트의 아이디어에 참여했ek.
 
 ---
 
@@ -49,6 +49,7 @@ tags: [retrospective, knights-frontier]
 | 2026.10.23 ~ 10.25 | HITCON CTF 2026 | 팀 · **16위** |
 | 2026.10.31 | 2026 KISA ACDC | 팀 참가 |
 
+## HITCON CTF
 ![HITCON CTF 2026 16위](/assets/proof/hitcon-1.webp)
 
 **라이트업**
@@ -84,13 +85,13 @@ tags: [retrospective, knights-frontier]
 | 2026.07.24 | CODEGATE 2026 정보보안 부스 | 부스 운영 · 학장님 인증서 수여 |
 | 2026.08 ~ 2026.11 | KUCIS 권역별 세미나 | 호남 기획·포스터·연사 섭외 / 영남·충청·서경강 참여 |
 | 2026.11.03 ~ 11.05 | 2026 부산 사이버보안 콘퍼런스 | 부스 운영 |
-| 2026.11.28 (예정) | OWASP 부스 | KUCIS 대표진 팀 |
+| 2026.11.28 | OWASP 부스 | KUCIS 대표진 팀 |
 
 **CODEGATE 2026 부스**
 
 ![CODEGATE 2026 부스](/assets/proof/codegate-booth-1.webp)
 
-<!-- 부스 주제 한 줄 -->
+One prompt를 통해 바이브 코딩을 하는 사람들의 보안 위험성을 알리는 형태의 부스다.
 
 **KUCIS 2026 호남권 대표 · 권역 세미나**
 
@@ -103,7 +104,7 @@ tags: [retrospective, knights-frontier]
 
 ![부산 사이버보안 콘퍼런스 부스](/assets/proof/busan-cyber-conf-1.webp)
 
-<!-- 부스 내용 한 줄 -->
+이전 CODEGATE 2026에서 진행한거에 업데이트를 진행하여 부산 콘퍼런스에서도 부스 운영을 진행하였다.
 
 **논문 리뷰**
 - [When AIOps Become "AI Oops"](https://plyegh.github.io/posts/paper-conf/ai-oops-review/): USENIX Security '26
@@ -128,20 +129,13 @@ tags: [retrospective, knights-frontier]
 ## 회고 — 부족했던 점과 채울 계획
 
 **1. Bug Bounty 실적 0**
-- 계획: <!-- 예) 공개 프로그램 1개 선정, 오픈소스 취약점 제보 1건 -->
 
 **2. 활동에 비해 기록이 적음**
 - CTF는 6개 대회에 참가했지만 라이트업은 2개다.
 - 프로젝트는 2개인데 글은 1개다.
-- 계획: <!-- 예) 대회 후 1주 안에 라이트업 1개 -->
 
 **3. CTF가 웹 위주, 상위권은 1회**
-- 계획: <!-- 예) 클라우드·LLM 보안 분야로 확장 -->
 
 **4. 보안 분야 공모전·자격증 부족**
-- 계획: <!-- 예) 리눅스마스터 1급, 교내 생성형 AI 공모전 -->
 
 **5. 프로젝트 결과물 비공개**
-- 계획: <!-- 예) CSPM·DBA GitHub README·데모 정리 -->
-
-<!-- 마무리 2~3줄: 나이츠프론티어 7개월 목표와 연결 -->
