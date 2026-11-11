@@ -55,3 +55,44 @@ export const figureCaptions = defineHastPlugin({
     },
   },
 });
+
+/**
+ * YouTube embeds: a YouTube link alone on its own line becomes an embedded player.
+ *   <https://www.youtube.com/watch?v=YzhgxadNNls>
+ * Uses youtube-nocookie.com (allowed in the CSP frame-src). Anything else stays a normal link.
+ */
+const YT = /^https?:\/\/(?:www\.|m\.)?(?:youtube\.com\/watch\?(?:.*&)?v=|youtu\.be\/)([\w-]{11})/;
+export const youtubeEmbeds = defineHastPlugin({
+  name: 'plyegh-youtube',
+  element: {
+    filter: ['p'],
+    visit(node, ctx) {
+      const kids = node.children.filter((c) => !(c.type === 'text' && !c.value.trim()));
+      if (kids.length !== 1) return;
+      const a = kids[0];
+      if (a.type !== 'element' || a.tagName !== 'a') return;
+      const href = String(a.properties?.href ?? '');
+      const m = href.match(YT);
+      const text = a.children.map((c) => c.value ?? '').join('');
+      if (!m || text.trim() !== href) return;
+      ctx.replaceNode(node, {
+        type: 'element',
+        tagName: 'div',
+        properties: { className: ['video-embed'] },
+        children: [{
+          type: 'element',
+          tagName: 'iframe',
+          properties: {
+            src: `https://www.youtube-nocookie.com/embed/${m[1]}`,
+            title: 'YouTube video',
+            loading: 'lazy',
+            allow: 'accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
+            allowFullScreen: true,
+            referrerPolicy: 'strict-origin-when-cross-origin',
+          },
+          children: [],
+        }],
+      });
+    },
+  },
+});
