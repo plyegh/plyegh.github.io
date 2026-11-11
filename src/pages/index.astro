@@ -27,7 +27,7 @@ const plural = (n: number) => `${n} ${n === 1 ? 'post' : 'posts'}`;
         <h2>Categories</h2>
       </header>
       <ol class="cat-grid">
-        {CATEGORIES.map((c, i) => (
+        {CATEGORIES.filter((c) => !('hideOnHome' in c && c.hideOnHome)).map((c, i) => (
           <li class="cat-card reveal" style={`--d:${(i % 3) * 0.08}s`}>
             <a href={`/posts/${c.slug}/`}>
               <span class="top"><span class="no">{String(i + 1).padStart(2, '0')}</span></span>

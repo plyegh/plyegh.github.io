@@ -41,6 +41,7 @@ export const GISCUS = {
 
 // slug: folder name under src/content/posts/ = URL path = category id (keep it URL-safe).
 // label: how the category is shown on cards, the /posts menu, the tree and breadcrumbs.
+// hideOnHome: leave it off the home page's category cards (still in the menu, tree and terminal).
 export const CATEGORIES = [
   { slug: 'dev', label: 'dev', name: 'Development' },
   { slug: 'ctf-wargame', label: 'ctf&wargame', name: 'CTF / Wargame' },
@@ -48,7 +49,7 @@ export const CATEGORIES = [
   { slug: 'blog-docs', label: 'blog&docs', name: 'Blog / Tech Docs' },
   { slug: 'paper-conf', label: 'paper&conf', name: 'Papers / Conferences' },
   { slug: 'contest-cert', label: 'contest&cert', name: 'Contests / Certifications' },
-  { slug: 'playground', label: 'playground', name: 'Playground' },
+  { slug: 'playground', label: 'playground', name: 'Playground', hideOnHome: true }, // not on the home cards
 ] as const;
 
 export type CategorySlug = (typeof CATEGORIES)[number]['slug'];
