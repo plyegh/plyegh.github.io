@@ -94,3 +94,7 @@ public/              copied as-is (profile image, favicon, /yu/seon/ho/game/play
 ```
 
 The pre-renewal Chirpy site is kept on the `legacy-chirpy` branch.
+
+## License
+
+All rights reserved — posts, images, documents, profile information and code may not be copied or reused without permission. See [LICENSE](LICENSE) and <https://plyegh.github.io/license/>.

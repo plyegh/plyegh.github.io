@@ -9,6 +9,7 @@ export async function GET(context: APIContext) {
     title: SITE.title,
     description: SITE.description,
     site: context.site!,
+    customData: `<copyright>© ${new Date().getFullYear()} Dongjun Park (plyegh). All rights reserved.</copyright>`,
     items: posts.map((p) => ({
       title: p.data.title,
       pubDate: p.data.date,
