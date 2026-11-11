@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { satteri } from '@astrojs/markdown-satteri';
-import { callouts, figureCaptions } from './src/lib/markdown-plugins.mjs';
+import { callouts, figureCaptions, youtubeEmbeds } from './src/lib/markdown-plugins.mjs';
 
 // Old Chirpy post URLs → new category paths, so links shared before the renewal keep working.
 const redirects = {
@@ -30,7 +30,7 @@ export default defineConfig({
         "img-src 'self' data:",
         "font-src 'self' https://fonts.gstatic.com",
         "connect-src 'self'",
-        "frame-src https://giscus.app",
+        "frame-src https://giscus.app https://www.youtube-nocookie.com",
         "object-src 'none'",
         "base-uri 'self'",
         "form-action 'self'",
@@ -51,7 +51,7 @@ export default defineConfig({
     },
   },
   markdown: {
-    processor: satteri({ hastPlugins: [callouts, figureCaptions] }),
+    processor: satteri({ hastPlugins: [callouts, figureCaptions, youtubeEmbeds] }),
     shikiConfig: {
       theme: 'tokyo-night',
       langAlias: { plain: 'text' },
