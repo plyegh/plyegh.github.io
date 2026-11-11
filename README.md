@@ -49,8 +49,8 @@ docs:
   - file: review.hwp
 ```
 
-Page images are generated at build time into `public/docs/` (gitignored) and need `pdftoppm`
-(`poppler-utils`; the deploy workflow installs it).
+Page images are generated at build time into `public/docs/` (gitignored) with pdf.js and
+`@napi-rs/canvas` (npm dev dependencies, so nothing extra to install).
 
 ## Search
 

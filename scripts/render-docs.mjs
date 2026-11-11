@@ -5,11 +5,12 @@
 //   src/content/posts/<category>/<slug>/review.hwp  →  public/docs/<category>/<slug>/review.hwp (download only)
 //
 // public/docs/ is generated (gitignored). Runs before `astro dev` / `astro build`.
-// Needs `pdftoppm` (poppler-utils) for page images; without it PDFs are still copied and linked.
+// Pages are rendered with pdf.js + @napi-rs/canvas (both from npm, no system packages needed).
 import { createHash } from 'node:crypto';
-import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { createCanvas } from '@napi-rs/canvas';
+import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
 
 const SRC = 'src/content/posts';
 const OUT = 'public/docs';
@@ -17,10 +18,33 @@ const DOC_EXT = new Set(['.pdf', '.hwp', '.hwpx', '.doc', '.docx', '.ppt', '.ppt
 const PAGE_WIDTH = 1400; // px; long enough to read body text when zoomed
 const QUALITY = 80;
 
-const hasPoppler = (() => {
-  try { execFileSync('pdftoppm', ['-v'], { stdio: 'ignore' }); return true; } catch { return false; }
-})();
-if (!hasPoppler) console.warn('[docs] pdftoppm not found — PDFs are copied but page images are skipped (install poppler-utils).');
+const RENDERER = 'pdfjs-1'; // bump to force re-rendering cached pages
+const PDFJS = path.dirname(path.dirname(path.dirname(new URL(import.meta.resolve('pdfjs-dist/legacy/build/pdf.mjs')).pathname)));
+
+async function renderPdf(src, outDir) {
+  const pdf = await getDocument({
+    data: new Uint8Array(fs.readFileSync(src)),
+    cMapUrl: path.join(PDFJS, 'cmaps') + '/',
+    cMapPacked: true,
+    standardFontDataUrl: path.join(PDFJS, 'standard_fonts') + '/',
+    isEvalSupported: false,
+    verbosity: 0,
+  }).promise;
+  for (let n = 1; n <= pdf.numPages; n++) {
+    const page = await pdf.getPage(n);
+    const viewport = page.getViewport({ scale: PAGE_WIDTH / page.getViewport({ scale: 1 }).width });
+    const canvas = createCanvas(Math.round(viewport.width), Math.round(viewport.height));
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    await page.render({ canvas, canvasContext: ctx, viewport }).promise;
+    fs.writeFileSync(path.join(outDir, `p-${n}.jpg`), await canvas.encode('jpeg', QUALITY));
+    page.cleanup();
+  }
+  const pages = pdf.numPages;
+  await pdf.destroy();
+  return pages;
+}
 
 const sha1 = (file) => createHash('sha1').update(fs.readFileSync(file)).digest('hex');
 const keep = new Set(); // every path under OUT that should exist after this run
@@ -43,22 +67,18 @@ for (const category of fs.existsSync(SRC) ? fs.readdirSync(SRC) : []) {
       const hash = sha1(src);
       if (!fs.existsSync(dest) || sha1(dest) !== hash) { fs.copyFileSync(src, dest); copied++; }
 
-      if (ext !== '.pdf' || !hasPoppler) continue;
+      if (ext !== '.pdf') continue;
       const pagesDir = path.join(outDir, path.basename(name, ext));
       const metaFile = path.join(pagesDir, 'meta.json');
       keep.add(pagesDir);
       const meta = fs.existsSync(metaFile) ? JSON.parse(fs.readFileSync(metaFile, 'utf8')) : null;
-      if (meta?.hash === hash && meta?.width === PAGE_WIDTH) continue; // up to date
+      if (meta?.hash === hash && meta?.width === PAGE_WIDTH && meta?.renderer === RENDERER) continue; // up to date
       fs.rmSync(pagesDir, { recursive: true, force: true });
       fs.mkdirSync(pagesDir, { recursive: true });
-      execFileSync('pdftoppm', ['-jpeg', '-jpegopt', `quality=${QUALITY},optimize=y`, '-scale-to-x', String(PAGE_WIDTH), '-scale-to-y', '-1', src, path.join(pagesDir, 'p')]);
-      // pdftoppm pads numbers by page count (p-01, p-001); normalise to p-1.jpg, p-2.jpg …
-      const pages = fs.readdirSync(pagesDir).filter((f) => f.endsWith('.jpg'))
-        .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-      pages.forEach((f, i) => fs.renameSync(path.join(pagesDir, f), path.join(pagesDir, `p-${i + 1}.jpg`)));
-      fs.writeFileSync(metaFile, JSON.stringify({ hash, width: PAGE_WIDTH, pages: pages.length }));
+      const pages = await renderPdf(src, pagesDir);
+      fs.writeFileSync(metaFile, JSON.stringify({ hash, width: PAGE_WIDTH, pages, renderer: RENDERER }));
       rendered++;
-      console.log(`[docs] ${category}/${slug}/${name}: ${pages.length} pages`);
+      console.log(`[docs] ${category}/${slug}/${name}: ${pages} pages`);
     }
   }
 }
