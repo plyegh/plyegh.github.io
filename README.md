@@ -79,6 +79,7 @@ Every page carries a Content-Security-Policy `<meta>` (configured in `astro.conf
 | `blog-docs` | Blog / Tech Docs |
 | `paper-conf` | Papers / Conferences |
 | `contest-cert` | Contests / Certifications |
+| `playground` | Playground |
 
 The list lives in `src/data/site.ts` (with the profile and links). A post in any other folder fails the build.
 
