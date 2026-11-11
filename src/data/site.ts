@@ -48,6 +48,7 @@ export const CATEGORIES = [
   { slug: 'blog-docs', label: 'blog&docs', name: 'Blog / Tech Docs' },
   { slug: 'paper-conf', label: 'paper&conf', name: 'Papers / Conferences' },
   { slug: 'contest-cert', label: 'contest&cert', name: 'Contests / Certifications' },
+  { slug: 'playground', label: 'playground', name: 'Playground' },
 ] as const;
 
 export type CategorySlug = (typeof CATEGORIES)[number]['slug'];
