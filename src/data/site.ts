@@ -45,6 +45,17 @@ export const LINKS = [
   { id: 'discord', href: 'https://discord.com/users/373615449117556736' },
 ] as const;
 
+// Shown on the About pages.
+export const CONTACT_EMAIL = 'bdongjun343@gmail.com';
+// friendly handle shown instead of the raw URL
+export const LINK_HANDLE: Record<string, string> = {
+  github: '@plyegh',
+  dreamhack: 'plyegh',
+  linkedin: '박동준',
+  instagram: '@d_zun0210',
+  discord: '@plyegh',
+};
+
 // Comments (giscus, backed by GitHub Discussions of a PUBLIC repo).
 // Fill these from https://giscus.app after creating the repo; comments stay hidden while any is empty.
 export const GISCUS = {

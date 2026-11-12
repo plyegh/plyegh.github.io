@@ -21,11 +21,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(PROFILE.avatar, Astro.site);
 const year = new Date().getFullYear();
 const SEARCH = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>';
-// 소개 and 활동 get their own /public pages next; until then they open the personal ones.
 const NAV = [
   { id: 'blog', label: '블로그', href: `${PUBLIC}/` },
-  { id: 'about', label: '소개', href: `${PERSONAL}/about/` },
-  { id: 'activity', label: '활동', href: `${PERSONAL}/timeline/` },
+  { id: 'about', label: '소개', href: `${PUBLIC}/about/` },
+  { id: 'activity', label: '활동', href: `${PUBLIC}/activity/` },
 ];
 ---
 <!doctype html>
@@ -54,6 +53,7 @@ const NAV = [
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script is:inline>document.documentElement.classList.add('js');</script>
 </head>
 <body>
   <header class="p-header">
