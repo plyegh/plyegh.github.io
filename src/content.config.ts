@@ -14,6 +14,9 @@ const posts = defineCollection({
     series: z.string().optional(), // posts sharing this name are linked in reading order
     pinned: z.boolean().default(false), // shown first in lists
     draft: z.boolean().default(false),
+    // card thumbnail on /public: a file in the post folder (./cover.jpg) or a site path (/assets/…).
+    // Default: the first ./image in the post, else page 1 of the first PDF in `docs`.
+    cover: z.string().optional(),
     // files in the post folder: PDFs get a page viewer, everything (hwp, docx …) a download button
     // cap inline image width for this post, in px (e.g. 480 for small proof photos)
     imageWidth: z.number().optional(),

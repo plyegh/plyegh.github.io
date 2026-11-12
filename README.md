@@ -5,6 +5,11 @@
 https://plyegh.github.io/
 ```
 
+Two sites from one set of posts:
+
+- `/public/` — clean, Korean, recruiter-facing: activities and results only (the root redirects here)
+- `/personal/` — the terminal-style blog with everything, including `playground`
+
 Personal security study log — built with [Astro](https://astro.build), deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to `main`.
 
 ## Writing a post
@@ -29,7 +34,10 @@ description: "One line shown in lists"
 series: "Heap study"             # optional — posts with the same name are linked in date order
 pinned: false                    # optional — true puts the post at the top of lists
 draft: false
+cover: ./cover.jpg               # optional — card thumbnail on /public (default: first ./image, else page 1 of the first PDF)
 ```
+
+Every post appears on both sites, except posts in a category marked `personalOnly` in `src/data/site.ts` (`playground`), which stay on `/personal/` only. If you add another personal-only category, add it to `PERSONAL_ONLY` in `astro.config.mjs` too.
 
 Callouts:
 
@@ -89,6 +97,7 @@ The list lives in `src/data/site.ts` (with the profile and links). A post in any
 src/content/posts/   posts (folder = category)
 src/data/site.ts     profile, links, categories
 src/components/      terminal, header, side panel, lists
+src/pages/public/    routes under /public/: home, posts/<category>/, posts/<category>/<slug>/, search/ (layout: src/layouts/Public.astro, styles: src/styles/public.css)
 src/pages/personal/  routes under /personal/: posts/, posts/<category>/, posts/<category>/<slug>/, tags/, timeline/, about/, search/
                      (old root URLs redirect there — see `redirects` in astro.config.mjs)
 public/              copied as-is (profile image, favicon, /yu/seon/ho/game/play/)

@@ -35,7 +35,7 @@ import Base from '../../layouts/Base.astro';
     history.replaceState(null, '', url);
     if (!q.trim()) { list.innerHTML = ''; status.textContent = ''; return; }
     try {
-      const { total, hits } = await searchPosts(q);
+      const { total, hits } = await searchPosts(q, 20, 'personal');
       if (my !== seq) return; // a newer query already started
       status.textContent = total ? `${total} match${total === 1 ? '' : 'es'}` : 'no matches';
       // excerpts come from our own Pagefind index: escaped text plus <mark> highlights

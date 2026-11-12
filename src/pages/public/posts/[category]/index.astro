@@ -1,0 +1,20 @@
+---
+import Public from '../../../../layouts/Public.astro';
+import PostIndex from '../../../../components/public/PostIndex.astro';
+import { CATEGORIES, PERSONAL, categoryKo } from '../../../../data/site';
+import { getPublicPosts } from '../../../../lib/posts';
+
+// only categories that have posts get a page (and a tab)
+export async function getStaticPaths() {
+  const posts = await getPublicPosts();
+  return CATEGORIES.filter((c) => posts.some((p) => p.category === c.slug)).map((c) => ({ params: { category: c.slug } }));
+}
+const { category } = Astro.params;
+const posts = await getPublicPosts();
+---
+<Public title={categoryKo(category)} description={`${categoryKo(category)} 글 목록`} personalHref={`${PERSONAL}/posts/${category}/`}>
+  <div class="wrap">
+    <h1 class="p-page-title">{categoryKo(category)}</h1>
+    <PostIndex all={posts} active={category} />
+  </div>
+</Public>
