@@ -1,0 +1,17 @@
+---
+import Public from '../../layouts/Public.astro';
+import LicenseText from '../../components/LicenseText.astro';
+import { PERSONAL, PUBLIC } from '../../data/site';
+const year = new Date().getFullYear();
+---
+<Public title="라이선스" description="plyegh.github.io의 저작권과 이용 조건 — All rights reserved." personalHref={`${PERSONAL}/license/`}>
+  <div class="wrap">
+    <header class="p-page-head">
+      <h1>라이선스</h1>
+      <p>© {year} Dongjun Park (plyegh). All rights reserved.</p>
+    </header>
+    <div class="prose p-license">
+      <LicenseText aboutHref={`${PUBLIC}/about/`} />
+    </div>
+  </div>
+</Public>

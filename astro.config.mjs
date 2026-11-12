@@ -24,7 +24,7 @@ const redirects = {
   '/about': `${PUB}/about/`,
   '/timeline': `${PUB}/activity/`,
   '/search': `${PUB}/search/`,
-  '/license': `${P}/license/`,
+  '/license': `${PUB}/license/`,
   '/tags': `${P}/tags/`,
   '/tags/[tag]': `${P}/tags/[tag]`,
   // pre-renewal (Chirpy) URLs

@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import LicenseText from '../../components/LicenseText.astro';
 const year = new Date().getFullYear();
 ---
 <Base title="license" description="Copyright and usage terms for plyegh.github.io — all rights reserved.">
@@ -11,41 +12,7 @@ const year = new Date().getFullYear();
     </header>
 
     <div class="prose license">
-      <h2 id="ko">한국어</h2>
-      <p>
-        이 사이트와 <a href="https://github.com/plyegh/plyegh.github.io" target="_blank" rel="noopener">GitHub 저장소</a>의
-        모든 글, 사진·이미지, 문서(PDF·HWP 등), 상장·자격증 등 증빙 이미지, 프로필·활동 정보, 디자인과 소스 코드는
-        별도 표시가 없는 한 작성자에게 저작권이 있습니다.
-      </p>
-      <p>
-        작성자의 <strong>사전 서면 허락 없이</strong> 전부 또는 일부를 복제·배포·재게시·수정하거나 2차 저작물을 만드는 것을 금지합니다.
-        데이터셋 수집이나 AI·머신러닝 모델 학습에 사용하는 것도 포함됩니다.
-      </p>
-      <h3>허락 없이 가능한 것</h3>
-      <ul>
-        <li>사이트를 보고 링크로 공유하기</li>
-        <li>출처(작성자와 글 제목)와 원문 링크를 밝히고 짧게 인용하기</li>
-        <li>GitHub 이용약관이 허용하는 범위에서 저장소를 보거나 포크하기 (그 외의 권리는 주어지지 않습니다)</li>
-      </ul>
-      <p>논문 제목·그림, 로고, 상표, 대회·행사명, 삽입·링크된 영상 등 제3자의 자료는 각 권리자에게 저작권이 있습니다.</p>
-      <p>사용 허락이 필요하면 <a href="/personal/about/">About</a>의 연락처로 문의해 주세요.</p>
-
-      <h2 id="en">English</h2>
-      <p>
-        All posts, photos and images, documents, award and certificate images, profile and activity information,
-        design and source code on this site and in its GitHub repository belong to the author unless noted otherwise.
-      </p>
-      <p>
-        No part may be copied, reproduced, redistributed, republished, modified, or used to create derivative
-        works <strong>without prior written permission</strong> — including collecting it into datasets or training AI or
-        machine-learning models.
-      </p>
-      <p>
-        Allowed without asking: viewing and linking; quoting a short excerpt with attribution (author and post title)
-        and a link to the original; viewing and forking the repository on GitHub only to the extent the GitHub Terms
-        of Service require. Third-party material belongs to its respective owners.
-      </p>
-      <p>For permission, use the contact details on the <a href="/personal/about/">About</a> page.</p>
+      <LicenseText aboutHref="/personal/about/" />
     </div>
   </div>
 </Base>

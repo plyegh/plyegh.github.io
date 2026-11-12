@@ -97,7 +97,7 @@ The list lives in `src/data/site.ts` (with the profile and links). A post in any
 src/content/posts/   posts (folder = category)
 src/data/site.ts     profile, links, categories
 src/components/      terminal, header, side panel, lists
-src/pages/public/    routes under /public/: home, posts/<category>/, posts/<category>/<slug>/, about/, activity/, search/ (layout: src/layouts/Public.astro, styles: src/styles/public.css)
+src/pages/public/    routes under /public/: home, posts/<category>/, posts/<category>/<slug>/, about/, activity/, license/, search/ (layout: src/layouts/Public.astro, styles: src/styles/public.css)
 src/pages/personal/  routes under /personal/: posts/, posts/<category>/, posts/<category>/<slug>/, tags/, timeline/, about/, search/
                      (old root URLs redirect there — see `redirects` in astro.config.mjs)
 public/              copied as-is (profile image, favicon, /yu/seon/ho/game/play/)
