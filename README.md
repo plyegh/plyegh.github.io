@@ -24,7 +24,7 @@ Front matter:
 ```yaml
 title: "Post title"
 date: 2026-10-27T13:00:00+09:00
-tags: [CTF, Web]                 # each tag gets a page at /tags/<tag>/
+tags: [CTF, Web]                 # each tag gets a page at /personal/tags/<tag>/
 description: "One line shown in lists"
 series: "Heap study"             # optional — posts with the same name are linked in date order
 pinned: false                    # optional — true puts the post at the top of lists
@@ -54,7 +54,7 @@ Page images are generated at build time into `public/docs/` (gitignored) with pd
 
 ## Search
 
-`npm run build` runs [Pagefind](https://pagefind.app) after Astro, so search (the `/search/` page and the terminal's `grep`) only works on a build: `npm run build && npm run preview`.
+`npm run build` runs [Pagefind](https://pagefind.app) after Astro, so search (the `/personal/search/` page and the terminal's `grep`) only works on a build: `npm run build && npm run preview`.
 
 ## Comments (giscus)
 
@@ -89,7 +89,8 @@ The list lives in `src/data/site.ts` (with the profile and links). A post in any
 src/content/posts/   posts (folder = category)
 src/data/site.ts     profile, links, categories
 src/components/      terminal, header, side panel, lists
-src/pages/           routes: /, /posts/, /posts/<category>/, /posts/<category>/<slug>/, /tags/, /search/
+src/pages/personal/  routes under /personal/: posts/, posts/<category>/, posts/<category>/<slug>/, tags/, timeline/, about/, search/
+                     (old root URLs redirect there — see `redirects` in astro.config.mjs)
 public/              copied as-is (profile image, favicon, /yu/seon/ho/game/play/)
 ```
 

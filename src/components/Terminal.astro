@@ -150,8 +150,8 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
     cd(a) {
       const r = resolve(a[0]);
       if (r === 'home') { print(dim('already at ~')); return; }
-      if (r === 'posts' || r === 'tags' || r === 'search' || r === 'timeline' || r === 'about') { print(ok('~/' + r)); return go(`/${r}/`); }
-      if (r) { print(ok('~/posts/' + r)); return go(`/posts/${r}/`); }
+      if (r === 'posts' || r === 'tags' || r === 'search' || r === 'timeline' || r === 'about') { print(ok('~/' + r)); return go(`/personal/${r}/`); }
+      if (r) { print(ok('~/posts/' + r)); return go(`/personal/posts/${r}/`); }
       print(err((a[0] === 'readme.md' ? 'cd: not a directory: ' : 'cd: no such file or directory: ') + esc(a[0] || '')));
     },
     cat(a) {

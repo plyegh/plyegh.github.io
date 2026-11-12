@@ -1,5 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { CATEGORY_SLUGS, type CategorySlug } from '../data/site';
+import { CATEGORY_SLUGS, PERSONAL, type CategorySlug } from '../data/site';
 
 export type Post = CollectionEntry<'posts'> & { category: CategorySlug; slug: string; url: string };
 
@@ -14,7 +14,7 @@ export async function getPosts(): Promise<Post[]> {
           `Unknown category folder "${category}" (post: ${entry.id}). Use one of: ${CATEGORY_SLUGS.join(', ')}`,
         );
       }
-      return { ...entry, category: category as CategorySlug, slug, url: `/posts/${category}/${slug}/` };
+      return { ...entry, category: category as CategorySlug, slug, url: `${PERSONAL}/posts/${category}/${slug}/` };
     })
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
@@ -31,7 +31,7 @@ export function countByCategory(posts: Post[]) {
 /** "DefCamp 2026" → "defcamp-2026", "단일 노드" → "단일-노드" */
 export const tagSlug = (tag: string) =>
   tag.trim().toLowerCase().replace(/[\s/?#%&]+/g, '-').replace(/^-+|-+$/g, '');
-export const tagUrl = (tag: string) => `/tags/${tagSlug(tag)}/`;
+export const tagUrl = (tag: string) => `${PERSONAL}/tags/${tagSlug(tag)}/`;
 
 /** Tags across all posts: one entry per slug (first spelling wins), most used first. */
 export function getTags(posts: Post[]) {

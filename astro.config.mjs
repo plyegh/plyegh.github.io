@@ -3,11 +3,23 @@ import sitemap from '@astrojs/sitemap';
 import { satteri } from '@astrojs/markdown-satteri';
 import { callouts, figureCaptions, youtubeEmbeds } from './src/lib/markdown-plugins.mjs';
 
-// Old Chirpy post URLs → new category paths, so links shared before the renewal keep working.
+// The blog moved under /personal. Everything that used to live at the root redirects there,
+// including the pre-renewal Chirpy post URLs, so links shared earlier keep working.
+const P = '/personal';
 const redirects = {
-  '/posts/kolla-ansible-통한-openstack-단일노드-구축': '/posts/dev/kolla-ansible-openstack-single-node/',
-  '/posts/blog-docs/kolla-ansible-openstack-single-node': '/posts/dev/kolla-ansible-openstack-single-node/',
-  '/posts/defcamp-2026': '/posts/ctf-wargame/defcamp-2026-asicrimination/',
+  '/': `${P}/`,
+  '/about': `${P}/about/`,
+  '/timeline': `${P}/timeline/`,
+  '/search': `${P}/search/`,
+  '/license': `${P}/license/`,
+  '/tags': `${P}/tags/`,
+  '/tags/[tag]': `${P}/tags/[tag]`,
+  '/posts': `${P}/posts/`,
+  '/posts/[category]': `${P}/posts/[category]`,
+  '/posts/[category]/[slug]': `${P}/posts/[category]/[slug]`,
+  '/posts/kolla-ansible-통한-openstack-단일노드-구축': `${P}/posts/dev/kolla-ansible-openstack-single-node/`,
+  '/posts/blog-docs/kolla-ansible-openstack-single-node': `${P}/posts/dev/kolla-ansible-openstack-single-node/`,
+  '/posts/defcamp-2026': `${P}/posts/ctf-wargame/defcamp-2026-asicrimination/`,
 };
 
 export default defineConfig({
@@ -16,8 +28,8 @@ export default defineConfig({
   redirects,
   integrations: [
     sitemap({
-      // keep redirect stubs and the standalone game out of the sitemap
-      filter: (page) => !page.includes('/yu/') && !Object.keys(redirects).some((r) => decodeURI(page).endsWith(`${r}/`)),
+      // only real pages: redirect stubs and the standalone game stay out of the sitemap
+      filter: (page) => !page.includes('/yu/') && new URL(page).pathname.startsWith(`${P}/`),
     }),
   ],
   // Content-Security-Policy as a <meta> tag on every page. Astro hashes its own inline

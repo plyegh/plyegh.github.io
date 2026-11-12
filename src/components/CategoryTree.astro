@@ -8,13 +8,13 @@ const counts = countByCategory(posts);
 ---
 <aside class="tree" aria-label="Categories">
   <nav>
-    <a class="tree-root" href="/posts/" aria-current={active === '' ? 'page' : undefined}>
+    <a class="tree-root" href="/personal/posts/" aria-current={active === '' ? 'page' : undefined}>
       <span>~/posts/</span><span class="count">{posts.length}</span>
     </a>
     <ul>
       {CATEGORIES.map((c, i) => (
         <li>
-          <a href={`/posts/${c.slug}/`} aria-current={active === c.slug ? 'page' : undefined}>
+          <a href={`/personal/posts/${c.slug}/`} aria-current={active === c.slug ? 'page' : undefined}>
             <span class="branch">{i === CATEGORIES.length - 1 ? '└─' : '├─'}</span>{c.label}/<span class="count">{counts[c.slug]}</span>
           </a>
         </li>

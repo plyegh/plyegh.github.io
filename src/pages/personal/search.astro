@@ -1,10 +1,10 @@
 ---
-import Base from '../layouts/Base.astro';
+import Base from '../../layouts/Base.astro';
 ---
 <Base title="search" description="Search posts on plyegh.">
   <div class="wrap">
     <header class="page-head">
-      <nav class="crumbs" aria-label="Path"><a href="/">~</a>/<span class="here">search</span>/</nav>
+      <nav class="crumbs" aria-label="Path"><a href="/personal/">~</a>/<span class="here">search</span>/</nav>
       <h1>Search</h1>
     </header>
     <div class="search-page">
@@ -20,7 +20,7 @@ import Base from '../layouts/Base.astro';
 </Base>
 
 <script>
-  import { searchPosts } from '../lib/search-client';
+  import { searchPosts } from '../../lib/search-client';
 
   const input = document.getElementById('q') as HTMLInputElement;
   const status = document.getElementById('status')!;
