@@ -11,7 +11,7 @@ const thumb = thumbOf(post);
 const tone = CATEGORY_SLUGS.indexOf(post.category) % 3;
 const H = featured ? 'h2' : 'h3';
 ---
-<a class={featured ? 'p-feat' : 'p-card'} href={post.publicUrl}>
+<a class={featured ? 'p-feat' : 'p-card'} href={post.url}>
   {thumb.image ? (
     <div class="p-thumb"><Image src={thumb.image} alt="" width={featured ? 1200 : 760} height={featured ? 675 : 428} fit="cover" loading={featured ? 'eager' : 'lazy'} /></div>
   ) : thumb.src ? (

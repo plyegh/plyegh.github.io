@@ -1,8 +1,8 @@
 ---
 import Base from '../../../layouts/Base.astro';
-import { getPosts, getTags } from '../../../lib/posts';
+import { getPersonalPosts, getTags } from '../../../lib/posts';
 
-const tags = getTags(await getPosts());
+const tags = getTags(await getPersonalPosts());
 ---
 <Base title="tags" description="All tags on plyegh.">
   <div class="wrap">

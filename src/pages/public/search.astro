@@ -1,9 +1,9 @@
 ---
 import Public from '../../layouts/Public.astro';
-import { CATEGORIES, PERSONAL } from '../../data/site';
+import { CATEGORIES } from '../../data/site';
 const KO = Object.fromEntries(CATEGORIES.map((c) => [c.slug, c.ko]));
 ---
-<Public title="검색" description="plyegh 블로그 글 검색" personalHref={`${PERSONAL}/search/`}>
+<Public title="검색" description="plyegh 블로그 글 검색">
   <div class="wrap">
     <div class="p-search-page">
       <h1>글 검색</h1>

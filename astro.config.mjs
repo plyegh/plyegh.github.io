@@ -4,9 +4,9 @@ import sitemap from '@astrojs/sitemap';
 import { satteri } from '@astrojs/markdown-satteri';
 import { callouts, figureCaptions, youtubeEmbeds } from './src/lib/markdown-plugins.mjs';
 
-// Two sites: /public (recruiter-facing) and /personal (everything). URLs from before the split
-// redirect so shared links keep working: posts go to their /public page, or to /personal when
-// the category is personal-only; pages that only exist on the personal site go there.
+// Two sites: /public (study, activities, results) and /personal (playground). A post lives on one
+// of them, by category. Older URLs redirect so shared links keep working: root-level URLs from
+// before the split, and /personal URLs of posts and pages that have since moved to /public.
 const P = '/personal';
 const PUB = '/public';
 const PERSONAL_ONLY = ['playground']; // keep in sync with `personalOnly` in src/data/site.ts
@@ -14,6 +14,7 @@ const postDirs = fs.readdirSync('src/content/posts', { withFileTypes: true }).fi
   .flatMap((cat) => fs.readdirSync(`src/content/posts/${cat.name}`, { withFileTypes: true })
     .filter((d) => d.isDirectory()).map((d) => [cat.name, d.name]));
 const siteOf = (category) => (PERSONAL_ONLY.includes(category) ? P : PUB);
+const publicDirs = postDirs.filter(([c]) => !PERSONAL_ONLY.includes(c));
 const kolla = `${PUB}/posts/dev/kolla-ansible-openstack-single-node/`;
 const redirects = {
   '/': `${PUB}/`,
@@ -21,6 +22,11 @@ const redirects = {
   [`${PUB}/posts`]: `${PUB}/`,
   ...Object.fromEntries([...new Set(postDirs.map(([c]) => c))].map((c) => [`/posts/${c}`, `${siteOf(c)}/posts/${c}/`])),
   ...Object.fromEntries(postDirs.map(([c, s]) => [`/posts/${c}/${s}`, `${siteOf(c)}/posts/${c}/${s}/`])),
+  // moved from /personal to /public
+  ...Object.fromEntries(publicDirs.map(([c, s]) => [`${P}/posts/${c}/${s}`, `${PUB}/posts/${c}/${s}/`])),
+  ...Object.fromEntries([...new Set(publicDirs.map(([c]) => c))].map((c) => [`${P}/posts/${c}`, `${PUB}/posts/${c}/`])),
+  [`${P}/about`]: `${PUB}/about/`,
+  [`${P}/timeline`]: `${PUB}/activity/`,
   '/about': `${PUB}/about/`,
   '/timeline': `${PUB}/activity/`,
   '/search': `${PUB}/search/`,
@@ -32,6 +38,7 @@ const redirects = {
   '/posts/blog-docs/kolla-ansible-openstack-single-node': kolla,
   '/posts/defcamp-2026': `${PUB}/posts/ctf-wargame/defcamp-2026-asicrimination/`,
 };
+const redirectPaths = new Set(Object.keys(redirects));
 
 export default defineConfig({
   site: 'https://plyegh.github.io',
@@ -40,7 +47,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       // only real pages: redirect stubs and the standalone game stay out of the sitemap
-      filter: (page) => !page.includes('/yu/') && [P, PUB].some((base) => new URL(page).pathname.startsWith(`${base}/`)) && !new URL(page).pathname.endsWith(`${PUB}/posts/`),
+      filter: (page) => !page.includes('/yu/') && [P, PUB].some((base) => new URL(page).pathname.startsWith(`${base}/`)) && !redirectPaths.has(decodeURI(new URL(page).pathname).replace(/\/$/, '')),
     }),
   ],
   // Content-Security-Policy as a <meta> tag on every page. Astro hashes its own inline

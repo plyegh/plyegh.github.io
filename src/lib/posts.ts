@@ -1,8 +1,8 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { CATEGORY_SLUGS, PERSONAL, PUBLIC, isPublicCategory, type CategorySlug } from '../data/site';
 
-/** `url` is the /personal page; `publicUrl` the /public one (absent for personal-only posts). */
-export type Post = CollectionEntry<'posts'> & { category: CategorySlug; slug: string; url: string; publicUrl?: string };
+/** `url` is the post's page: under /public, or under /personal for personal-only categories. */
+export type Post = CollectionEntry<'posts'> & { category: CategorySlug; slug: string; url: string };
 
 /** All posts, newest first. Drafts show up in `npm run dev` only. */
 export async function getPosts(): Promise<Post[]> {
@@ -17,15 +17,16 @@ export async function getPosts(): Promise<Post[]> {
       }
       return {
         ...entry, category: category as CategorySlug, slug,
-        url: `${PERSONAL}/posts/${category}/${slug}/`,
-        publicUrl: isPublicCategory(category) ? `${PUBLIC}/posts/${category}/${slug}/` : undefined,
+        url: `${isPublicCategory(category) ? PUBLIC : PERSONAL}/posts/${category}/${slug}/`,
       };
     })
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
 
-/** Posts shown on /public: everything except personal-only categories. */
-export const getPublicPosts = async () => (await getPosts()).filter((p) => p.publicUrl);
+/** Posts of the /public site: everything except personal-only categories. */
+export const getPublicPosts = async () => (await getPosts()).filter((p) => isPublicCategory(p.category));
+/** Posts of the /personal site: personal-only categories (playground). */
+export const getPersonalPosts = async () => (await getPosts()).filter((p) => !isPublicCategory(p.category));
 
 /** Same order, but `pinned: true` posts first — used by the lists people browse. */
 export const pinnedFirst = (posts: Post[]) => [...posts.filter((p) => p.data.pinned), ...posts.filter((p) => !p.data.pinned)];
@@ -39,6 +40,7 @@ export function countByCategory(posts: Post[]) {
 /** "DefCamp 2026" → "defcamp-2026", "단일 노드" → "단일-노드" */
 export const tagSlug = (tag: string) =>
   tag.trim().toLowerCase().replace(/[\s/?#%&]+/g, '-').replace(/^-+|-+$/g, '');
+/** Tag pages exist on the /personal site only. */
 export const tagUrl = (tag: string) => `${PERSONAL}/tags/${tagSlug(tag)}/`;
 
 /** Tags across all posts: one entry per slug (first spelling wins), most used first. */

@@ -7,8 +7,9 @@ export const SITE = {
   lang: 'en',
 };
 
-// Two sites share the posts: /personal (the terminal-style blog, everything) and
-// /public (clean, recruiter-facing — activities and results only).
+// Two sites, one set of posts. A post lives on exactly one of them, decided by its category:
+// /public (clean, recruiter-facing — study, activities, results) or
+// /personal (the terminal-style site — things made for fun: `personalOnly` categories).
 export const PERSONAL = '/personal';
 export const PUBLIC = '/public';
 
@@ -68,8 +69,7 @@ export const GISCUS = {
 // slug: folder name under src/content/posts/ = URL path = category id (keep it URL-safe).
 // label: how the category is shown on cards, the /posts menu, the tree and breadcrumbs.
 // ko: the name shown on the /public site.
-// hideOnHome: leave it off the home page's category cards (still in the menu, tree and terminal).
-// personalOnly: posts in it never appear on /public (things made for fun).
+// personalOnly: its posts live on /personal instead of /public (things made for fun).
 export const CATEGORIES = [
   { slug: 'dev', label: 'dev', name: 'Development', ko: '개발' },
   { slug: 'ctf-wargame', label: 'ctf&wargame', name: 'CTF / Wargame', ko: 'CTF · 워게임' },
@@ -77,12 +77,14 @@ export const CATEGORIES = [
   { slug: 'blog-docs', label: 'blog&docs', name: 'Blog / Tech Docs', ko: '기술 문서' },
   { slug: 'paper-conf', label: 'paper&conf', name: 'Papers / Conferences', ko: '논문 · 컨퍼런스' },
   { slug: 'contest-cert', label: 'contest&cert', name: 'Contests / Certifications', ko: '공모전 · 자격증' },
-  { slug: 'playground', label: 'playground', name: 'Playground', ko: 'Playground', hideOnHome: true, personalOnly: true },
+  { slug: 'playground', label: 'playground', name: 'Playground', ko: 'Playground', personalOnly: true },
 ] as const;
 
 export type CategorySlug = (typeof CATEGORIES)[number]['slug'];
 export const CATEGORY_SLUGS = CATEGORIES.map((c) => c.slug) as CategorySlug[];
 export const categoryKo = (slug: string) => CATEGORIES.find((c) => c.slug === slug)?.ko ?? slug;
 export const isPublicCategory = (slug: string) => !CATEGORIES.some((c) => c.slug === slug && 'personalOnly' in c && c.personalOnly);
+/** Categories of the /personal site. */
+export const PERSONAL_CATEGORIES = CATEGORIES.filter((c) => !isPublicCategory(c.slug));
 export const categoryLabel = (slug: string) => CATEGORIES.find((c) => c.slug === slug)?.label ?? slug;
 export const categoryName = (slug: string) => CATEGORIES.find((c) => c.slug === slug)?.name ?? slug;
