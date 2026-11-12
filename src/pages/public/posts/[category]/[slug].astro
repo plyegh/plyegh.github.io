@@ -74,5 +74,8 @@ const seriesIndex = series.findIndex((p) => p.id === post.id);
 
 <script>
   import { enhancePost } from '../../../../lib/post-client';
-  enhancePost(document.getElementById('prose')!, { copy: '복사', copied: '복사됨' });
+  import { enableImageZoom } from '../../../../lib/image-viewer';
+  const prose = document.getElementById('prose')!;
+  enhancePost(prose, { copy: '복사', copied: '복사됨' });
+  enableImageZoom(prose, { open: '크게 보기', prev: '이전 이미지', next: '다음 이미지', close: '닫기' });
 </script>
