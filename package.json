@@ -21,6 +21,6 @@
   "devDependencies": {
     "@napi-rs/canvas": "^0.1.100",
     "pagefind": "1.5.2",
-    "pdfjs-dist": "^5.7.284"
+    "pdfjs-dist": "5.5.207"
   }
 }
