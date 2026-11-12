@@ -1,10 +1,10 @@
 ---
 import { render } from 'astro:content';
-import Base from '../../../layouts/Base.astro';
-import Comments from '../../../components/Comments.astro';
-import DocViewer from '../../../components/DocViewer.astro';
-import { categoryName, categoryLabel } from '../../../data/site';
-import { getPosts, formatDate, seriesOf, tagUrl, type Post } from '../../../lib/posts';
+import Base from '../../../../layouts/Base.astro';
+import Comments from '../../../../components/Comments.astro';
+import DocViewer from '../../../../components/DocViewer.astro';
+import { categoryName, categoryLabel } from '../../../../data/site';
+import { getPosts, formatDate, seriesOf, tagUrl, type Post } from '../../../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPosts(); // newest first
@@ -31,12 +31,12 @@ const seriesIndex = series.findIndex((p) => p.id === post.id);
     <header class="wrap post-head">
       <div class="post-head-inner">
         <nav class="crumbs" aria-label="Path" data-pagefind-ignore>
-          <a href="/">~</a>/<a href="/posts/">posts</a>/<a href={`/posts/${post.category}/`}>{categoryLabel(post.category)}</a>/<span class="here">{post.slug}</span>
+          <a href="/personal/">~</a>/<a href="/personal/posts/">posts</a>/<a href={`/personal/posts/${post.category}/`}>{categoryLabel(post.category)}</a>/<span class="here">{post.slug}</span>
         </nav>
         <h1>{post.data.title}</h1>
         {post.data.description && <p class="lead">{post.data.description}</p>}
         <p class="post-meta" data-pagefind-ignore>
-          <a class="cat" href={`/posts/${post.category}/`}>{categoryName(post.category)}</a>
+          <a class="cat" href={`/personal/posts/${post.category}/`}>{categoryName(post.category)}</a>
           <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
           <span>{minutes} min read</span>
           {post.data.draft && <span class="draft-badge">DRAFT</span>}

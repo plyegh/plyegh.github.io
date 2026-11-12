@@ -1,7 +1,7 @@
 import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
-import { SITE, categoryName } from '../data/site';
-import { getPosts } from '../lib/posts';
+import { SITE, categoryName } from '../../data/site';
+import { getPosts } from '../../lib/posts';
 
 export async function GET(context: APIContext) {
   const posts = await getPosts();

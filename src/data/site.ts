@@ -7,6 +7,9 @@ export const SITE = {
   lang: 'en',
 };
 
+// The existing blog lives under /personal; the recruiter-facing one will live under /public.
+export const PERSONAL = '/personal';
+
 export const PROFILE = {
   user: 'plyegh',
   name: 'Dongjun Park',

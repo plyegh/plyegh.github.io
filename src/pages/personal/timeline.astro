@@ -1,7 +1,7 @@
 ---
 import fs from 'node:fs';
-import Base from '../layouts/Base.astro';
-import { TIMELINE, KIND_LABEL, type Kind } from '../data/timeline';
+import Base from '../../layouts/Base.astro';
+import { TIMELINE, KIND_LABEL, type Kind } from '../../data/timeline';
 
 // proof images: public/assets/proof/<id>-<n>.<ext>
 const PROOF_DIR = 'public/assets/proof';
@@ -42,7 +42,7 @@ const chevron = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6
 <Base title="timeline" description="Competitions, CTFs, certifications and activities by year.">
   <div class="wrap">
     <header class="page-head">
-      <nav class="crumbs" aria-label="Path"><a href="/">~</a>/<span class="here">timeline</span>/</nav>
+      <nav class="crumbs" aria-label="Path"><a href="/personal/">~</a>/<span class="here">timeline</span>/</nav>
       <h1>Timeline</h1>
     </header>
 

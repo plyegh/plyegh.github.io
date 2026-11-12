@@ -1,8 +1,8 @@
 ---
-import Base from '../layouts/Base.astro';
-import AboutItem from '../components/AboutItem.astro';
-import { ABOUT, ABOUT_INTRO, TOP_RANK } from '../data/about';
-import { PROFILE, LINKS } from '../data/site';
+import Base from '../../layouts/Base.astro';
+import AboutItem from '../../components/AboutItem.astro';
+import { ABOUT, ABOUT_INTRO, TOP_RANK } from '../../data/about';
+import { PROFILE, LINKS } from '../../data/site';
 
 const chevron = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
 const isTop = (item: { rank?: number }) => item.rank !== undefined && item.rank <= TOP_RANK;
@@ -20,7 +20,7 @@ const HANDLE: Record<string, string> = {
 <Base title="about" description={`About ${PROFILE.name} — ${PROFILE.focus}.`}>
   <div class="wrap">
     <header class="page-head">
-      <nav class="crumbs" aria-label="Path"><a href="/">~</a>/<span class="here">about</span>/</nav>
+      <nav class="crumbs" aria-label="Path"><a href="/personal/">~</a>/<span class="here">about</span>/</nav>
       <h1>About</h1>
       <p class="lead">{ABOUT_INTRO}</p>
     </header>
