@@ -39,8 +39,6 @@ button, input { font: inherit; color: inherit; }
 .p-search svg { flex: none; width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 .p-search input { width: 100%; min-width: 0; border: 0; outline: 0; background: none; font-size: 14px; color: var(--ink); }
 .p-search input::placeholder { color: var(--ink-3); }
-.p-pill { font-size: 13px; color: var(--ink-2); border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px; white-space: nowrap; transition: border-color .15s, color .15s; }
-.p-pill:hover { border-color: var(--ink); color: var(--ink); }
 .p-search-link { display: none; width: 38px; height: 38px; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--ink-2); }
 .p-search-link svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 
@@ -124,14 +122,15 @@ button, input { font: inherit; color: inherit; }
 .p-series a { text-decoration: underline; text-underline-offset: 3px; }
 .p-series [aria-current] { color: var(--ink); font-weight: 600; }
 .p-post .prose { margin-top: 40px; color: #1F2430; }
-.p-post .prose h2 { font-size: 26px; letter-spacing: -.02em; line-height: 1.4; }
-.p-post .prose h2::before { content: none; }
-.p-post .prose h3 { font-size: 20px; letter-spacing: -.01em; }
-.p-post .prose strong { color: var(--ink); }
-.p-post .prose li::marker { color: var(--ink-3); }
-.p-post .prose ol li::marker { font-family: inherit; }
-.p-post .prose th { font: 700 .88em var(--sans); letter-spacing: 0; }
-.p-post .prose blockquote { border-left-width: 4px; }
+.prose.p-license { max-width: 760px; margin-top: 24px; padding-bottom: 96px; color: #1F2430; }
+:is(.p-post .prose, .prose.p-license) h2 { font-size: 26px; letter-spacing: -.02em; line-height: 1.4; }
+:is(.p-post .prose, .prose.p-license) h2::before { content: none; }
+:is(.p-post .prose, .prose.p-license) h3 { font-size: 20px; letter-spacing: -.01em; }
+:is(.p-post .prose, .prose.p-license) strong { color: var(--ink); }
+:is(.p-post .prose, .prose.p-license) li::marker { color: var(--ink-3); }
+:is(.p-post .prose, .prose.p-license) ol li::marker { font-family: inherit; }
+:is(.p-post .prose, .prose.p-license) th { font: 700 .88em var(--sans); letter-spacing: 0; }
+:is(.p-post .prose, .prose.p-license) blockquote { border-left-width: 4px; }
 .p-toc { position: sticky; top: 96px; align-self: start; max-height: calc(100vh - 120px); overflow: auto; font-size: 14px; scrollbar-width: thin; }
 .p-toc p { font-size: 12px; font-weight: 700; letter-spacing: .1em; color: var(--ink-3); margin-bottom: 12px; }
 .p-toc a { display: block; padding: 6px 0 6px 12px; color: var(--ink-3); border-left: 2px solid var(--line); line-height: 1.5; }

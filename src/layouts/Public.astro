@@ -11,7 +11,7 @@ interface Props {
   publishedTime?: Date;
   /** which header item is current */
   nav?: 'blog' | 'about' | 'activity';
-  /** the same page on the personal site, for the "개인 블로그" links */
+  /** the same page on the personal site, for the footer's "개인 블로그" link */
   personalHref?: string;
 }
 const { title, type = 'website', publishedTime, nav = 'blog', personalHref = `${PERSONAL}/` } = Astro.props;
@@ -68,7 +68,6 @@ const NAV = [
           <input type="search" name="q" placeholder="글 검색" aria-label="글 검색" autocomplete="off">
         </form>
         <a class="p-search-link" href={`${PUBLIC}/search/`} aria-label="글 검색"><Fragment set:html={SEARCH} /></a>
-        <a class="p-pill" href={personalHref}>개인 블로그 ↗</a>
       </div>
     </div>
   </header>
@@ -76,7 +75,7 @@ const NAV = [
   <footer class="p-footer">
     <div class="wrap p-ft">
       <span>© {year} {PROFILE.name}. All rights reserved.</span>
-      <nav aria-label="바닥글"><a href={`${PUBLIC}/rss.xml`}>RSS</a><a href={`${PERSONAL}/license/`}>License</a><a href={`${PERSONAL}/`}>개인 블로그</a></nav>
+      <nav aria-label="바닥글"><a href={`${PUBLIC}/rss.xml`}>RSS</a><a href={`${PUBLIC}/license/`}>License</a><a href={personalHref}>개인 블로그 ↗</a></nav>
     </div>
   </footer>
 </body>
