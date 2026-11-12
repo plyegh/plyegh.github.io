@@ -1,7 +1,7 @@
 ---
 import Public from '../../layouts/Public.astro';
 import PostIndex from '../../components/public/PostIndex.astro';
-import { PROFILE, LINKS, PERSONAL, PUBLIC_PROFILE } from '../../data/site';
+import { PROFILE, LINKS, PUBLIC, PUBLIC_PROFILE } from '../../data/site';
 import { getPublicPosts } from '../../lib/posts';
 
 const posts = await getPublicPosts();
@@ -21,7 +21,7 @@ const link = (id: string) => LINKS.find((l) => l.id === id)?.href;
       <img src={PROFILE.avatar} alt="" width="52" height="52">
       <div><b>{PUBLIC_PROFILE.name} ({PUBLIC_PROFILE.nameEn})</b><p>{PUBLIC_PROFILE.line}</p></div>
       <div class="p-links">
-        <a class="primary" href={`${PERSONAL}/about/`}>소개 · 이력</a>
+        <a class="primary" href={`${PUBLIC}/about/`}>소개 · 이력</a>
         {link('github') && <a href={link('github')} target="_blank" rel="noopener">GitHub</a>}
         {link('linkedin') && <a href={link('linkedin')} target="_blank" rel="noopener">LinkedIn</a>}
       </div>

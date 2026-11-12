@@ -8,6 +8,8 @@
   --t-bg: #0D1422; --t-line: #1B2740;
   --sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, "D2Coding", monospace;
+  --display: var(--sans);
+  --tl-1: #0E8FB8; --tl-2: #B7791F; --tl-3: #D1495B; --tl-4: #1F6FEB; --tl-5: #7C5CD6; --tl-6: #1E9E5A;
   --radius: 14px;
   color-scheme: light;
 }
@@ -161,7 +163,75 @@ button, input { font: inherit; color: inherit; }
 .p-results p { margin-top: 6px; font-size: 15px; color: var(--ink-2); }
 .p-results mark { background: #FFF1B8; color: inherit; border-radius: 3px; padding: 0 2px; }
 
+/* page header for 소개 / 활동 */
+.p-page-head { padding: 56px 0 8px; }
+.p-page-head h1 { font-size: 38px; font-weight: 800; letter-spacing: -.03em; line-height: 1.25; }
+.p-page-head p { margin-top: 12px; font-size: 18px; color: var(--ink-2); }
+
+/* 소개 — same structure as the personal About (sections.css), restyled as cards */
+.p-about { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 40px; align-items: start; padding: 32px 0 96px; }
+.p-about .about-timeline { gap: 16px; }
+.p-about .about-section { border: 1px solid var(--line); border-radius: var(--radius); background: #fff; padding: 0 24px; }
+.p-about .about-section:first-child { border-top: 1px solid var(--line); }
+.p-about .about-section > summary { padding: 20px 0; font: 800 20px/1 var(--sans); letter-spacing: -.02em; }
+.p-about .about-section > summary:hover .sec-title, .p-about .ctf-group > summary:hover .gl { color: var(--accent); }
+.p-about .sec-count { font: 600 13px var(--sans); color: var(--ink-3); background: var(--bg-soft); border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; }
+.p-about .about-items { margin: 0 0 12px; padding-left: 0; border-left: 0; gap: 0; }
+.p-about .about-items li { padding: 16px 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 24px; align-items: baseline; }
+.p-about .it-name { font-size: 16px; font-weight: 700; }
+.p-about .it-detail { grid-column: 1; font-size: 15px; margin-top: 2px; }
+.p-about .it-date { grid-column: 2; grid-row: 1; margin: 0; font: 500 14px var(--sans); color: var(--ink-3); white-space: nowrap; }
+.p-about .rank-badge { font: 700 12px var(--sans); color: var(--accent); background: var(--accent-soft); border: 0; border-radius: 999px; padding: 2px 8px; }
+.p-about .ctf-groups { margin: 0 0 12px; padding-left: 0; border-left: 0; gap: 0; }
+.p-about .ctf-group { border-top: 1px solid var(--line); }
+.p-about .ctf-group > summary { padding: 14px 0; font: 700 15px var(--sans); }
+.p-about .ctf-group .about-items { margin: 0 0 4px; padding-left: 0; }
+.p-about .group-empty { margin: 0 0 16px; font-size: 14px; }
+.p-side { position: sticky; top: 96px; display: grid; gap: 16px; }
+.p-profile, .p-contact { border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+.p-profile { background: var(--bg-soft); }
+.p-profile img { width: 64px; height: 64px; border-radius: 14px; }
+.p-profile b { display: block; margin-top: 14px; font-size: 20px; letter-spacing: -.02em; }
+.p-profile span { font-size: 14px; color: var(--ink-3); }
+.p-profile p { margin-top: 10px; font-size: 14px; line-height: 1.7; color: var(--ink-2); }
+.p-profile .p-links { margin: 16px 0 0; }
+.p-contact h2 { font-size: 13px; font-weight: 700; letter-spacing: .1em; color: var(--ink-3); margin-bottom: 14px; }
+.p-contact ul { list-style: none; display: grid; gap: 12px; }
+.p-contact li { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 8px; font-size: 14px; }
+.p-contact .k { color: var(--ink-3); }
+.p-contact a { color: var(--ink); font-weight: 600; overflow-wrap: anywhere; }
+.p-contact a:hover { color: var(--accent); }
+
+/* 활동 — same alternating timeline as the personal site (sections.css), light and without the terminal accents */
+.p-activity { padding: 28px 0 0; }
+.p-activity .tl-tabs { margin: 0 0 48px; }
+.p-activity .tl-tab { font: 600 15px var(--sans); padding: 9px 16px; background: #fff; color: var(--ink-2); }
+.p-activity .tl-tab .n { font-size: 12px; }
+.p-activity .tl-tab:hover { border-color: var(--ink); }
+.p-activity .tl-tab[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.p-activity .tl-tab[aria-selected="true"] .n { color: rgba(255, 255, 255, .7); }
+.p-activity .tl-year-head { font: 800 28px var(--sans); letter-spacing: -.02em; }
+.p-activity .tl-year-head::before { content: none; }
+.p-activity .tl-entry::before { width: 4px; }
+.p-activity .tl-right::before { left: -2px; }
+.p-activity .tl-left::before { right: -2px; }
+.p-activity .tl-node { background: #fff; }
+.p-activity .tl-date { font-weight: 800; letter-spacing: -.03em; }
+.p-activity .tl-icon { background: #fff; border-width: 4px; }
+.p-activity .tl-sec { font: 700 12px var(--sans); letter-spacing: .06em; }
+.p-activity .tl-name { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -.01em; }
+.p-activity .tl-detail { font-size: 15px; }
+.p-activity .tl-when { font: 500 13px var(--sans); }
+.p-activity .tl-soon { font-weight: 700; }
+.p-activity .tl-thumb { width: 88px; height: 64px; border-radius: 10px; }
+.p-activity .rank-badge { font: 700 12px var(--sans); color: var(--accent); background: var(--accent-soft); border: 0; border-radius: 999px; padding: 2px 8px; }
+@media (max-width: 860px) {
+  .p-activity .tl-entry::before, .p-activity .tl-left::before { left: -2px; right: auto; }
+}
+
 @media (max-width: 1000px) {
+  .p-about { grid-template-columns: 1fr; }
+  .p-side { position: static; }
   .p-post { grid-template-columns: minmax(0, 760px); }
   .p-toc { display: none; }
 }
@@ -193,4 +263,11 @@ button, input { font: inherit; color: inherit; }
   .p-pager { grid-template-columns: 1fr; }
   .p-pager .next { grid-column: 1; }
   .p-page-title { font-size: 26px; margin-top: 32px; }
+  .p-page-head { padding-top: 32px; }
+  .p-page-head h1 { font-size: 28px; }
+  .p-page-head p { font-size: 16px; }
+  .p-about .about-section { padding: 0 16px; }
+  .p-about .about-items li { grid-template-columns: 1fr; }
+  .p-about .it-date { grid-column: 1; grid-row: auto; margin-top: 4px; }
+  .p-activity .tl-thumb { width: 72px; height: 54px; }
 }

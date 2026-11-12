@@ -1,0 +1,170 @@
+---
+// The timeline itself: year tabs, month groups down a spine, proof thumbnails and the image viewer.
+// Used by /personal/timeline (English labels) and /public/activity (Korean labels).
+import '../styles/sections.css';
+import fs from 'node:fs';
+import { TIMELINE, KIND_LABEL, type Kind } from '../data/timeline';
+
+// proof images: public/assets/proof/<id>-<n>.<ext>
+const PROOF_DIR = 'public/assets/proof';
+const proofFiles = fs.existsSync(PROOF_DIR) ? fs.readdirSync(PROOF_DIR).filter((f) => /\.(jpe?g|png|webp)$/i.test(f)).sort((a, b) => a.localeCompare(b, undefined, { numeric: true })) : [];
+const proofsOf = (id: string) => proofFiles.filter((f) => f.startsWith(id + '-')).map((f) => `/assets/proof/${f}`);
+
+const today = new Date().toISOString().slice(0, 10);
+const dot = (d: string) => d.replaceAll('-', '.');
+// "2026.10.23 ~ 10.25", "2026.05 ~ 2026.11", "2026.03 ~ Present"
+function when(e: (typeof TIMELINE)[number]) {
+  if (e.ongoing) return `${dot(e.date)} ~ ${present}`;
+  if (!e.end) return dot(e.date);
+  const sameYear = e.end.slice(0, 4) === e.date.slice(0, 4) && e.end.length === 10;
+  return `${dot(e.date)} ~ ${sameYear ? dot(e.end.slice(5)) : dot(e.end)}`;
+}
+
+const ICON: Record<Kind, string> = {
+  ctf: '<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+  award: '<path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7"/>',
+  completion: '<path d="M7 3h7l4 4v14H7zM14 3v4h4M10 14l2 2 3.5-4"/>',
+  certification: '<circle cx="12" cy="9" r="5.5"/><path d="M8.5 13.2L7 21l5-2.5 5 2.5-1.5-7.8"/>',
+  activity: '<path d="M4 10v4h3l6 4V6L7 10H4zM17 9a4 4 0 0 1 0 6M19.5 6.5a8 8 0 0 1 0 11"/>',
+  affiliation: '<path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"/>',
+  project: '<path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/>',
+};
+const PALETTE = 6;
+
+// year → months → entries (chronological inside a year, newest year first in the tabs)
+const sorted = [...TIMELINE].sort((a, b) => a.date.localeCompare(b.date));
+const years = [...new Set(sorted.map((e) => e.date.slice(0, 4)))].sort().reverse();
+const byYear = years.map((year) => {
+  const list = sorted.filter((e) => e.date.startsWith(year));
+  const months = [...new Set(list.map((e) => e.date.slice(5, 7)))];
+  return { year, count: list.length, months: months.map((mo) => ({ mo, items: list.filter((e) => e.date.slice(5, 7) === mo) })) };
+});
+const chevron = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
+
+interface Props { ko?: boolean }
+const { ko = false } = Astro.props;
+const KO: Record<Kind, string> = { ctf: 'CTF', award: '대회', completion: '수료', certification: '자격증', activity: '활동', affiliation: '소속', project: '프로젝트' };
+const kindLabel = (k: Kind) => (ko ? KO[k] : KIND_LABEL[k]);
+const present = ko ? '현재' : 'Present';
+---
+<div class="tl-tabs" role="tablist" aria-label={ko ? "연도" : "Year"}>
+  {byYear.map((y, i) => (
+    <button type="button" role="tab" class="tl-tab" data-year={y.year} aria-selected={i === 0 ? 'true' : 'false'}>
+      {y.year}<span class="n">{y.count}</span>
+    </button>
+  ))}
+  <button type="button" role="tab" class="tl-tab" data-year="all" aria-selected="false">{ko ? "전체" : "all"}<span class="n">{TIMELINE.length}</span></button>
+</div>
+
+<div class="tl-years" id="tlYears">
+  {byYear.map((y, yi) => (
+    <section class:list={['tl-year', { 'is-active': yi === 0 }]} data-year={y.year} role="tabpanel" aria-label={y.year}>
+      <h2 class="tl-year-head">{y.year}</h2>
+      <ol class="tl">
+        {y.months.map((g, i) => (
+          <li class:list={['tl-entry', { reveal: !ko }, i % 2 ? 'tl-left' : 'tl-right']} style={`--c: var(--tl-${(i % PALETTE) + 1})`}>
+            <span class="tl-node" aria-hidden="true"></span>
+            <div class="tl-head">
+              <span class="tl-chev" aria-hidden="true"></span>
+              <h3 class="tl-date"><span class="yr">{y.year}.</span>{g.mo}</h3>
+              <span class="tl-rule" aria-hidden="true"></span>
+              <span class="tl-icon" aria-hidden="true"><svg viewBox="0 0 24 24" set:html={ICON[g.items[0].kind]}></svg></span>
+            </div>
+            <ul class="tl-items">
+              {g.items.map((it) => {
+                const proofs = proofsOf(it.id);
+                return (
+                  <li>
+                    <p class="tl-sec">
+                      {kindLabel(it.kind)}
+                      {it.date > today && <span class="tl-soon">{ko ? "예정" : "upcoming"}</span>}
+                    </p>
+                    <h4 class="tl-name">{it.title}{it.rank && <span class="rank-badge">#{it.rank}</span>}</h4>
+                    {it.detail && <p class="tl-detail">{it.detail}</p>}
+                    <p class="tl-when">{when(it)}</p>
+                    {proofs.length > 0 && (
+                      <div class="tl-proofs" data-title={it.title} data-proofs={JSON.stringify(proofs)}>
+                        {proofs.map((src, pi) => (
+                          <button type="button" class="tl-thumb" data-i={pi} aria-label={`${it.title} ${ko ? '증빙 사진' : 'proof'} ${pi + 1}`}>
+                            <img src={src} alt="" loading="lazy" decoding="async" />
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+  ))}
+</div>
+
+<dialog class="proof-dlg" id="proofDlg" aria-label="Proof">
+  <figure>
+    <img id="proofImg" alt="" />
+    <figcaption><span id="proofCap"></span><span class="idx" id="proofIdx"></span></figcaption>
+  </figure>
+  <button type="button" class="pd-btn pd-prev" id="proofPrev" aria-label="Previous"><Fragment set:html={chevron} /></button>
+  <button type="button" class="pd-btn pd-next" id="proofNext" aria-label="Next"><Fragment set:html={chevron} /></button>
+  <button type="button" class="pd-btn pd-close" id="proofClose" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+</dialog>
+
+
+<script>
+  // ---- year tabs (#2024, #all) ----
+  const wrap = document.getElementById('tlYears')!;
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>('.tl-tab')];
+  const panels = [...document.querySelectorAll<HTMLElement>('.tl-year')];
+  function show(year: string, push = true) {
+    if (!tabs.some((t) => t.dataset.year === year)) year = tabs[0].dataset.year!;
+    tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.year === year)));
+    wrap.classList.toggle('show-all', year === 'all');
+    panels.forEach((p) => {
+      const on = year === 'all' || p.dataset.year === year;
+      p.classList.toggle('is-active', on);
+      if (on) p.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
+    });
+    if (push) history.replaceState(null, '', year === tabs[0].dataset.year ? location.pathname : `#${year}`);
+  }
+  tabs.forEach((t) => t.addEventListener('click', () => show(t.dataset.year!)));
+  const fromHash = () => show(decodeURIComponent(location.hash.slice(1)) || tabs[0].dataset.year!, false);
+  if (location.hash) fromHash();
+  addEventListener('hashchange', fromHash);
+
+  // ---- proof viewer ----
+  const dlg = document.getElementById('proofDlg') as HTMLDialogElement;
+  const img = document.getElementById('proofImg') as HTMLImageElement;
+  const cap = document.getElementById('proofCap')!;
+  const idx = document.getElementById('proofIdx')!;
+  let list: string[] = [];
+  let cur = 0;
+  function render() {
+    img.src = list[cur];
+    img.alt = `${cap.textContent} — proof ${cur + 1}`;
+    idx.textContent = list.length > 1 ? `${cur + 1} / ${list.length}` : '';
+    dlg.classList.toggle('single', list.length < 2);
+  }
+  const step = (d: number) => { cur = (cur + d + list.length) % list.length; render(); };
+  document.querySelectorAll<HTMLElement>('.tl-proofs').forEach((box) => {
+    box.addEventListener('click', (ev) => {
+      const b = (ev.target as HTMLElement).closest<HTMLElement>('.tl-thumb');
+      if (!b) return;
+      list = JSON.parse(box.dataset.proofs || '[]');
+      cur = Number(b.dataset.i) || 0;
+      cap.textContent = box.dataset.title || '';
+      render();
+      dlg.showModal();
+    });
+  });
+  document.getElementById('proofPrev')!.addEventListener('click', () => step(-1));
+  document.getElementById('proofNext')!.addEventListener('click', () => step(1));
+  document.getElementById('proofClose')!.addEventListener('click', () => dlg.close());
+  dlg.addEventListener('click', (ev) => { if (ev.target === dlg) dlg.close(); }); // backdrop
+  dlg.addEventListener('keydown', (ev) => {
+    if (ev.key === 'ArrowLeft') step(-1);
+    if (ev.key === 'ArrowRight') step(1);
+  });
+</script>

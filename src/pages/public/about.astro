@@ -1,0 +1,39 @@
+---
+import Public from '../../layouts/Public.astro';
+import AboutSections from '../../components/AboutSections.astro';
+import { ABOUT_INTRO } from '../../data/about';
+import { PROFILE, LINKS, CONTACT_EMAIL, LINK_HANDLE, PERSONAL, PUBLIC, PUBLIC_PROFILE } from '../../data/site';
+
+const LABEL: Record<string, string> = { github: 'GitHub', dreamhack: 'Dreamhack', linkedin: 'LinkedIn', instagram: 'Instagram', discord: 'Discord' };
+---
+<Public title="소개" description={`${PUBLIC_PROFILE.name} (${PUBLIC_PROFILE.nameEn}) — ${PUBLIC_PROFILE.line}`} nav="about" personalHref={`${PERSONAL}/about/`}>
+  <div class="wrap">
+    <header class="p-page-head">
+      <h1>소개</h1>
+      <p>{ABOUT_INTRO}</p>
+    </header>
+
+    <div class="p-about">
+      <AboutSections ko />
+
+      <aside class="p-side">
+        <section class="p-profile" aria-label="프로필">
+          <img src={PROFILE.avatar} alt={PROFILE.avatarAlt} width="64" height="64">
+          <b>{PUBLIC_PROFILE.name}</b>
+          <span>{PUBLIC_PROFILE.nameEn} · plyegh</span>
+          <p>{PUBLIC_PROFILE.line}</p>
+          <div class="p-links"><a class="primary" href={`${PUBLIC}/activity/`}>활동 타임라인</a><a href={`${PUBLIC}/`}>블로그 글</a></div>
+        </section>
+        <section class="p-contact" aria-label="연락처">
+          <h2>CONTACT</h2>
+          <ul>
+            <li><span class="k">Email</span><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></li>
+            {LINKS.map((l) => (
+              <li><span class="k">{LABEL[l.id] ?? l.id}</span><a href={l.href} target="_blank" rel="noopener">{LINK_HANDLE[l.id] ?? l.href} ↗</a></li>
+            ))}
+          </ul>
+        </section>
+      </aside>
+    </div>
+  </div>
+</Public>

@@ -1,0 +1,47 @@
+---
+// The About sections (Affiliation, Projects, … as collapsible groups; CTF split by rank).
+// Used by /personal/about (English headings) and /public/about (Korean headings).
+import '../styles/sections.css';
+import AboutItem from './AboutItem.astro';
+import { ABOUT, TOP_RANK } from '../data/about';
+
+interface Props { ko?: boolean }
+const { ko = false } = Astro.props;
+const KO: Record<string, string> = { Affiliation: '소속', Projects: '프로젝트', Activities: '활동', CTF: 'CTF', Certifications: '자격증' };
+const t = (title: string) => (ko ? KO[title] ?? title : title);
+const loc = <T extends { date?: string }>(item: T) => (ko && item.date ? { ...item, date: item.date.replace('Present', '현재') } : item);
+const chevron = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+const isTop = (item: { rank?: number }) => item.rank !== undefined && item.rank <= TOP_RANK;
+---
+<div class="about-timeline">
+  {ABOUT.map((section) => {
+    const top = section.items.filter(isTop);
+    const rest = section.items.filter((i) => !isTop(i));
+    return (
+      <details class="about-section" open>
+        <summary>
+          <span class={`dot dot-${section.dot}`} aria-hidden="true"></span>
+          <span class="sec-title">{t(section.title)}</span>
+          <span class="sec-count">{section.items.length}</span>
+          <Fragment set:html={chevron} />
+        </summary>
+        {section.title === 'CTF' ? (
+          <div class="ctf-groups">
+            <details class="ctf-group" open>
+              <summary><span class="gl">Top {TOP_RANK}</span><span class="sec-count">{top.length}</span><Fragment set:html={chevron} /></summary>
+              {top.length ? <ul class="about-items">{top.map((item) => <AboutItem item={loc(item)} />)}</ul>
+                : <p class="group-empty">아직 Top {TOP_RANK} 기록이 없습니다.</p>}
+            </details>
+            <details class="ctf-group" open>
+              <summary><span class="gl">{ko ? `${TOP_RANK}위 밖` : `Below ${TOP_RANK}`}</span><span class="dim">· {ko ? "순위 없음" : "Unplaced"}</span><span class="sec-count">{rest.length}</span><Fragment set:html={chevron} /></summary>
+              {rest.length ? <ul class="about-items">{rest.map((item) => <AboutItem item={loc(item)} />)}</ul>
+                : <p class="group-empty">없음</p>}
+            </details>
+          </div>
+        ) : (
+          <ul class="about-items">{section.items.map((item) => <AboutItem item={loc(item)} />)}</ul>
+        )}
+      </details>
+    );
+  })}
+</div>
