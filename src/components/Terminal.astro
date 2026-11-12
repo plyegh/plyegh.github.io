@@ -192,7 +192,7 @@ const json = JSON.stringify(data).replace(/</g, '\\u003c');
       print(dim('searching…'));
       const status = out.lastElementChild as HTMLElement;
       try {
-        const { total, hits } = await searchPosts(q, 8);
+        const { total, hits } = await searchPosts(q, 8, "personal");
         status.remove();
         if (!total) { print(dim(`no matches for "${esc(q)}"`)); return; }
         lastList = hits.map((h) => D.posts.find((p) => p.url === h.url)).filter(Boolean) as TermPost[];

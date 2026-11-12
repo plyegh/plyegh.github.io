@@ -1,7 +1,8 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { CATEGORY_SLUGS, PERSONAL, type CategorySlug } from '../data/site';
+import { CATEGORY_SLUGS, PERSONAL, PUBLIC, isPublicCategory, type CategorySlug } from '../data/site';
 
-export type Post = CollectionEntry<'posts'> & { category: CategorySlug; slug: string; url: string };
+/** `url` is the /personal page; `publicUrl` the /public one (absent for personal-only posts). */
+export type Post = CollectionEntry<'posts'> & { category: CategorySlug; slug: string; url: string; publicUrl?: string };
 
 /** All posts, newest first. Drafts show up in `npm run dev` only. */
 export async function getPosts(): Promise<Post[]> {
@@ -14,10 +15,17 @@ export async function getPosts(): Promise<Post[]> {
           `Unknown category folder "${category}" (post: ${entry.id}). Use one of: ${CATEGORY_SLUGS.join(', ')}`,
         );
       }
-      return { ...entry, category: category as CategorySlug, slug, url: `${PERSONAL}/posts/${category}/${slug}/` };
+      return {
+        ...entry, category: category as CategorySlug, slug,
+        url: `${PERSONAL}/posts/${category}/${slug}/`,
+        publicUrl: isPublicCategory(category) ? `${PUBLIC}/posts/${category}/${slug}/` : undefined,
+      };
     })
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
+
+/** Posts shown on /public: everything except personal-only categories. */
+export const getPublicPosts = async () => (await getPosts()).filter((p) => p.publicUrl);
 
 /** Same order, but `pinned: true` posts first — used by the lists people browse. */
 export const pinnedFirst = (posts: Post[]) => [...posts.filter((p) => p.data.pinned), ...posts.filter((p) => !p.data.pinned)];
@@ -55,3 +63,8 @@ export const seriesOf = (posts: Post[], name: string) =>
 const fmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' });
 /** 2026.06.20 (KST) */
 export const formatDate = (d: Date) => fmt.format(d).replaceAll('-', '.');
+const fmtKo = new Intl.DateTimeFormat('ko-KR', { timeZone: 'Asia/Seoul', year: 'numeric', month: 'long', day: 'numeric' });
+/** 2026년 6월 20일 (KST) */
+export const formatDateKo = (d: Date) => fmtKo.format(d);
+/** Rough reading time in minutes. */
+export const readingMinutes = (post: Post) => Math.max(1, Math.round((post.body ?? '').length / 900));

@@ -25,9 +25,10 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const minutes = Math.max(1, Math.round((post.body ?? '').length / 900));
 const seriesIndex = series.findIndex((p) => p.id === post.id);
 ---
-<Base title={post.data.title} description={post.data.description} type="article" publishedTime={post.data.date}>
+<Base title={post.data.title} description={post.data.description} type="article" publishedTime={post.data.date} canonicalPath={post.publicUrl}>
   <div class="progress" aria-hidden="true"><span></span></div>
   <article class="post" data-pagefind-body data-pagefind-meta={`date:${formatDate(post.data.date)}`} data-pagefind-filter={`category:${post.category}`}>
+    <span data-pagefind-filter="site:personal" hidden></span>
     <header class="wrap post-head">
       <div class="post-head-inner">
         <nav class="crumbs" aria-label="Path" data-pagefind-ignore>
@@ -40,6 +41,7 @@ const seriesIndex = series.findIndex((p) => p.id === post.id);
           <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
           <span>{minutes} min read</span>
           {post.data.draft && <span class="draft-badge">DRAFT</span>}
+          {post.publicUrl && <a class="cat" href={post.publicUrl}>public version ↗</a>}
         </p>
         {series.length > 1 && (
           <nav class="series-box" aria-label="Series" data-pagefind-ignore>
@@ -87,53 +89,6 @@ const seriesIndex = series.findIndex((p) => p.id === post.id);
 </Base>
 
 <script>
-  const prose = document.getElementById('prose')!;
-
-  // tables scroll sideways instead of pushing the page wider
-  prose.querySelectorAll('table').forEach((t) => {
-    const w = document.createElement('div');
-    w.className = 'table-wrap';
-    t.replaceWith(w);
-    w.appendChild(t);
-  });
-
-  // code blocks: language label + copy button
-  prose.querySelectorAll('pre').forEach((pre) => {
-    const box = document.createElement('div');
-    box.className = 'code';
-    pre.replaceWith(box);
-    box.appendChild(pre);
-    const lang = pre.dataset.language;
-    if (lang && !['text', 'plain', 'plaintext', 'txt'].includes(lang)) {
-      const tag = document.createElement('span');
-      tag.className = 'code-lang';
-      tag.textContent = lang;
-      box.appendChild(tag);
-    }
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'copy-btn';
-    btn.textContent = 'copy';
-    btn.addEventListener('click', async () => {
-      try { await navigator.clipboard.writeText(pre.innerText.replace(/\n$/, '')); } catch {}
-      btn.textContent = 'copied'; btn.classList.add('done');
-      setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('done'); }, 1600);
-    });
-    box.appendChild(btn);
-  });
-
-  // reading progress + active TOC entry
-  const bar = document.querySelector<HTMLElement>('.progress span')!;
-  const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc a')];
-  const heads = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1)))).filter(Boolean) as HTMLElement[];
-  function onScroll() {
-    const r = prose.getBoundingClientRect();
-    const p = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight * 0.6)));
-    bar.style.transform = `scaleX(${p})`;
-    let idx = 0;
-    heads.forEach((h, i) => { if (h.getBoundingClientRect().top < 140) idx = i; });
-    links.forEach((a, i) => a.classList.toggle('active', i === idx));
-  }
-  addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  import { enhancePost } from '../../../../lib/post-client';
+  enhancePost(document.getElementById('prose')!);
 </script>

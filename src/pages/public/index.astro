@@ -1,0 +1,32 @@
+---
+import Public from '../../layouts/Public.astro';
+import PostIndex from '../../components/public/PostIndex.astro';
+import { PROFILE, LINKS, PERSONAL, PUBLIC_PROFILE } from '../../data/site';
+import { getPublicPosts } from '../../lib/posts';
+
+const posts = await getPublicPosts();
+const link = (id: string) => LINKS.find((l) => l.id === id)?.href;
+---
+<Public>
+  <div class="wrap">
+    <section class="p-hero">
+      <div class="p-hero-in">
+        <p class="p-kicker">{PUBLIC_PROFILE.kicker}</p>
+        <h1>{PUBLIC_PROFILE.title}</h1>
+        <p class="p-tagline">{PUBLIC_PROFILE.tagline}</p>
+      </div>
+    </section>
+
+    <section class="p-intro" aria-label="작성자">
+      <img src={PROFILE.avatar} alt="" width="52" height="52">
+      <div><b>{PUBLIC_PROFILE.name} ({PUBLIC_PROFILE.nameEn})</b><p>{PUBLIC_PROFILE.line}</p></div>
+      <div class="p-links">
+        <a class="primary" href={`${PERSONAL}/about/`}>소개 · 이력</a>
+        {link('github') && <a href={link('github')} target="_blank" rel="noopener">GitHub</a>}
+        {link('linkedin') && <a href={link('linkedin')} target="_blank" rel="noopener">LinkedIn</a>}
+      </div>
+    </section>
+
+    <PostIndex all={posts} />
+  </div>
+</Public>

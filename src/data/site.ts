@@ -7,8 +7,20 @@ export const SITE = {
   lang: 'en',
 };
 
-// The existing blog lives under /personal; the recruiter-facing one will live under /public.
+// Two sites share the posts: /personal (the terminal-style blog, everything) and
+// /public (clean, recruiter-facing — activities and results only).
 export const PERSONAL = '/personal';
+export const PUBLIC = '/public';
+
+// Shown on the /public site.
+export const PUBLIC_PROFILE = {
+  title: 'plyegh 블로그',
+  kicker: 'Security Study Log',
+  tagline: '네트워크 · 클라우드 · 웹 보안을 공부하며 배운 것을 기록합니다.',
+  name: '박동준',
+  nameEn: 'Dongjun Park',
+  line: '우석대학교 정보보안학과 · APS · KUCIS 호남권 대표 · HSPACE Knights Frontier 3기',
+};
 
 export const PROFILE = {
   user: 'plyegh',
@@ -44,18 +56,22 @@ export const GISCUS = {
 
 // slug: folder name under src/content/posts/ = URL path = category id (keep it URL-safe).
 // label: how the category is shown on cards, the /posts menu, the tree and breadcrumbs.
+// ko: the name shown on the /public site.
 // hideOnHome: leave it off the home page's category cards (still in the menu, tree and terminal).
+// personalOnly: posts in it never appear on /public (things made for fun).
 export const CATEGORIES = [
-  { slug: 'dev', label: 'dev', name: 'Development' },
-  { slug: 'ctf-wargame', label: 'ctf&wargame', name: 'CTF / Wargame' },
-  { slug: 'bug-bounty', label: 'bug-bounty', name: 'Bug Bounty' },
-  { slug: 'blog-docs', label: 'blog&docs', name: 'Blog / Tech Docs' },
-  { slug: 'paper-conf', label: 'paper&conf', name: 'Papers / Conferences' },
-  { slug: 'contest-cert', label: 'contest&cert', name: 'Contests / Certifications' },
-  { slug: 'playground', label: 'playground', name: 'Playground', hideOnHome: true }, // not on the home cards
+  { slug: 'dev', label: 'dev', name: 'Development', ko: '개발' },
+  { slug: 'ctf-wargame', label: 'ctf&wargame', name: 'CTF / Wargame', ko: 'CTF · 워게임' },
+  { slug: 'bug-bounty', label: 'bug-bounty', name: 'Bug Bounty', ko: '버그바운티' },
+  { slug: 'blog-docs', label: 'blog&docs', name: 'Blog / Tech Docs', ko: '기술 문서' },
+  { slug: 'paper-conf', label: 'paper&conf', name: 'Papers / Conferences', ko: '논문 · 컨퍼런스' },
+  { slug: 'contest-cert', label: 'contest&cert', name: 'Contests / Certifications', ko: '공모전 · 자격증' },
+  { slug: 'playground', label: 'playground', name: 'Playground', ko: 'Playground', hideOnHome: true, personalOnly: true },
 ] as const;
 
 export type CategorySlug = (typeof CATEGORIES)[number]['slug'];
 export const CATEGORY_SLUGS = CATEGORIES.map((c) => c.slug) as CategorySlug[];
+export const categoryKo = (slug: string) => CATEGORIES.find((c) => c.slug === slug)?.ko ?? slug;
+export const isPublicCategory = (slug: string) => !CATEGORIES.some((c) => c.slug === slug && 'personalOnly' in c && c.personalOnly);
 export const categoryLabel = (slug: string) => CATEGORIES.find((c) => c.slug === slug)?.label ?? slug;
 export const categoryName = (slug: string) => CATEGORIES.find((c) => c.slug === slug)?.name ?? slug;

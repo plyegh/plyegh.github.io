@@ -1,0 +1,31 @@
+---
+// One post on the /public lists: thumbnail (image or coloured title card), category, title, summary, byline.
+import { Image } from 'astro:assets';
+import { PROFILE, PUBLIC_PROFILE, CATEGORY_SLUGS, categoryKo, categoryName } from '../../data/site';
+import { formatDateKo, type Post } from '../../lib/posts';
+import { thumbOf } from '../../lib/thumbs';
+
+interface Props { post: Post; featured?: boolean }
+const { post, featured = false } = Astro.props;
+const thumb = thumbOf(post);
+const tone = CATEGORY_SLUGS.indexOf(post.category) % 3;
+const H = featured ? 'h2' : 'h3';
+---
+<a class={featured ? 'p-feat' : 'p-card'} href={post.publicUrl}>
+  {thumb.image ? (
+    <div class="p-thumb"><Image src={thumb.image} alt="" width={featured ? 1200 : 760} height={featured ? 675 : 428} fit="cover" loading={featured ? 'eager' : 'lazy'} /></div>
+  ) : thumb.src ? (
+    <div class="p-thumb"><img src={thumb.src} alt="" loading={featured ? 'eager' : 'lazy'} decoding="async"></div>
+  ) : (
+    <div class={`p-thumb text t-${tone}`} aria-hidden="true">
+      <span class="t-cat">{categoryName(post.category)}</span>
+      <span class="t-title">{post.data.title}</span>
+    </div>
+  )}
+  <div>
+    <p class="p-cat">{categoryKo(post.category)}{post.data.series && ` · ${post.data.series}`}</p>
+    <H>{post.data.title}</H>
+    {post.data.description && <p class="p-desc">{post.data.description}</p>}
+    <div class="p-by"><img src={PROFILE.avatar} alt="" width="22" height="22"><b>{PUBLIC_PROFILE.name}</b>· <time datetime={post.data.date.toISOString()}>{formatDateKo(post.data.date)}</time></div>
+  </div>
+</a>

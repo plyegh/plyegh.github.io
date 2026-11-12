@@ -1,0 +1,58 @@
+---
+import Public from '../../layouts/Public.astro';
+import { CATEGORIES, PERSONAL } from '../../data/site';
+const KO = Object.fromEntries(CATEGORIES.map((c) => [c.slug, c.ko]));
+---
+<Public title="검색" description="plyegh 블로그 글 검색" personalHref={`${PERSONAL}/search/`}>
+  <div class="wrap">
+    <div class="p-search-page">
+      <h1>글 검색</h1>
+      <label class="p-search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="검색어를 입력하세요" aria-label="검색어" autocomplete="off" spellcheck="false" enterkeyhint="search">
+      </label>
+      <p class="p-status" id="status" aria-live="polite"></p>
+      <ul class="p-results" id="results" data-ko={JSON.stringify(KO)}></ul>
+    </div>
+  </div>
+</Public>
+
+<script>
+  import { searchPosts } from '../../lib/search-client';
+
+  const input = document.getElementById('q') as HTMLInputElement;
+  const status = document.getElementById('status')!;
+  const list = document.getElementById('results')!;
+  const KO: Record<string, string> = JSON.parse(list.dataset.ko!);
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+
+  let seq = 0;
+  async function run(q: string) {
+    const my = ++seq;
+    const url = new URL(location.href);
+    if (q) url.searchParams.set('q', q); else url.searchParams.delete('q');
+    history.replaceState(null, '', url);
+    if (!q.trim()) { list.innerHTML = ''; status.textContent = ''; return; }
+    try {
+      const { total, hits } = await searchPosts(q, 20, 'public');
+      if (my !== seq) return; // a newer query already started
+      status.textContent = total ? `${total}개의 글을 찾았습니다.` : '검색 결과가 없습니다.';
+      // excerpts come from our own Pagefind index: escaped text plus <mark> highlights
+      list.innerHTML = hits.map((h) => `
+        <li><a href="${esc(h.url)}">
+          <p class="p-cat">${esc(KO[h.cat] ?? h.cat)}${h.date ? ` · ${esc(h.date)}` : ''}</p>
+          <h2>${esc(h.title)}</h2>
+          <p>${h.excerpt}</p>
+        </a></li>`).join('');
+    } catch {
+      status.textContent = '검색 색인을 불러오지 못했습니다.';
+    }
+  }
+
+  let t: ReturnType<typeof setTimeout>;
+  input.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => run(input.value), 180); });
+  const initial = new URLSearchParams(location.search).get('q') || '';
+  input.value = initial;
+  if (initial) run(initial);
+  input.focus();
+</script>

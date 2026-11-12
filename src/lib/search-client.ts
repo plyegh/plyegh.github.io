@@ -5,7 +5,7 @@ export type Hit = { url: string; title: string; date: string; cat: string; excer
 
 type Pagefind = {
   options: (o: Record<string, unknown>) => Promise<void>;
-  search: (q: string) => Promise<{ results: { data: () => Promise<any> }[] } | null>;
+  search: (q: string, o?: Record<string, unknown>) => Promise<{ results: { data: () => Promise<any> }[] } | null>;
 };
 let pagefind: Promise<Pagefind> | null = null;
 
@@ -22,11 +22,12 @@ function load() {
 }
 
 /** Throws if the index isn't there (e.g. `npm run dev`, which doesn't run Pagefind). */
-export async function searchPosts(query: string, limit = 20): Promise<{ total: number; hits: Hit[] }> {
+/** `site` keeps the two sites' results apart: each post is indexed once per site. */
+export async function searchPosts(query: string, limit = 20, site: 'personal' | 'public' = 'personal'): Promise<{ total: number; hits: Hit[] }> {
   const q = query.trim();
   if (!q) return { total: 0, hits: [] };
   const pf = await load();
-  const res = await pf.search(q);
+  const res = await pf.search(q, { filters: { site } });
   if (!res) return { total: 0, hits: [] };
   const data = await Promise.all(res.results.slice(0, limit).map((r) => r.data()));
   return {

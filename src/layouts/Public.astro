@@ -1,0 +1,83 @@
+---
+// Layout of the /public site: clean, light, Korean UI. The personal site uses Base.astro.
+import '../styles/public.css';
+import '../styles/content.css';
+import { SITE, PROFILE, PUBLIC, PERSONAL, PUBLIC_PROFILE } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  type?: 'website' | 'article';
+  publishedTime?: Date;
+  /** which header item is current */
+  nav?: 'blog' | 'about' | 'activity';
+  /** the same page on the personal site, for the "개인 블로그" links */
+  personalHref?: string;
+}
+const { title, type = 'website', publishedTime, nav = 'blog', personalHref = `${PERSONAL}/` } = Astro.props;
+const description = Astro.props.description || PUBLIC_PROFILE.tagline;
+const fullTitle = title ? `${title} · ${PUBLIC_PROFILE.title}` : PUBLIC_PROFILE.title;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(PROFILE.avatar, Astro.site);
+const year = new Date().getFullYear();
+const SEARCH = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>';
+// 소개 and 활동 get their own /public pages next; until then they open the personal ones.
+const NAV = [
+  { id: 'blog', label: '블로그', href: `${PUBLIC}/` },
+  { id: 'about', label: '소개', href: `${PERSONAL}/about/` },
+  { id: 'activity', label: '활동', href: `${PERSONAL}/timeline/` },
+];
+---
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{fullTitle}</title>
+  <meta name="description" content={description}>
+  <link rel="canonical" href={canonical}>
+  <meta property="og:type" content={type}>
+  <meta property="og:site_name" content={PUBLIC_PROFILE.title}>
+  <meta property="og:title" content={fullTitle}>
+  <meta property="og:description" content={description}>
+  <meta property="og:url" content={canonical}>
+  <meta property="og:image" content={ogImage}>
+  {publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()}>}
+  <meta name="twitter:card" content="summary">
+  <meta name="color-scheme" content="light">
+  <meta name="generator" content={Astro.generator}>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="alternate" type="application/rss+xml" title={PUBLIC_PROFILE.title} href={`${PUBLIC}/rss.xml`}>
+  <link rel="sitemap" href="/sitemap-index.xml">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="p-header">
+    <div class="wrap p-hd">
+      <a class="p-logo" href={`${PUBLIC}/`} aria-label={`${SITE.title} 블로그 홈`}><img src={PROFILE.avatar} alt="" width="28" height="28"><span>{SITE.title}</span></a>
+      <nav class="p-nav" aria-label="주 메뉴">
+        {NAV.map((n) => <a href={n.href} aria-current={n.id === nav ? 'page' : undefined}>{n.label}</a>)}
+      </nav>
+      <div class="p-hd-r">
+        <form class="p-search" action={`${PUBLIC}/search/`} role="search">
+          <Fragment set:html={SEARCH} />
+          <input type="search" name="q" placeholder="글 검색" aria-label="글 검색" autocomplete="off">
+        </form>
+        <a class="p-search-link" href={`${PUBLIC}/search/`} aria-label="글 검색"><Fragment set:html={SEARCH} /></a>
+        <a class="p-pill" href={personalHref}>개인 블로그 ↗</a>
+      </div>
+    </div>
+  </header>
+  <main><slot /></main>
+  <footer class="p-footer">
+    <div class="wrap p-ft">
+      <span>© {year} {PROFILE.name}. All rights reserved.</span>
+      <nav aria-label="바닥글"><a href={`${PUBLIC}/rss.xml`}>RSS</a><a href={`${PERSONAL}/license/`}>License</a><a href={`${PERSONAL}/`}>개인 블로그</a></nav>
+    </div>
+  </footer>
+</body>
+</html>

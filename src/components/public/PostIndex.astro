@@ -1,0 +1,24 @@
+---
+// Body of the /public list pages: category tabs, then the posts.
+// On "전체" the newest post is featured above the grid.
+import PostCard from './PostCard.astro';
+import { CATEGORIES, PUBLIC } from '../../data/site';
+import { pinnedFirst, type Post } from '../../lib/posts';
+
+interface Props { all: Post[]; active?: string }
+const { all, active = '' } = Astro.props;
+const tabs = CATEGORIES.filter((c) => all.some((p) => p.category === c.slug)); // only categories that have posts
+const posts = pinnedFirst(active ? all.filter((p) => p.category === active) : all);
+const [first, ...rest] = posts;
+const featured = !active && first;
+---
+<nav class="p-tabs" aria-label="카테고리">
+  <a class="p-tab" href={`${PUBLIC}/`} aria-current={active === '' ? 'page' : undefined}>전체</a>
+  {tabs.map((c) => <a class="p-tab" href={`${PUBLIC}/posts/${c.slug}/`} aria-current={active === c.slug ? 'page' : undefined}>{c.ko}</a>)}
+</nav>
+{featured && <PostCard post={first} featured />}
+{posts.length ? (
+  <div class="p-grid">{(featured ? rest : posts).map((p) => <PostCard post={p} />)}</div>
+) : (
+  <p class="p-empty">아직 글이 없습니다.</p>
+)}
