@@ -5,10 +5,12 @@
 https://plyegh.github.io/
 ```
 
-Two sites from one set of posts:
+Two sites, one set of posts — a post lives on exactly one of them, decided by its category folder:
 
-- `/public/` — clean, Korean, recruiter-facing: activities and results only (the root redirects here)
-- `/personal/` — the terminal-style blog with everything, including `playground`
+- `/public/` — clean, Korean, recruiter-facing: study notes, activities and results (the root redirects here)
+- `/personal/` — the terminal-style playground: posts in `playground`, plus the game at `/yu/seon/ho/game/play/`
+
+The site as it was when `/personal/` still carried every post is kept on the `backup/personal-full-2026-11-12` branch.
 
 Personal security study log — built with [Astro](https://astro.build), deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to `main`.
 
@@ -29,7 +31,7 @@ Front matter:
 ```yaml
 title: "Post title"
 date: 2026-10-27T13:00:00+09:00
-tags: [CTF, Web]                 # each tag gets a page at /personal/tags/<tag>/
+tags: [CTF, Web]                 # playground posts get tag pages at /personal/tags/<tag>/
 description: "One line shown in lists"
 series: "Heap study"             # optional — posts with the same name are linked in date order
 pinned: false                    # optional — true puts the post at the top of lists
@@ -37,7 +39,7 @@ draft: false
 cover: ./cover.jpg               # optional — card thumbnail on /public (default: first ./image, else page 1 of the first PDF)
 ```
 
-Every post appears on both sites, except posts in a category marked `personalOnly` in `src/data/site.ts` (`playground`), which stay on `/personal/` only. If you add another personal-only category, add it to `PERSONAL_ONLY` in `astro.config.mjs` too.
+Posts go to `/public/`, except categories marked `personalOnly` in `src/data/site.ts` (`playground`), which go to `/personal/`. If you add another personal-only category, add it to `PERSONAL_ONLY` in `astro.config.mjs` too.
 
 Callouts:
 
@@ -98,7 +100,7 @@ src/content/posts/   posts (folder = category)
 src/data/site.ts     profile, links, categories
 src/components/      terminal, header, side panel, lists
 src/pages/public/    routes under /public/: home, posts/<category>/, posts/<category>/<slug>/, about/, activity/, license/, search/ (layout: src/layouts/Public.astro, styles: src/styles/public.css)
-src/pages/personal/  routes under /personal/: posts/, posts/<category>/, posts/<category>/<slug>/, tags/, timeline/, about/, search/
+src/pages/personal/  routes under /personal/: home (terminal), posts/, posts/playground/, posts/playground/<slug>/, tags/, search/, license/
                      (old root URLs redirect there — see `redirects` in astro.config.mjs)
 public/              copied as-is (profile image, favicon, /yu/seon/ho/game/play/)
 ```

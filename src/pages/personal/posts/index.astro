@@ -2,9 +2,9 @@
 import Base from '../../../layouts/Base.astro';
 import PostList from '../../../components/PostList.astro';
 import CategoryTree from '../../../components/CategoryTree.astro';
-import { getPosts, pinnedFirst } from '../../../lib/posts';
+import { getPersonalPosts, pinnedFirst } from '../../../lib/posts';
 
-const posts = await getPosts();
+const posts = await getPersonalPosts();
 ---
 <Base title="posts" description="All posts on plyegh.">
   <div class="wrap">

@@ -2,11 +2,11 @@
 import Public from '../../layouts/Public.astro';
 import AboutSections from '../../components/AboutSections.astro';
 import { ABOUT_INTRO } from '../../data/about';
-import { PROFILE, LINKS, CONTACT_EMAIL, LINK_HANDLE, PERSONAL, PUBLIC, PUBLIC_PROFILE } from '../../data/site';
+import { PROFILE, LINKS, CONTACT_EMAIL, LINK_HANDLE, PUBLIC, PUBLIC_PROFILE } from '../../data/site';
 
 const LABEL: Record<string, string> = { github: 'GitHub', dreamhack: 'Dreamhack', linkedin: 'LinkedIn', instagram: 'Instagram', discord: 'Discord' };
 ---
-<Public title="소개" description={`${PUBLIC_PROFILE.name} (${PUBLIC_PROFILE.nameEn}) — ${PUBLIC_PROFILE.line}`} nav="about" personalHref={`${PERSONAL}/about/`}>
+<Public title="소개" description={`${PUBLIC_PROFILE.name} (${PUBLIC_PROFILE.nameEn}) — ${PUBLIC_PROFILE.line}`} nav="about">
   <div class="wrap">
     <header class="p-page-head">
       <h1>소개</h1>

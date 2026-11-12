@@ -1,10 +1,10 @@
 ---
 import Base from '../../../../layouts/Base.astro';
 import PostList from '../../../../components/PostList.astro';
-import { getPosts, getTags, type Post } from '../../../../lib/posts';
+import { getPersonalPosts, getTags, type Post } from '../../../../lib/posts';
 
 export async function getStaticPaths() {
-  return getTags(await getPosts()).map((t) => ({ params: { tag: t.slug }, props: { name: t.name, posts: t.posts } }));
+  return getTags(await getPersonalPosts()).map((t) => ({ params: { tag: t.slug }, props: { name: t.name, posts: t.posts } }));
 }
 interface Props { name: string; posts: Post[] }
 const { tag } = Astro.params;

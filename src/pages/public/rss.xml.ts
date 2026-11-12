@@ -14,7 +14,7 @@ export async function GET(context: APIContext) {
       title: p.data.title,
       pubDate: p.data.date,
       description: p.data.description,
-      link: new URL(p.publicUrl!, context.site!).href,
+      link: new URL(p.url, context.site!).href,
       categories: [categoryKo(p.category), ...p.data.tags],
     })),
   });

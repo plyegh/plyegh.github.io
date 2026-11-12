@@ -4,10 +4,10 @@ import Base from '../../../../layouts/Base.astro';
 import Comments from '../../../../components/Comments.astro';
 import DocViewer from '../../../../components/DocViewer.astro';
 import { categoryName, categoryLabel } from '../../../../data/site';
-import { getPosts, formatDate, seriesOf, tagUrl, type Post } from '../../../../lib/posts';
+import { getPersonalPosts, formatDate, seriesOf, tagUrl, type Post } from '../../../../lib/posts';
 
 export async function getStaticPaths() {
-  const posts = await getPosts(); // newest first
+  const posts = await getPersonalPosts(); // newest first
   return posts.map((post, i) => ({
     params: { category: post.category, slug: post.slug },
     props: {
@@ -25,7 +25,7 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const minutes = Math.max(1, Math.round((post.body ?? '').length / 900));
 const seriesIndex = series.findIndex((p) => p.id === post.id);
 ---
-<Base title={post.data.title} description={post.data.description} type="article" publishedTime={post.data.date} canonicalPath={post.publicUrl}>
+<Base title={post.data.title} description={post.data.description} type="article" publishedTime={post.data.date}>
   <div class="progress" aria-hidden="true"><span></span></div>
   <article class="post" data-pagefind-body data-pagefind-meta={`date:${formatDate(post.data.date)}`} data-pagefind-filter={`category:${post.category}`}>
     <span data-pagefind-filter="site:personal" hidden></span>
@@ -41,7 +41,6 @@ const seriesIndex = series.findIndex((p) => p.id === post.id);
           <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
           <span>{minutes} min read</span>
           {post.data.draft && <span class="draft-badge">DRAFT</span>}
-          {post.publicUrl && <a class="cat" href={post.publicUrl}>public version ↗</a>}
         </p>
         {series.length > 1 && (
           <nav class="series-box" aria-label="Series" data-pagefind-ignore>

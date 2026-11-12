@@ -23,7 +23,7 @@ const { Content, headings } = await render(post);
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const seriesIndex = series.findIndex((p) => p.id === post.id);
 ---
-<Public title={post.data.title} description={post.data.description} type="article" publishedTime={post.data.date} personalHref={post.url}>
+<Public title={post.data.title} description={post.data.description} type="article" publishedTime={post.data.date}>
   <div class="wrap p-post">
     <article data-pagefind-body data-pagefind-meta={`date:${formatDate(post.data.date)}`} data-pagefind-filter={`category:${post.category}`}>
       <span data-pagefind-filter="site:public" hidden></span>
@@ -41,7 +41,7 @@ const seriesIndex = series.findIndex((p) => p.id === post.id);
           <p>{post.data.series} <span>· {seriesIndex + 1}/{series.length}</span></p>
           <ol>
             {series.map((p) => (
-              <li>{p.id === post.id ? <span aria-current="page">{p.data.title}</span> : <a href={p.publicUrl}>{p.data.title}</a>}</li>
+              <li>{p.id === post.id ? <span aria-current="page">{p.data.title}</span> : <a href={p.url}>{p.data.title}</a>}</li>
             ))}
           </ol>
         </nav>
@@ -56,11 +56,10 @@ const seriesIndex = series.findIndex((p) => p.id === post.id);
         {post.data.tags.length > 0 && <ul class="p-tags" aria-label="태그">{post.data.tags.map((t) => <li>#{t}</li>)}</ul>}
         {(older || newer) && (
           <nav class="p-pager" aria-label="다른 글">
-            {older && <a class="prev" href={older.publicUrl}><span>← 이전 글</span>{older.data.title}</a>}
-            {newer && <a class="next" href={newer.publicUrl}><span>다음 글 →</span>{newer.data.title}</a>}
+            {older && <a class="prev" href={older.url}><span>← 이전 글</span>{older.data.title}</a>}
+            {newer && <a class="next" href={newer.url}><span>다음 글 →</span>{newer.data.title}</a>}
           </nav>
         )}
-        <p class="p-cross">이 글은 개인 블로그에도 있습니다. <a href={post.url}>개인 블로그에서 보기 ↗</a></p>
       </footer>
     </article>
 

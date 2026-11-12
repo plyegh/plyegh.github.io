@@ -1,9 +1,9 @@
 ---
 import Logo from './Logo.astro';
-import { CATEGORIES } from '../data/site';
-import { getPosts, countByCategory } from '../lib/posts';
+import { PERSONAL_CATEGORIES } from '../data/site';
+import { getPersonalPosts, countByCategory } from '../lib/posts';
 
-const posts = await getPosts();
+const posts = await getPersonalPosts();
 const counts = countByCategory(posts);
 const path = Astro.url.pathname;
 const inPosts = path.startsWith('/personal/posts');
@@ -27,9 +27,9 @@ const activeCat = inPosts ? path.split('/')[2] || '' : null;
             <a class="menu-all" href="/personal/posts/" style="--i:0" aria-current={activeCat === '' ? 'page' : undefined}>
               <span>all posts</span><span class="count">{posts.length}</span>
             </a>
-            {CATEGORIES.map((c, i) => (
+            {PERSONAL_CATEGORIES.map((c, i) => (
               <a href={`/personal/posts/${c.slug}/`} style={`--i:${i + 1}`} aria-current={activeCat === c.slug ? 'page' : undefined}>
-                <span class="branch">{i === CATEGORIES.length - 1 ? '└─' : '├─'}</span>
+                <span class="branch">{i === PERSONAL_CATEGORIES.length - 1 ? '└─' : '├─'}</span>
                 <span class="slug">{c.label}/</span>
                 <span class="name">{c.name}</span>
                 <span class="count">{counts[c.slug]}</span>
@@ -39,8 +39,7 @@ const activeCat = inPosts ? path.split('/')[2] || '' : null;
         </div>
       </div>
       <a class="nav-link" href="/personal/tags/" aria-current={path.startsWith('/personal/tags') ? 'page' : undefined}><span>/</span>tags</a>
-      <a class="nav-link" href="/personal/timeline/" aria-current={path.startsWith('/personal/timeline') ? 'page' : undefined}><span>/</span>timeline</a>
-      <a class="nav-link" href="/personal/about/" aria-current={path.startsWith('/personal/about') ? 'page' : undefined}><span>/</span>about</a>
+      <a class="nav-link" href="/public/"><span>/</span>public ↗</a>
     </nav>
     <div class="header-actions">
       <a class="icon-btn" href="/personal/search/" aria-label="Search posts" aria-current={path.startsWith('/personal/search') ? 'page' : undefined}>
