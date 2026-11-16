@@ -56,5 +56,7 @@ export const TIMELINE: TimelineEntry[] = [
   { id: 'hitcon', date: '2026-10-23', end: '2026-10-25', title: 'HITCON CTF 2026', detail: '팀 참가 · 16위', kind: 'ctf', rank: 16 },
   { id: 'kisa-acdc', date: '2026-10-31', title: '2026 KISA ACDC', detail: '팀 참가', kind: 'ctf' },
   { id: 'busan-cyber-conf', date: '2026-11-03', end: '2026-11-05', title: '2026 부산 사이버보안 콘퍼런스', detail: '부스 운영', kind: 'activity' },
+  { id: 'kucis-osint', date: '2026-11-08', title: '2026 KUCIS OSINT 동아리 대항전', detail: 'KUCIS 소속 동아리 대상 온라인 OSINT 대항전 진행', kind: 'activity' },
+  { id: 'h4ckc0n', date: '2026-11-15', end: '2026-11-16', title: 'h4ckc0n CTF 2026', detail: '팀 참가 · 10위', kind: 'ctf', rank: 10 },
   { id: 'owasp-booth', date: '2026-11-28', title: 'OWASP 부스 운영', detail: 'KUCIS 대표진 팀', kind: 'activity' },
 ];
