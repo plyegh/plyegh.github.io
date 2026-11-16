@@ -34,6 +34,7 @@ export const ABOUT: Section[] = [
     items: [
       { name: 'CODEGATE 2026 정보보안 부스 운영', detail: '부스 운영 · 학장님 인증서 수여', date: '2026.07' },
       { name: 'KUCIS 권역별 세미나 참여 및 진행', detail: '호남(기획 · 포스터 · 연사 섭외), 영남 · 충청 · 서경강 참여', date: '2026.08 ~ 2026.11' },
+      { name: '2026 KUCIS OSINT 동아리 대항전', detail: 'KUCIS 소속 동아리 대상 온라인 OSINT 대항전 진행', date: '2026.11' },
     ],
   },
   {
@@ -46,6 +47,7 @@ export const ABOUT: Section[] = [
       { name: 'DEADFACE CTF 2026', detail: '팀 참가 · 본인 11문제 해결', date: '2026.10' },
       { name: 'HITCON CTF 2026', detail: '팀 참가 · 16위', date: '2026.10', rank: 16 },
       { name: '2026 KISA ACDC', detail: '팀 참가', date: '2026.10' },
+      { name: 'h4ckc0n CTF 2026', detail: '팀 참가 · 10위', date: '2026.11', rank: 10 },
     ],
   },
   {
