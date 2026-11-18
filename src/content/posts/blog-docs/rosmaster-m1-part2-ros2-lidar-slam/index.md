@@ -20,7 +20,7 @@ cover: ./18-slam-map-rviz.png
 
 ## 결과 영상
 
-로봇을 손으로 들어 돌리면 노트북 rviz의 스캔과 지도가 같이 회전한다. (영상은 소리 없이 올렸다.)
+로봇을 손으로 들어 돌리면 노트북 rviz의 스캔과 지도가 같이 회전한다.
 
 <video controls playsinline preload="metadata" poster="/assets/video/rosmaster-m1-2/slam-demo-poster.jpg">
   <source src="/assets/video/rosmaster-m1-2/slam-demo.mp4" type="video/mp4">
