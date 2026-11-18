@@ -3,7 +3,7 @@ import { render } from 'astro:content';
 import Public from '../../../../layouts/Public.astro';
 import DocViewer from '../../../../components/DocViewer.astro';
 import { PROFILE, PUBLIC, PUBLIC_PROFILE, categoryKo } from '../../../../data/site';
-import { getPublicPosts, formatDate, formatDateKo, readingMinutes, seriesOf, type Post } from '../../../../lib/posts';
+import { getPublicPosts, formatDate, formatDateKo, readingMinutes, seriesOf, seriesStart, type Post } from '../../../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPublicPosts(); // newest first
@@ -21,7 +21,6 @@ interface Props { post: Post; newer?: Post; older?: Post; series: Post[] }
 const { post, newer, older, series } = Astro.props;
 const { Content, headings } = await render(post);
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
-const seriesIndex = series.findIndex((p) => p.id === post.id);
 ---
 <Public title={post.data.title} description={post.data.description} type="article" publishedTime={post.data.date}>
   <div class="wrap p-post">
@@ -38,8 +37,8 @@ const seriesIndex = series.findIndex((p) => p.id === post.id);
 
       {series.length > 1 && (
         <nav class="p-series" aria-label="시리즈" data-pagefind-ignore>
-          <p>{post.data.series} <span>· {seriesIndex + 1}/{series.length}</span></p>
-          <ol>
+          <p>{post.data.series} <span>· 총 {series.length}편</span></p>
+          <ol start={seriesStart(series)}>
             {series.map((p) => (
               <li>{p.id === post.id ? <span aria-current="page">{p.data.title}</span> : <a href={p.url}>{p.data.title}</a>}</li>
             ))}

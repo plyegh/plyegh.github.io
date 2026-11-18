@@ -60,7 +60,11 @@ export function getTags(posts: Post[]) {
 
 /** Posts of a series, oldest first (reading order). */
 export const seriesOf = (posts: Post[], name: string) =>
-  posts.filter((p) => p.data.series === name).sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+  posts
+    .filter((p) => p.data.series === name)
+    .sort((a, b) => (a.data.seriesOrder ?? Infinity) - (b.data.seriesOrder ?? Infinity) || a.data.date.getTime() - b.data.date.getTime());
+/** Number the series list starts at: the first post's `seriesOrder` (0 for a "part 0"), else 1. */
+export const seriesStart = (series: Post[]) => series[0]?.data.seriesOrder ?? 1;
 
 const fmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' });
 /** 2026.06.20 (KST) */

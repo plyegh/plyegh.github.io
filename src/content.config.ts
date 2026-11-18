@@ -12,6 +12,9 @@ const posts = defineCollection({
     tags: z.array(z.string()).default([]),
     description: z.string().optional(),
     series: z.string().optional(), // posts sharing this name are linked in reading order
+    // place in the series list when date order is not the reading order: 0 puts a "part 0" first
+    // and makes the list count from 0. Posts without it follow in date order.
+    seriesOrder: z.number().int().min(0).optional(),
     pinned: z.boolean().default(false), // shown first in lists
     draft: z.boolean().default(false),
     // card thumbnail on /public: a file in the post folder (./cover.jpg) or a site path (/assets/…).
