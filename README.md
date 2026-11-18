@@ -34,7 +34,8 @@ date: 2026-10-27T13:00:00+09:00
 tags: [CTF, Web]                 # playground posts get tag pages at /personal/tags/<tag>/
 description: "One line shown in lists"
 series: "Heap study"             # optional — posts with the same name are linked in date order
-pinned: false                    # optional — true puts the post at the top of lists
+seriesOrder: 0                   # optional — 0 lists this post first as "0." (a part 0 written later)
+pinned: false                    # optional — true puts the post at the top of lists (on /public: the large featured card)
 draft: false
 cover: ./cover.jpg               # optional — card thumbnail on /public (default: first ./image, else page 1 of the first PDF)
 ```

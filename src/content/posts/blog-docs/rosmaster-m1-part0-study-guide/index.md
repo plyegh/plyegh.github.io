@@ -4,6 +4,7 @@ date: 2026-11-18T21:00:00+09:00
 tags: [ros2, rosmaster, yahboom, dds, qos, rviz2, tf, study]
 description: "Yahboom 공식 자료 25개 폴더 중 라즈베리파이5 구성에 필요한 것만 고른 로드맵과 ROS2 DDS·QoS·TF·rviz2 기초, 자주 쓰는 명령어 정리"
 series: "ROSMASTER M1"
+seriesOrder: 0
 cover: ./cover.png
 ---
 ## 이 글의 목적

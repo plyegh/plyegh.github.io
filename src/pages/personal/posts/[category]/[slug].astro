@@ -4,7 +4,7 @@ import Base from '../../../../layouts/Base.astro';
 import Comments from '../../../../components/Comments.astro';
 import DocViewer from '../../../../components/DocViewer.astro';
 import { categoryName, categoryLabel } from '../../../../data/site';
-import { getPersonalPosts, formatDate, seriesOf, tagUrl, type Post } from '../../../../lib/posts';
+import { getPersonalPosts, formatDate, seriesOf, seriesStart, tagUrl, type Post } from '../../../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPersonalPosts(); // newest first
@@ -45,7 +45,7 @@ const seriesIndex = series.findIndex((p) => p.id === post.id);
         {series.length > 1 && (
           <nav class="series-box" aria-label="Series" data-pagefind-ignore>
             <p class="series-head"><span>SERIES</span> {post.data.series} <span class="dim">· {seriesIndex + 1}/{series.length}</span></p>
-            <ol>
+            <ol start={seriesStart(series)}>
               {series.map((p) => (
                 <li>{p.id === post.id
                   ? <span class="here" aria-current="page">{p.data.title}</span>
