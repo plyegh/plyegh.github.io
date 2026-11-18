@@ -62,14 +62,14 @@ PowerShell + .NET `System.Net.Http.HttpClient`(동시 요청 레이스용). 사�
 checkout(terminal_badge, profile='"; id; "')  ->  result: "profile accepted:standard"
 ```
 
-반면 premium 물건 `zero_day_debugger`는 `profile`을 그대로 검증 단계로 흘려보낸다. 다만 가격이 20크레딧이고, 카탈로그에도 **"Restricted: requires 20 credits"**로 잠겨 있다.
+반면 premium 물건 `zero_day_debugger`는 `profile`을 그대로 검증 단계로 흘려보낸다. 다만 가격이 20크레딧이고, 카탈로그에도 <strong>"Restricted: requires 20 credits"</strong>로 잠겨 있다.
 
 ![Zero-Day Debugger item locked behind 20 credits](./fig2.png)
 _그림 2. premium 물건 `Zero-Day Debugger` — `¢20`, "Restricted: requires 20 credits". 인젝션은 이 물건에서만 가능_
 
 ## 2. 크레딧 게이트 — `/redeem` 레이스 컨디션
 
-`/redeem`의 "오늘 이미 청구함" 검사는 **원자적이지 않은 check-then-set(TOCTOU)**이다. 플래그가 세팅되기 전에 동시 요청 여러 개를 밀어 넣으면 다수가 검사를 통과해 잔액이 2씩 여러 번 올라간다. 이걸로 한 번에 20 이상을 확보한다.
+`/redeem`의 "오늘 이미 청구함" 검사는 <strong>원자적이지 않은 check-then-set(TOCTOU)</strong>이다. 플래그가 세팅되기 전에 동시 요청 여러 개를 밀어 넣으면 다수가 검사를 통과해 잔액이 2씩 여러 번 올라간다. 이걸로 한 번에 20 이상을 확보한다.
 
 이 과정에서 두 개의 함정이 있었다.
 
@@ -78,7 +78,7 @@ _그림 2. premium 물건 `Zero-Day Debugger` — `¢20`, "Restricted: requires 
 
 ## 3. 즉시 결과 회수 — 음수 수량
 
-주문은 비동기다. `eta > 0`이면 `status:queued`, `result:null`로 약 36분 뒤에나 처리된다. 그런데 **음수 수량**을 주면 `eta < 0`이 되어 주문이 **즉시 `status:done`**으로 처리되고, `verify_custom_profile(profile)`이 동기 실행되어 인젝션 명령의 출력이 곧바로 `result`로 돌아온다.
+주문은 비동기다. `eta > 0`이면 `status:queued`, `result:null`로 약 36분 뒤에나 처리된다. 그런데 **음수 수량**을 주면 `eta < 0`이 되어 주문이 <strong>즉시 `status:done`</strong>으로 처리되고, `verify_custom_profile(profile)`이 동기 실행되어 인젝션 명령의 출력이 곧바로 `result`로 돌아온다.
 
 ```plain
 POST /checkout

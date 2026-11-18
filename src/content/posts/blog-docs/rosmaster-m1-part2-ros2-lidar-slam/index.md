@@ -204,7 +204,7 @@ _By topic 탭에서 `/scan` 아래의 LaserScan을 고른다_
 
 > [!DANGER]
 > **시행착오 1: `No tf data` (Fixed Frame 오류)**
-> Fixed Frame 기본값이 `map`인데, SLAM을 안 돌린 상태에선 `map` 좌표계가 존재하지 않는다. 라이다만 볼 때는 Fixed Frame을 **`laser_frame`**으로 바꿔야 한다.
+> Fixed Frame 기본값이 `map`인데, SLAM을 안 돌린 상태에선 `map` 좌표계가 존재하지 않는다. 라이다만 볼 때는 Fixed Frame을 <strong>`laser_frame`</strong>으로 바꿔야 한다.
 >
 > **시행착오 2: Status OK인데 점이 0개 (`Showing [0] points`)**
 > rviz의 기본 QoS는 Reliability **Reliable**인데, 센서 드라이버는 보통 **Best Effort**로 발행한다. QoS가 안 맞으면 연결은 됐는데 데이터는 안 온다. LaserScan → Topic → Reliability Policy를 **Best Effort**로 바꾸니 바로 점이 찍혔다. 점 크기(Size)도 기본 0.01m는 너무 작아서 0.05~0.1로 키웠다.
@@ -223,7 +223,7 @@ _Fixed Frame `laser_frame`, Reliability `Best Effort`로 변경_
 ros2 launch yahboomcar_nav map_slam_toolbox_launch.py
 ```
 
-로그에 `Registering sensor: [Custom Described Lidar]`가 뜨면 SLAM이 라이다를 잡은 것이다. 노트북 rviz에서 Fixed Frame을 다시 **`map`**으로 바꾸고 **Add → By topic → /map → Map**을 추가한다.
+로그에 `Registering sensor: [Custom Described Lidar]`가 뜨면 SLAM이 라이다를 잡은 것이다. 노트북 rviz에서 Fixed Frame을 다시 <strong>`map`</strong>으로 바꾸고 **Add → By topic → /map → Map**을 추가한다.
 
 ![Map 추가](./17-rviz-add-map.png)
 _slam_toolbox가 `/map`, `/tf`, `/odom` 등을 발행하면서 Global Status가 OK로 바뀌었다_

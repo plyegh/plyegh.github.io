@@ -45,6 +45,10 @@ Video file: put it under `public/assets/video/<name>/` and use a `<video>` tag i
 (`<video controls playsinline preload="metadata" poster="/assets/video/<name>/poster.jpg"><source src="/assets/video/<name>/clip.mp4" type="video/mp4"></video>`).
 A YouTube link alone on a line becomes an embedded player.
 
+Bold next to Korean particles: `**…)**다` or ``**`code`**으로`` is not rendered as bold (a Markdown rule:
+a closing `**` after punctuation or a code span must be followed by a space). Write
+`<strong>…)</strong>다` in those spots.
+
 Callouts:
 
 ```md
