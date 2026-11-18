@@ -54,9 +54,9 @@ docker exec -it -e DISPLAY=:0 $(docker ps -q) /bin/bash
 ![컨테이너 진입](./03-docker-enter.png)
 _진입하면 ROS_DOMAIN_ID 61, 로봇 M1, 라이다 tmini, 카메라 usb 설정이 표시된다_
 
-> [!TIP]
+> [!확인중]
 > **시행착오: SSH가 느림**
-> 접속과 타이핑이 꽤 느렸다. 원인은 sshd의 역방향 DNS 조회(UseDNS)와 WiFi 절전 모드로 추정됐는데, 고치는 대신 IP로 바로 접속하는 방식으로 그냥 진행했다. 작업에 지장이 있을 정도는 아니었다.
+> 접속과 타이핑이 꽤 느렸다. (접속 및 타이핑만 1시간 소모) 연결은 잘되던 때가 있고 안되던 때가 있었는데 원인은 sshd의 역방향 DNS 조회(UseDNS)와 WiFi 절전 모드로 추정됐는데, 이는 확실하지 않아 원인 파악 중이다.
 
 ## 2. USB 장치 확인과 라이다 인식
 
@@ -87,7 +87,7 @@ _처음엔 `/dev/rplidar`가 없었다_
 ![심볼릭 링크 정상](./02-dev-symlink.png)
 _해결 후: myserial, rplidar 둘 다 ttyUSB로 연결됨_
 
-## 3. 배선 정리: USB 포트가 모자라다
+## 3. 배선 정리
 
 라즈베리파이5의 USB-A 포트는 4개뿐이다. 음성 모듈, 카메라, 라이다, 게임패드 수신기, 허브를 꽂다 보니 하나를 꽂으면 다른 하나가 빠지는 상황이 반복됐다. 카메라가 갑자기 `/dev/video0 not available`이 된 것도 포트를 바꾸다 카메라가 빠졌기 때문이었다.
 
@@ -111,9 +111,9 @@ _`Lidar init success`, health good, 스캔 주파수 10Hz_
 
 > [!WARNING]
 > **시행착오: 패키지를 찾을 수 없다**
-> `ydlidar_ros2driver`라고 입력했었다. 정확한 이름은 `ydlidar_ros2_driver`다 (언더바 하나 차이). 마찬가지로 카메라도 `cmera.launch.py`로 오타를 냈다. `ros2 launch <패키지>` 다음에 Tab을 누르면 자동완성되니 그걸 쓰는 게 낫다.
+> `ydlidar_ros2driver`라고 입력했었다. 정확한 이름은 `ydlidar_ros2_driver`다 (언더바 하나 차이). 마찬가지로 카메라도 `cmera.launch.py`로 오타를 냈다. <TAP>을 누르면 되긴 하지만 느린 연결 문제로 인해서 <TAP>을 친다면 10분간의 명상 시간이 주워진다. 그때, ctrl + c 해도 막가니 그냥 새로 cmd(or termnial)을 키자...
 
-## 5. 카메라 (진행 중)
+## 5. 카메라 (진행 중) -> 3탄에선 해결해서 돌아올 예정
 
 ```bash
 ros2 launch usb_cam camera.launch.py
