@@ -204,7 +204,7 @@ _허브 보드 전원 LED_
 ![OLED](./13-oled-status.jpg)
 _OLED 상태 화면. `192.168.1.11`은 공장 이미지의 기본 핫스팟 IP다_
 
-공장 이미지는 부팅하면 **`ROSMASTER-M1` 핫스팟(비밀번호 `12345678`)**을 연다. SSH·VNC 계정은 `pi` / `yahboom`.
+공장 이미지는 부팅하면 <strong>`ROSMASTER-M1` 핫스팟(비밀번호 `12345678`)</strong>을 연다. SSH·VNC 계정은 `pi` / `yahboom`.
 
 | 버튼 | 동작 |
 |---|---|
