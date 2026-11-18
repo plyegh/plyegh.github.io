@@ -4,6 +4,7 @@ date: 2026-11-18T21:00:00+09:00
 tags: [ros2, rosmaster, yahboom, dds, qos, rviz2, tf, study]
 description: "Yahboom 공식 자료 25개 폴더 중 라즈베리파이5 구성에 필요한 것만 고른 로드맵과 ROS2 DDS·QoS·TF·rviz2 기초, 자주 쓰는 명령어 정리"
 series: "ROSMASTER M1"
+cover: ./cover.png
 ---
 ## 이 글의 목적
 
@@ -23,6 +24,9 @@ Yahboom 공식 자료 25개 과정 폴더 중 **우리 구성에 해당하는 �
 ## Yahboom PDF 로드맵: 무엇을 어떤 순서로
 
 핵심 경로는 <strong>01 → 21(ROS2 기초) → 06(차체) → 11(라이다) → 09(카메라) → 14(YOLO)</strong>다. 시리즈의 2탄~3탄이 이 순서를 그대로 따른다. 폴더 번호는 GitHub 저장소 기준이다.
+
+![Yahboom 자료를 보는 순서: 기본 운용, ROS2 이해, 차체, 라이다, 카메라, AI 인식, LLM·음성](./fig-roadmap.png)
+_전체 순서를 한 장으로 요약한 그림. 자세한 문서 번호와 링크는 아래 표에 있다_
 
 | 단계 | 폴더 / 문서 (링크) | 왜 보나 | 상태 |
 | --- | --- | --- | --- |
@@ -56,6 +60,9 @@ Yahboom 공식 자료 25개 과정 폴더 중 **우리 구성에 해당하는 �
 
 PDF를 따라 치다 막히는 지점은 대부분 ROS2가 아니라 그 아래 층(리눅스·USB·네트워크)이었다. [2탄의 시행착오](/public/posts/blog-docs/rosmaster-m1-part2-ros2-lidar-slam/#시행착오-요약) 12개 중 8개가 그랬다.
 
+![막힌 지점을 층별로 나눈 그림: 물리·USB, 리눅스, Docker, 네트워크, ROS2 통신, 좌표계, 화면](./fig-layers.png)
+_2탄에서 막혔던 지점을 층별로 나눈 그림. 아래 표는 각 층에서 알아야 할 것을 정리한 것이다_
+
 | 분야 | 알아야 할 것 | 왜 필요했나 (실제 사례) |
 | --- | --- | --- |
 | 리눅스 장치 | `lsusb`, `/dev/ttyUSB*`, `/dev/video*`, udev 규칙, 심볼릭 링크 | `/dev/rplidar` 미생성, 장치 ID 착각 |
@@ -87,6 +94,9 @@ ROS2의 통신은 전부 DDS(Data Distribution Service) 위에서 돌아간다. 
 
 ### 통신 방식 4가지
 
+![ROS2 통신 방식 4가지: 토픽, 서비스, 액션, 파라미터](./fig-comm.png)
+_토픽은 계속 흘러가는 데이터, 서비스와 액션은 요청에 대한 응답이다_
+
 | 방식 | 형태 | 우리 로봇 예 |
 | --- | --- | --- |
 | 토픽 (Topic) | 발행자 → 구독자, 단방향 연속 데이터 | `/scan`, `/cmd_vel`, `/imu/data_raw` |
@@ -95,6 +105,9 @@ ROS2의 통신은 전부 DDS(Data Distribution Service) 위에서 돌아간다. 
 | 파라미터 (Parameter) | 노드별 설정값 | 라이다 포트, 카메라 framerate |
 
 ### 디스커버리와 DOMAIN_ID
+
+![라즈베리파이의 Docker 컨테이너와 노트북 VM이 WiFi 공유기를 통해 멀티캐스트로 서로를 발견하고 데이터를 주고받는 그림](./fig-dds.png)
+_먼저 멀티캐스트로 서로를 찾고(①), 그다음 노드끼리 직접 데이터를 주고받는다(②)_
 
 - 노드가 켜지면 멀티캐스트로 "나 여기 있고 이 토픽을 발행한다"를 알린다. 토픽 이름·타입·QoS가 맞는 상대끼리 연결된다.
 - DOMAIN_ID는 사용할 UDP 포트 번호를 갈라놓는 값이다. 발견용 멀티캐스트 포트 = 7400 + 250 × DOMAIN_ID. 우리는 61이라 **22650번**이다.
@@ -113,9 +126,15 @@ ROS2의 통신은 전부 DDS(Data Distribution Service) 위에서 돌아간다. 
 
 호환 규칙은 하나만 기억하면 된다. **구독자가 발행자보다 더 까다로운 걸 요구하면 연결되지 않는다.**
 
+![QoS 호환표: Reliability와 Durability에서 발행자와 구독자 조합별 연결 여부](./fig-qos.png)
+_빨간 칸이 연결되지 않는 조합이다_
+
 - 센서(라이다·카메라)는 보통 Best Effort로 발행한다. rviz가 Reliable로 구독하면 데이터가 안 온다 → 2탄의 `Showing [0] points`
 - `/map`은 Transient Local로 발행된다. rviz Map을 Volatile로 두면 다음 갱신 때까지 지도가 안 보일 수 있다
 - 현재 QoS는 `ros2 topic info -v /scan`으로 양쪽 모두 확인할 수 있다
+
+![rviz LaserScan의 Status는 OK인데 Showing 0 points로 표시된 화면](./shot-qos-zero-points.png)
+_실제로 겪은 화면. Reliability Policy가 `Reliable`이라 Status는 OK인데 점이 0개다 (2탄)_
 
 ### TF (좌표계)
 
@@ -124,6 +143,9 @@ ROS2의 통신은 전부 DDS(Data Distribution Service) 위에서 돌아간다. 
 ```text
 map ──(SLAM/AMCL이 발행)──▶ odom ──(오도메트리)──▶ base_link ──(고정, URDF)──▶ laser_frame / camera_link
 ```
+
+![TF 좌표계 사슬: map, odom, base_link, laser_frame과 각 변환을 발행하는 주체](./fig-tf.png)
+_같은 사슬을 그림으로 나타낸 것. 아래 칸은 상황별 Fixed Frame이다_
 
 - `map`: 지도 기준 절대 위치. SLAM이 돌아야 생긴다
 - `odom`: 바퀴 회전으로 누적한 위치. 부드럽지만 시간이 지날수록 오차가 쌓인다
@@ -151,6 +173,9 @@ ros2 multicast receive                # 한쪽에서 실행
 ros2 multicast send                   # 다른 쪽에서 실행 → 멀티캐스트 통신 확인
 ```
 
+![컨테이너에 진입하면 ROS_DOMAIN_ID 61, ROS humble 등이 표시되는 터미널](./shot-docker-enter.png)
+_로봇 컨테이너는 진입할 때 `ROS_DOMAIN_ID`와 로봇·라이다·카메라 설정을 보여 준다_
+
 ### 토픽
 
 ```bash
@@ -163,6 +188,9 @@ ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist \
   "{linear: {x: 0.1}, angular: {z: 0.0}}"   # 직접 발행 (로봇이 움직임)
 ros2 interface show sensor_msgs/msg/LaserScan   # 메시지 구조
 ```
+
+![노트북 VM에서 ros2 topic list와 ros2 topic hz /scan을 실행한 결과](./shot-topic-hz.png)
+_노트북 VM에서 `ros2 topic list`와 `ros2 topic hz /scan`을 실행한 화면. 로봇의 `/scan`이 약 9.8Hz로 들어온다_
 
 ### 노드·서비스·파라미터
 
@@ -218,13 +246,16 @@ rviz2는 토픽을 구독해서 3D로 그려주는 뷰어다. 스스로 데이�
 
 ### 화면 구성
 
+![rviz2 화면에 번호를 붙인 그림: 1 Displays, 2 3D 뷰, 3 Views, 4 도구줄, 5 Time](./shot-rviz-layout.png)
+_rviz2 화면 구성. 번호는 아래 표와 같다_
+
 | 영역 | 역할 |
 | --- | --- |
-| Displays (왼쪽) | 무엇을 그릴지 목록. Global Options의 Fixed Frame이 여기 있다 |
-| 3D 뷰 (가운데) | 실제 화면. 왼쪽 드래그 회전, 휠 줌, Shift+드래그 이동 |
-| Views (오른쪽) | 카메라 시점. Orbit(기본), TopDownOrtho(지도 볼 때 편함) |
-| 도구줄 (위) | Interact, 2D Pose Estimate, 2D Goal Pose, Publish Point |
-| Time (아래) | ROS 시간, 우측 하단 fps |
+| ① Displays (왼쪽) | 무엇을 그릴지 목록. Global Options의 Fixed Frame이 여기 있다 |
+| ② 3D 뷰 (가운데) | 실제 화면. 왼쪽 드래그 회전, 휠 줌, Shift+드래그 이동 |
+| ③ Views (오른쪽) | 카메라 시점. Orbit(기본), TopDownOrtho(지도 볼 때 편함) |
+| ④ 도구줄 (위) | Interact, 2D Pose Estimate, 2D Goal Pose, Publish Point |
+| ⑤ Time (아래) | ROS 시간, 우측 하단 fps |
 
 ### 기본 순서
 
@@ -234,6 +265,9 @@ rviz2는 토픽을 구독해서 3D로 그려주는 뷰어다. 스스로 데이�
 4. **Topic → Reliability / Durability**를 발행자에 맞춘다
 5. 보기 설정(Size, Color)을 조절한다
 6. **File → Save Config As**로 `.rviz` 파일을 저장해 두고, 다음부터 `rviz2 -d ~/m1_slam.rviz`로 바로 연다
+
+![rviz2의 Add 창에서 By topic 탭의 /scan 아래 LaserScan을 고르는 화면](./shot-rviz-add-by-topic.png)
+_2번 단계의 Add → By topic 창. 뒤쪽 Displays에는 Fixed Frame이 `map`이라 `No tf data` 경고가 떠 있다 (1번 단계를 건너뛴 경우)_
 
 ### Display별 설정
 
@@ -247,6 +281,9 @@ rviz2는 토픽을 구독해서 3D로 그려주는 뷰어다. 스스로 데이�
 | Odometry | `/odom` | Keep 값을 줄여 화살표 개수 제한 |
 | Image / Camera | `/usb_cam/image_raw` | Transport를 **compressed**로, Best Effort. Camera는 TF가 필요하므로 영상만 볼 땐 Image |
 | Path | `/plan` | Nav2 경로 표시 (3탄) |
+
+![노트북 rviz2에 slam_toolbox 지도와 라이다 스캔이 함께 표시된 화면](./shot-rviz-slam-map.png)
+_Fixed Frame `map`, Map과 LaserScan을 추가한 결과. 회색이 지도, 컬러 점이 현재 라이다 스캔이다 (2탄)_
 
 ### 도구줄 버튼이 하는 일
 
@@ -275,6 +312,9 @@ rviz2는 토픽을 구독해서 3D로 그려주는 뷰어다. 스스로 데이�
 5. 토픽이 오나: 노트북에서 `ros2 topic list`, `ros2 topic hz`
 6. QoS가 맞나: `ros2 topic info -v`
 7. 좌표계가 있나: rviz Fixed Frame, `tf2_echo`
+
+![lsusb 결과와 /dev/rplidar가 없다는 오류가 나온 터미널](./shot-lsusb.png)
+_1번 단계의 예. `lsusb`에 라이다(10c4:ea60)가 없고 `/dev/rplidar`도 없다. 케이블을 다시 꽂아 해결했다 (2탄)_
 
 | 증상 | 원인 | 해결 |
 | --- | --- | --- |
