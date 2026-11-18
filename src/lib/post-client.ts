@@ -1,6 +1,26 @@
 // Browser-side touches for a rendered post body: scrollable tables, code-block labels and
 // copy buttons, reading progress and the active table-of-contents entry.
 export function enhancePost(prose: HTMLElement, labels = { copy: 'copy', copied: 'copied' }) {
+  // Lazy images take no space until they load, so the page grows while you read and in-page
+  // links (table of contents, #anchors) land in the wrong place. Give each image its final
+  // size up front: natural size, scaled down to fit the column, the post's image cap and 80vh.
+  const sized = [...prose.querySelectorAll<HTMLImageElement>('img[width][height]')].filter((i) => !i.closest('.docs'));
+  const fitImages = () => {
+    const cap = parseFloat(getComputedStyle(prose).getPropertyValue('--img-max')) || Infinity;
+    for (const img of sized) {
+      const w = Number(img.getAttribute('width'));
+      const h = Number(img.getAttribute('height'));
+      if (!w || !h) continue;
+      const box = (img.parentElement ?? prose).clientWidth || prose.clientWidth;
+      const scale = Math.min(1, box / w, cap / w, (innerHeight * 0.8) / h);
+      img.style.width = `${Math.floor(w * scale)}px`;
+    }
+  };
+  if (sized.length) {
+    fitImages();
+    addEventListener('resize', fitImages);
+  }
+
   prose.querySelectorAll('table').forEach((t) => {
     const w = document.createElement('div');
     w.className = 'table-wrap';

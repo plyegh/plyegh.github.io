@@ -41,6 +41,10 @@ cover: ./cover.jpg               # optional — card thumbnail on /public (defau
 
 Posts go to `/public/`, except categories marked `personalOnly` in `src/data/site.ts` (`playground`), which go to `/personal/`. If you add another personal-only category, add it to `PERSONAL_ONLY` in `astro.config.mjs` too.
 
+Video file: put it under `public/assets/video/<name>/` and use a `<video>` tag in the post
+(`<video controls playsinline preload="metadata" poster="/assets/video/<name>/poster.jpg"><source src="/assets/video/<name>/clip.mp4" type="video/mp4"></video>`).
+A YouTube link alone on a line becomes an embedded player.
+
 Callouts:
 
 ```md
