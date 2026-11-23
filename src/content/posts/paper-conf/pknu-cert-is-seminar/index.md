@@ -3,6 +3,7 @@ title: "부경대 CERT-IS 외부강연 참석 후기"
 date: 2026-11-22T20:00:00+09:00
 tags: [Seminar, CERT-IS, Red Team, AI Security, Fuzzing]
 description: "부경대학교 CERT-IS에서 연 현직자 외부강연을 듣고 왔다. 네 개 세션을 들은 짧은 후기"
+best: true
 cover: ./poster.webp
 imageWidth: 560
 privateNote: seminar/pknu-cert-is

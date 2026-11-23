@@ -3,6 +3,7 @@ title: "2026 부산 사이버보안 콘퍼런스 부스 운영 후기"
 date: 2026-11-05T21:00:00+09:00
 tags: [Conference, Booth, Secure Coding, APS]
 description: "11월 4~5일 벡스코에서 열린 2026 부산 사이버보안 콘퍼런스에서 '시큐어 바이브 코딩' 체험 부스를 운영하고 온 짧은 후기"
+best: true
 cover: ./team.webp
 ---
 
