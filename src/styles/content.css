@@ -129,3 +129,5 @@
 .prose .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 /* a video file placed in the post with a <video> tag */
 .prose video { display: block; width: 100%; height: auto; margin: 1.6em 0; border-radius: 12px; border: 1px solid var(--line); background: #000; }
+/* portrait clips: <video class="narrow"> keeps them from filling the column */
+.prose video.narrow { max-width: 360px; margin-inline: auto; }

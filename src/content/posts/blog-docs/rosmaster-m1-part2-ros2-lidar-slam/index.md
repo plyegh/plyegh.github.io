@@ -116,6 +116,9 @@ _`Lidar init success`, health good, 스캔 주파수 10Hz_
 
 ## 5. 카메라 (진행 중) -> 3탄에선 해결해서 돌아올 예정
 
+> [!TIP]
+> 이 문제는 [2-fixed탄](/public/posts/blog-docs/rosmaster-m1-part2-fixed-camera-ethernet/)에서 해결했다. 원인은 카메라가 아니라 네트워크 경로였다.
+
 ```bash
 ros2 launch usb_cam camera.launch.py
 ```
