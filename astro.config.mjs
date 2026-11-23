@@ -47,7 +47,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       // only real pages: redirect stubs and the standalone game stay out of the sitemap
-      filter: (page) => !page.includes('/yu/') && [P, PUB].some((base) => new URL(page).pathname.startsWith(`${base}/`)) && !redirectPaths.has(decodeURI(new URL(page).pathname).replace(/\/$/, '')) && !new URL(page).pathname.startsWith(`${P}/private/`),
+      filter: (page) => !page.includes('/yu/') && [P, PUB].some((base) => new URL(page).pathname.startsWith(`${base}/`)) && !redirectPaths.has(decodeURI(new URL(page).pathname).replace(/\/$/, '')) && !new URL(page).pathname.startsWith(`${PUB}/private/`),
     }),
   ],
   // Content-Security-Policy as a <meta> tag on every page. Astro hashes its own inline

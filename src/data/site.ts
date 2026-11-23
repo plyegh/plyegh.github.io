@@ -57,7 +57,7 @@ export const LINK_HANDLE: Record<string, string> = {
   discord: '@plyegh',
 };
 
-// The private notes page (/personal/private/) reads this repository in the browser with a token
+// The private notes page (/public/private/) reads this repository in the browser with a token
 // the owner pastes in. The repository must be private; nothing from it is built into the site.
 export const PRIVATE_NOTES = { owner: 'plyegh', repo: 'private-notes', branch: 'main' };
 

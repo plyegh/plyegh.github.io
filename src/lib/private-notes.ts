@@ -94,7 +94,7 @@ export class Notes {
     const info = {
       title: meta.title || body.match(/^#\s+(.+)$/m)?.[1]?.trim() || note.name,
       date: meta.date?.slice(0, 10),
-      tags: meta.tags ? meta.tags.replace(/^\[|\]$/g, '').split(',').map((t) => t.trim().replace(/^["']|["']$/g, '')).filter(Boolean) : [],
+      tags: parseTags(meta.tags),
     };
     try { sessionStorage.setItem(cacheKey, JSON.stringify(info)); } catch {}
     return { ...note, ...info };
@@ -176,6 +176,10 @@ export class Notes {
     try { for (const k of Object.keys(sessionStorage)) if (k.startsWith('private-notes-meta:')) sessionStorage.removeItem(k); } catch {}
   }
 }
+
+/** `[pwn, rop]` or `pwn, rop` → ['pwn', 'rop'] */
+export const parseTags = (value?: string) =>
+  value ? value.replace(/^\[|\]$/g, '').split(',').map((t) => t.trim().replace(/^["']|["']$/g, '')).filter(Boolean) : [];
 
 /** Minimal front matter reader: `key: value` lines between --- fences. */
 export function splitFrontMatter(text: string): { meta: Record<string, string>; body: string } {

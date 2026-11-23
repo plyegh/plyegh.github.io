@@ -73,7 +73,7 @@ Page images are generated at build time into `public/docs/` (gitignored) with pd
 
 ## Private notes
 
-`/personal/private/` shows notes that are **not** part of this site: they live in the private
+`/public/private/` (footer link "비공개 노트") shows notes that are **not** part of this site: they live in the private
 repository set in `PRIVATE_NOTES` (`src/data/site.ts`, default `plyegh/private-notes`) and are
 fetched in the browser with a token you paste in. Without a token the page only shows a lock.
 
@@ -83,6 +83,9 @@ fetched in the browser with a token you paste in. Without a token the page only 
   **Contents: Read-only**, with an expiry date.
 - The token stays in the tab (or on the device if you tick "Remember") and is sent only to
   `api.github.com`. "Lock" forgets it.
+- A public post can point at its private note: add `privateNote: seminar/pknu-cert-is` (a folder with
+  `index.md`, or a `.md` file, in the private repository) to the post's front matter. The post then
+  ends with a locked "비공개 정리" box that opens that note for whoever has the token.
 - Never put private notes in this repository: everything here is published.
 
 ## Search

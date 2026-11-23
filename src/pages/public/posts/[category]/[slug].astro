@@ -52,6 +52,13 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
       </div>
 
       <footer class="p-post-foot" data-pagefind-ignore>
+        {post.data.privateNote && (
+          <a class="p-private" href={`${PUBLIC}/private/#/${post.data.privateNote.split('/').map(encodeURIComponent).join('/')}`} rel="nofollow">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+            <div><b>비공개 정리</b><span>이 글의 자세한 정리는 작성자만 볼 수 있습니다.</span></div>
+            <em>열기 →</em>
+          </a>
+        )}
         {post.data.tags.length > 0 && <ul class="p-tags" aria-label="태그">{post.data.tags.map((t) => <li>#{t}</li>)}</ul>}
         {(older || newer) && (
           <nav class="p-pager" aria-label="다른 글">
