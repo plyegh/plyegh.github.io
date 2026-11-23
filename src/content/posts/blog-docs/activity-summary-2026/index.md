@@ -1,6 +1,7 @@
 ---
 title: "지금까지의 활동 정리"
 description: "개발, CTF, Bug Bounty, 기술문서, 컨퍼런스, 자격증 — 6개 분야로 정리한 활동 기록과 회고"
+best: true
 date: 2026-11-10T09:00:00+09:00
 imageWidth: 480
 tags: [retrospective, knights-frontier]

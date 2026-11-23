@@ -16,6 +16,7 @@ const posts = defineCollection({
     // and makes the list count from 0. Posts without it follow in date order.
     seriesOrder: z.number().int().min(0).optional(),
     pinned: z.boolean().default(false), // shown first in lists
+    best: z.boolean().default(false), // /public home: adds a slide to the banner at the top
     draft: z.boolean().default(false),
     // card thumbnail on /public: a file in the post folder (./cover.jpg) or a site path (/assets/…).
     // Default: the first ./image in the post, else page 1 of the first PDF in `docs`.

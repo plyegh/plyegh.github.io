@@ -1,0 +1,72 @@
+---
+// Banner at the top of the /public home. The first slide is the blog intro; every post with
+// `best: true` in its front matter adds a slide (newest first) that links to the post.
+// Swipe, the arrows or the dots move between slides; it also advances by itself every few seconds.
+import { Image } from 'astro:assets';
+import { PUBLIC_PROFILE, categoryKo } from '../../data/site';
+import type { Post } from '../../lib/posts';
+import { thumbOf } from '../../lib/thumbs';
+
+interface Props { posts: Post[] }
+const best = Astro.props.posts.filter((p) => p.data.best);
+const count = best.length + 1;
+---
+<section class="p-hero" aria-roledescription="carousel" aria-label="블로그 소개와 추천 글" data-carousel>
+  <div class="p-hero-track" data-track>
+    <div class="p-slide" data-slide>
+      <div class="p-hero-in">
+        <p class="p-kicker">{PUBLIC_PROFILE.kicker}</p>
+        <h1>{PUBLIC_PROFILE.title}</h1>
+        <p class="p-tagline">{PUBLIC_PROFILE.tagline}</p>
+      </div>
+    </div>
+    {best.map((post) => {
+      const thumb = thumbOf(post);
+      return (
+        <a class="p-slide p-slide-post" href={post.url} data-slide>
+          {thumb.image ? <Image class="p-slide-bg" src={thumb.image} alt="" width={1600} height={600} fit="cover" loading="lazy" />
+            : thumb.src ? <img class="p-slide-bg" src={thumb.src} alt="" loading="lazy" decoding="async"> : null}
+          <div class="p-hero-in">
+            <p class="p-kicker">BEST · {categoryKo(post.category)}{post.data.series && ` · ${post.data.series}`}</p>
+            <h2>{post.data.title}</h2>
+            {post.data.description && <p class="p-tagline">{post.data.description}</p>}
+          </div>
+        </a>
+      );
+    })}
+  </div>
+  {count > 1 && (
+    <button class="p-hero-arrow prev" type="button" data-prev aria-label="이전 슬라이드"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="p-hero-arrow next" type="button" data-next aria-label="다음 슬라이드"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <div class="p-hero-dots">
+      {Array.from({ length: count }, (_, i) => <button type="button" data-dot aria-label={`${i + 1}번째 슬라이드`} aria-current={i === 0 ? 'true' : undefined}></button>)}
+    </div>
+  )}
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-carousel]');
+  const track = root?.querySelector<HTMLElement>('[data-track]');
+  const dots = [...(root?.querySelectorAll<HTMLElement>('[data-dot]') ?? [])];
+  if (root && track && dots.length > 1) {
+    const n = dots.length;
+    const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const current = () => Math.round(track.scrollLeft / track.clientWidth);
+    const go = (i: number) => track.scrollTo({ left: ((i + n) % n) * track.clientWidth, behavior: smooth ? 'smooth' : 'auto' });
+    const mark = () => dots.forEach((d, i) => (i === current() ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current')));
+
+    root.querySelector('[data-prev]')?.addEventListener('click', () => go(current() - 1));
+    root.querySelector('[data-next]')?.addEventListener('click', () => go(current() + 1));
+    dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
+    track.addEventListener('scroll', mark, { passive: true });
+    addEventListener('resize', () => track.scrollTo({ left: current() * track.clientWidth }));
+
+    // advance by itself, but not while someone is pointing at it, tabbing through it, or the tab is hidden
+    let timer = 0;
+    const stop = () => clearInterval(timer);
+    const start = () => { stop(); if (smooth) timer = window.setInterval(() => { if (!document.hidden) go(current() + 1); }, 6000); };
+    for (const ev of ['pointerenter', 'focusin', 'touchstart']) root.addEventListener(ev, stop, { passive: true });
+    for (const ev of ['pointerleave', 'focusout', 'touchend']) root.addEventListener(ev, start, { passive: true });
+    start();
+  }
+</script>

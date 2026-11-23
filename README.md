@@ -36,6 +36,7 @@ description: "One line shown in lists"
 series: "Heap study"             # optional — posts with the same name are linked in date order
 seriesOrder: 0                   # optional — 0 lists this post first as "0." (a part 0 written later)
 pinned: false                    # optional — true puts the post at the top of lists on /personal (/public always shows the newest date first, 9 cards per page — `PAGE_SIZE` in src/lib/posts.ts)
+best: false                      # optional — true adds the post as a slide in the banner at the top of the /public home
 draft: false
 cover: ./cover.jpg               # optional — card thumbnail on /public (default: first ./image, else page 1 of the first PDF)
 ```

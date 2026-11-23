@@ -1,6 +1,7 @@
 ---
 import Public from '../../layouts/Public.astro';
 import PostIndex from '../../components/public/PostIndex.astro';
+import HeroCarousel from '../../components/public/HeroCarousel.astro';
 import { PROFILE, LINKS, PUBLIC, PUBLIC_PROFILE } from '../../data/site';
 import { getPublicPosts } from '../../lib/posts';
 
@@ -9,13 +10,7 @@ const link = (id: string) => LINKS.find((l) => l.id === id)?.href;
 ---
 <Public>
   <div class="wrap">
-    <section class="p-hero">
-      <div class="p-hero-in">
-        <p class="p-kicker">{PUBLIC_PROFILE.kicker}</p>
-        <h1>{PUBLIC_PROFILE.title}</h1>
-        <p class="p-tagline">{PUBLIC_PROFILE.tagline}</p>
-      </div>
-    </section>
+    <HeroCarousel posts={posts} />
 
     <section class="p-intro" aria-label="작성자">
       <img src={PROFILE.avatar} alt="" width="52" height="52">
