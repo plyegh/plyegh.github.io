@@ -3,7 +3,6 @@ title: "논문 리뷰 - When AIOps Become \"AI Oops\""
 date: 2026-11-09T12:00:00+09:00
 tags: [Paper Review, USENIX Security, LLM Security, AIOps]
 description: "LLM 기반 IT 운영 자동화(AIOps)를 텔레메트리 조작으로 무너뜨리는 공격과 방어(AIOpsDoom / AIOpsShield) 리뷰"
-best: true
 docs:
   - file: ai-oops-slides.pdf
     title: "PPT 자료"
