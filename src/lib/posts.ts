@@ -74,3 +74,12 @@ const fmtKo = new Intl.DateTimeFormat('ko-KR', { timeZone: 'Asia/Seoul', year: '
 export const formatDateKo = (d: Date) => fmtKo.format(d);
 /** Rough reading time in minutes. */
 export const readingMinutes = (post: Post) => Math.max(1, Math.round((post.body ?? '').length / 900));
+
+/** /public lists show this many cards per page (the home's first page adds the large card on top). */
+export const PAGE_SIZE = 9;
+/** Split a list into pages; the first page may hold more (`firstSize`). Always at least one page. */
+export function pagesOf<T>(items: T[], firstSize = PAGE_SIZE, size = PAGE_SIZE): T[][] {
+  const pages = [items.slice(0, firstSize)];
+  for (let i = firstSize; i < items.length; i += size) pages.push(items.slice(i, i + size));
+  return pages;
+}

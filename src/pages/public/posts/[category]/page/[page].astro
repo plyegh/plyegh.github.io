@@ -1,0 +1,22 @@
+---
+// Page 2 and on of a category list (page 1 is /public/posts/<category>/).
+import Public from '../../../../../layouts/Public.astro';
+import PostIndex from '../../../../../components/public/PostIndex.astro';
+import { CATEGORIES, categoryKo } from '../../../../../data/site';
+import { getPublicPosts, pagesOf } from '../../../../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPublicPosts();
+  return CATEGORIES.flatMap((c) =>
+    pagesOf(posts.filter((p) => p.category === c.slug)).slice(1).map((_, i) => ({ params: { category: c.slug, page: String(i + 2) } })));
+}
+const { category } = Astro.params;
+const page = Number(Astro.params.page);
+const posts = await getPublicPosts();
+---
+<Public title={`${categoryKo(category)} ${page}페이지`} description={`${categoryKo(category)} 글 목록 ${page}페이지`}>
+  <div class="wrap">
+    <h1 class="p-page-title">{categoryKo(category)}</h1>
+    <PostIndex all={posts} active={category} page={page} />
+  </div>
+</Public>
