@@ -20,6 +20,9 @@ const posts = defineCollection({
     // card thumbnail on /public: a file in the post folder (./cover.jpg) or a site path (/assets/…).
     // Default: the first ./image in the post, else page 1 of the first PDF in `docs`.
     cover: z.string().optional(),
+    // path of this post's private note in the private notes repository (folder or .md file).
+    // /public shows a locked box linking to it; only the owner's token can open the note.
+    privateNote: z.string().regex(/^[^\s#?]+$/).optional(),
     // files in the post folder: PDFs get a page viewer, everything (hwp, docx …) a download button
     // cap inline image width for this post, in px (e.g. 480 for small proof photos)
     imageWidth: z.number().optional(),

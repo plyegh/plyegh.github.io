@@ -21,13 +21,36 @@ export function enhancePost(prose: HTMLElement, labels = { copy: 'copy', copied:
     addEventListener('resize', fitImages);
   }
 
+  wrapTables(prose);
+  decorateCode(prose, labels);
+
+  const bar = document.querySelector<HTMLElement>('.progress span');
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc a')];
+  const heads = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1)))).filter(Boolean) as HTMLElement[];
+  function onScroll() {
+    const r = prose.getBoundingClientRect();
+    const p = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight * 0.6)));
+    if (bar) bar.style.transform = `scaleX(${p})`;
+    let idx = 0;
+    heads.forEach((h, i) => { if (h.getBoundingClientRect().top < 140) idx = i; });
+    links.forEach((a, i) => a.classList.toggle('active', i === idx));
+  }
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
+/** Wide tables scroll sideways inside their own box. */
+export function wrapTables(prose: HTMLElement) {
   prose.querySelectorAll('table').forEach((t) => {
     const w = document.createElement('div');
     w.className = 'table-wrap';
     t.replaceWith(w);
     w.appendChild(t);
   });
+}
 
+/** Code blocks get a language label (from `data-language`) and a copy button. */
+export function decorateCode(prose: HTMLElement, labels = { copy: 'copy', copied: 'copied' }) {
   prose.querySelectorAll('pre').forEach((pre) => {
     const box = document.createElement('div');
     box.className = 'code';
@@ -51,18 +74,4 @@ export function enhancePost(prose: HTMLElement, labels = { copy: 'copy', copied:
     });
     box.appendChild(btn);
   });
-
-  const bar = document.querySelector<HTMLElement>('.progress span');
-  const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc a')];
-  const heads = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1)))).filter(Boolean) as HTMLElement[];
-  function onScroll() {
-    const r = prose.getBoundingClientRect();
-    const p = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight * 0.6)));
-    if (bar) bar.style.transform = `scaleX(${p})`;
-    let idx = 0;
-    heads.forEach((h, i) => { if (h.getBoundingClientRect().top < 140) idx = i; });
-    links.forEach((a, i) => a.classList.toggle('active', i === idx));
-  }
-  addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
 }

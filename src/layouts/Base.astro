@@ -10,6 +10,8 @@ interface Props {
   description?: string;
   type?: 'website' | 'article';
   publishedTime?: Date;
+  /** keep the page out of search engines */
+  noindex?: boolean;
 }
 const { title, type = 'website', publishedTime } = Astro.props;
 const description = Astro.props.description || SITE.description;
@@ -24,6 +26,7 @@ const ogImage = new URL('/assets/img/profile.webp', Astro.site);
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{fullTitle}</title>
   <meta name="description" content={description}>
+  {Astro.props.noindex && <meta name="robots" content="noindex, nofollow">}
   <link rel="canonical" href={canonical}>
   <meta property="og:type" content={type}>
   <meta property="og:site_name" content={SITE.title}>

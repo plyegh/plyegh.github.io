@@ -11,6 +11,8 @@ interface Props {
   publishedTime?: Date;
   /** which header item is current */
   nav?: 'blog' | 'about' | 'activity';
+  /** keep the page out of search engines */
+  noindex?: boolean;
 }
 const { title, type = 'website', publishedTime, nav = 'blog' } = Astro.props;
 const description = Astro.props.description || PUBLIC_PROFILE.tagline;
@@ -32,6 +34,7 @@ const NAV = [
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{fullTitle}</title>
   <meta name="description" content={description}>
+  {Astro.props.noindex && <meta name="robots" content="noindex, nofollow">}
   <link rel="canonical" href={canonical}>
   <meta property="og:type" content={type}>
   <meta property="og:site_name" content={PUBLIC_PROFILE.title}>
@@ -74,7 +77,7 @@ const NAV = [
   <footer class="p-footer">
     <div class="wrap p-ft">
       <span>© {year} {PROFILE.name}. All rights reserved.</span>
-      <nav aria-label="바닥글"><a href={`${PUBLIC}/rss.xml`}>RSS</a><a href={`${PUBLIC}/license/`}>License</a></nav>
+      <nav aria-label="바닥글"><a href={`${PUBLIC}/rss.xml`}>RSS</a><a href={`${PUBLIC}/private/`}>비공개 노트</a><a href={`${PUBLIC}/license/`}>License</a></nav>
     </div>
   </footer>
 </body>

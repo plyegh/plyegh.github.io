@@ -47,7 +47,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       // only real pages: redirect stubs and the standalone game stay out of the sitemap
-      filter: (page) => !page.includes('/yu/') && [P, PUB].some((base) => new URL(page).pathname.startsWith(`${base}/`)) && !redirectPaths.has(decodeURI(new URL(page).pathname).replace(/\/$/, '')),
+      filter: (page) => !page.includes('/yu/') && [P, PUB].some((base) => new URL(page).pathname.startsWith(`${base}/`)) && !redirectPaths.has(decodeURI(new URL(page).pathname).replace(/\/$/, '')) && !new URL(page).pathname.startsWith(`${PUB}/private/`),
     }),
   ],
   // Content-Security-Policy as a <meta> tag on every page. Astro hashes its own inline
@@ -57,10 +57,12 @@ export default defineConfig({
       algorithm: 'SHA-256',
       directives: [
         "default-src 'self'",
-        "img-src 'self' data:",
+        // blob: — images of private notes, fetched with the owner's token and shown from memory
+        "img-src 'self' data: blob:",
         // Pretendard (the /public site's font) is served from jsDelivr
         "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net",
-        "connect-src 'self'",
+        // api.github.com — the private notes page reads its repository from the browser
+        "connect-src 'self' https://api.github.com",
         "frame-src https://giscus.app https://www.youtube-nocookie.com",
         "object-src 'none'",
         "base-uri 'self'",

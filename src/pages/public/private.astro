@@ -1,0 +1,237 @@
+---
+// Private notes: the page is public, the notes are not. They live in a private GitHub
+// repository and are fetched in the browser with a read-only token the owner pastes in.
+// Public posts can point at one of them with `privateNote:` in their front matter.
+import Public from '../../layouts/Public.astro';
+import { PRIVATE_NOTES } from '../../data/site';
+---
+<Public title="비공개 노트" description="작성자만 볼 수 있는 비공개 노트입니다." noindex>
+  <div class="wrap">
+    <header class="p-page-head">
+      <h1>비공개 노트</h1>
+      <p>작성자만 볼 수 있는 정리 노트입니다. 내용은 이 사이트에 포함되어 있지 않습니다.</p>
+    </header>
+
+    <div id="pn" data-owner={PRIVATE_NOTES.owner} data-repo={PRIVATE_NOTES.repo} data-branch={PRIVATE_NOTES.branch}>
+      <!-- locked -->
+      <form class="pn-lock" id="pn-lock" autocomplete="off">
+        <p class="pn-lock-title"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>잠겨 있습니다</p>
+        <p class="pn-wanted" id="pn-wanted" hidden></p>
+        <label class="pn-field">
+          <span class="sr-only">GitHub 액세스 토큰</span>
+          <input id="pn-token" type="password" placeholder="github_pat_…" spellcheck="false" autocapitalize="off" autocomplete="off" required>
+        </label>
+        <div class="pn-lock-row">
+          <label class="pn-remember"><input id="pn-remember" type="checkbox"> 이 기기에 저장</label>
+          <button class="pn-btn" type="submit">열기</button>
+        </div>
+        <p class="pn-status" id="pn-lock-status" role="status"></p>
+        <p class="pn-hint"><code>{PRIVATE_NOTES.owner}/{PRIVATE_NOTES.repo}</code> 저장소의 <b>Contents 읽기 전용</b> 권한만 가진 Fine-grained 토큰을 사용합니다. 토큰은 api.github.com으로만 전송되고, 저장하지 않으면 탭을 닫을 때 지워집니다.</p>
+      </form>
+
+      <!-- unlocked: list -->
+      <section class="pn-list" id="pn-list" hidden>
+        <div class="pn-bar">
+          <label class="pn-field"><span class="sr-only">노트 찾기</span><input id="pn-filter" type="search" placeholder="제목, 폴더, 태그로 찾기" autocomplete="off" spellcheck="false"></label>
+          <button class="pn-btn ghost" type="button" data-lock>잠그기</button>
+        </div>
+        <p class="pn-status" id="pn-list-status" role="status"></p>
+        <div id="pn-groups"></div>
+      </section>
+
+      <!-- unlocked: one note -->
+      <article class="pn-note" id="pn-note" hidden>
+        <div class="pn-bar">
+          <a class="pn-back" href="#">← 전체 노트</a>
+          <button class="pn-btn ghost" type="button" data-lock>잠그기</button>
+        </div>
+        <header class="pn-note-head">
+          <p class="pn-path" id="pn-note-path"></p>
+          <h2 id="pn-note-title"></h2>
+          <p class="pn-meta" id="pn-note-meta"></p>
+        </header>
+        <div class="prose pn-prose" id="pn-body"></div>
+      </article>
+    </div>
+  </div>
+</Public>
+
+<style is:global>
+  #pn { padding: 24px 0 96px; }
+  #pn [hidden] { display: none !important; }
+  .pn-lock { max-width: 560px; display: grid; gap: 14px; padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-soft); }
+  .pn-lock-title { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 800; letter-spacing: -.01em; }
+  .pn-lock-title svg { width: 20px; height: 20px; fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .pn-wanted { font-size: 14px; color: var(--ink-2); overflow-wrap: anywhere; }
+  .pn-wanted code { font: .92em var(--mono); }
+  .pn-field { display: block; flex: 1; min-width: 220px; }
+  .pn-field input { width: 100%; height: 46px; padding: 0 16px; border: 1px solid var(--line); border-radius: 12px; background: #fff; font-size: 15px; outline: 0; transition: border-color .15s, box-shadow .15s; }
+  .pn-field input[type="password"] { font-family: var(--mono); }
+  .pn-field input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .pn-lock-row, .pn-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .pn-remember { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink-2); cursor: pointer; }
+  .pn-remember input { accent-color: var(--accent); width: 16px; height: 16px; }
+  .pn-btn { font-size: 14px; font-weight: 700; padding: 11px 20px; border-radius: 999px; border: 1px solid var(--ink); background: var(--ink); color: #fff; cursor: pointer; white-space: nowrap; transition: opacity .15s, border-color .15s, color .15s; }
+  .pn-btn:hover { opacity: .85; }
+  .pn-btn[disabled] { opacity: .5; cursor: progress; }
+  .pn-btn.ghost { background: #fff; color: var(--ink-2); border-color: var(--line); }
+  .pn-btn.ghost:hover { color: var(--ink); border-color: var(--ink); opacity: 1; }
+  .pn-status { min-height: 1.5em; font-size: 14px; color: var(--ink-3); }
+  .pn-status.err { color: var(--red); }
+  .pn-hint { font-size: 13px; line-height: 1.7; color: var(--ink-3); }
+  .pn-hint code { font: .92em var(--mono); color: var(--ink-2); }
+  .pn-bar { margin-bottom: 14px; }
+  .pn-group { margin-top: 28px; }
+  .pn-group h2 { font-size: 15px; font-weight: 700; color: var(--ink-2); margin-bottom: 8px; }
+  .pn-group h2 .n { color: var(--ink-3); font-weight: 500; margin-left: 8px; }
+  .pn-items { list-style: none; border-top: 1px solid var(--line); }
+  .pn-items a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; align-items: baseline; padding: 16px 4px; border-bottom: 1px solid var(--line); }
+  .pn-items a:hover .t { text-decoration: underline; text-underline-offset: 3px; }
+  .pn-items .t { font-size: 17px; font-weight: 700; letter-spacing: -.01em; overflow-wrap: anywhere; }
+  .pn-items .d { font-size: 13px; color: var(--ink-3); white-space: nowrap; }
+  .pn-items .g { grid-column: 1 / -1; font-size: 13px; color: var(--ink-3); }
+  .pn-back { font-size: 14px; color: var(--ink-3); }
+  .pn-back:hover { color: var(--ink); }
+  .pn-note { max-width: 760px; margin: 0 auto; }
+  .pn-note-head { margin: 10px 0 0; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+  .pn-path, .pn-meta { font-size: 13px; color: var(--ink-3); overflow-wrap: anywhere; }
+  .pn-path { font-family: var(--mono); }
+  .pn-note-head h2 { font-size: 34px; line-height: 1.3; letter-spacing: -.03em; font-weight: 800; margin: 10px 0 12px; overflow-wrap: anywhere; }
+  .prose.pn-prose { margin-top: 36px; color: #1F2430; }
+  @media (max-width: 600px) { .pn-note-head h2 { font-size: 26px; } .prose.pn-prose { font-size: 16px; } }
+  /* highlight.js token colours, to match the Shiki theme used by the built posts */
+  .pn-note .hljs-comment, .pn-note .hljs-quote { color: #565F89; font-style: italic; }
+  .pn-note .hljs-keyword, .pn-note .hljs-selector-tag, .pn-note .hljs-built_in, .pn-note .hljs-meta { color: #BB9AF7; }
+  .pn-note .hljs-string, .pn-note .hljs-regexp, .pn-note .hljs-addition { color: #9ECE6A; }
+  .pn-note .hljs-number, .pn-note .hljs-literal, .pn-note .hljs-symbol { color: #FF9E64; }
+  .pn-note .hljs-title, .pn-note .hljs-section, .pn-note .hljs-name { color: #7AA2F7; }
+  .pn-note .hljs-attr, .pn-note .hljs-attribute, .pn-note .hljs-variable, .pn-note .hljs-template-variable { color: #7DCFFF; }
+  .pn-note .hljs-type, .pn-note .hljs-params { color: #E0AF68; }
+  .pn-note .hljs-deletion { color: #F7768E; }
+</style>
+
+<script>
+  import { Notes, NotesError, parseTags, tokenStore, type Note } from '../../lib/private-notes';
+  import { wrapTables, decorateCode } from '../../lib/post-client';
+
+  const root = document.getElementById('pn')!;
+  const repo = { owner: root.dataset.owner!, repo: root.dataset.repo!, branch: root.dataset.branch! };
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const lock = $<HTMLFormElement>('pn-lock'), list = $('pn-list'), view = $('pn-note');
+  const tokenInput = $<HTMLInputElement>('pn-token'), remember = $<HTMLInputElement>('pn-remember');
+  const lockStatus = $('pn-lock-status'), listStatus = $('pn-list-status'), groups = $('pn-groups'), filter = $<HTMLInputElement>('pn-filter');
+  const esc = (s: string) => s.replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]!);
+  const linkFor = (path: string) => `#/${path.split('/').map(encodeURIComponent).join('/')}`;
+
+  const MESSAGES = {
+    token: 'GitHub가 이 토큰을 거부했습니다. 잘못 입력했거나 만료·폐기된 토큰입니다.',
+    repo: '이 토큰으로는 노트 저장소를 읽을 수 없습니다.',
+    rate: 'GitHub가 요청을 거부했습니다. (요청 한도 초과 또는 권한 부족)',
+    network: 'GitHub에 연결할 수 없습니다.',
+  };
+  let notes: Notes | null = null;
+  let all: Note[] = [];
+
+  function show(which: 'lock' | 'list' | 'note') {
+    lock.hidden = which !== 'lock'; list.hidden = which !== 'list'; view.hidden = which !== 'note';
+  }
+  function fail(el: HTMLElement, e: unknown) {
+    el.textContent = e instanceof NotesError ? MESSAGES[e.kind] : '문제가 생겼습니다.';
+    el.classList.add('err');
+  }
+
+  function drawList() {
+    const q = filter.value.trim().toLowerCase();
+    const shown = all.filter((n) => !q || `${n.title} ${n.name} ${n.folder} ${n.tags.join(' ')}`.toLowerCase().includes(q));
+    const byFolder = new Map<string, Note[]>();
+    for (const n of shown) byFolder.set(n.folder, [...(byFolder.get(n.folder) ?? []), n]);
+    groups.innerHTML = [...byFolder].map(([folder, items]) => `
+      <section class="pn-group"><h2>${esc(folder)}<span class="n">${items.length}</span></h2>
+        <ul class="pn-items">${items.map((n) => `<li><a href="${esc(linkFor(n.path))}"><span class="t">${esc(n.title)}</span><span class="d">${esc(n.date ?? '')}</span>${n.tags.length ? `<span class="g">${n.tags.map((t) => `#${esc(t)}`).join(' ')}</span>` : ''}</a></li>`).join('')}</ul>
+      </section>`).join('');
+    listStatus.classList.remove('err');
+    listStatus.textContent = all.length ? `노트 ${all.length}개 중 ${shown.length}개` : '아직 노트가 없습니다. 저장소에 마크다운 파일을 올리세요.';
+  }
+
+  async function openNote(path: string) {
+    // a post links to a folder (`seminar/pknu`) or a file (`seminar/pknu/index.md`)
+    const note = all.find((n) => n.path === path) ?? all.find((n) => n.path === `${path.replace(/\/$/, '')}/index.md`) ?? all.find((n) => n.path === `${path}.md`);
+    if (!notes) return;
+    if (!note) { show('list'); drawList(); listStatus.textContent = `노트를 찾을 수 없습니다: ${path}`; listStatus.classList.add('err'); return; }
+    show('note');
+    $('pn-note-path').textContent = note.path;
+    $('pn-note-title').textContent = note.title;
+    $('pn-note-meta').textContent = '';
+    const body = $('pn-body');
+    body.textContent = '불러오는 중…';
+    try {
+      const meta = await notes.render(note, body, linkFor);
+      wrapTables(body);
+      decorateCode(body, { copy: '복사', copied: '복사됨' });
+      $('pn-note-title').textContent = meta.title || note.title;
+      $('pn-note-meta').textContent = [meta.date?.slice(0, 10), parseTags(meta.tags).map((t) => `#${t}`).join(' ')].filter(Boolean).join(' · ');
+      scrollTo({ top: 0 });
+    } catch (e) { body.textContent = ''; fail($('pn-note-meta'), e); }
+  }
+
+  function route() {
+    const wanted = $('pn-wanted');
+    const target = decodeURIComponent(location.hash.replace(/^#\/?/, ''));
+    wanted.hidden = !!notes || !target;
+    if (target) wanted.innerHTML = `열려는 노트: <code>${esc(target)}</code>`;
+    if (!notes) return show('lock');
+    const path = decodeURIComponent(location.hash.replace(/^#\/?/, ''));
+    if (path) openNote(path); else { show('list'); drawList(); }
+  }
+
+  async function unlock(token: string, rememberIt: boolean, quiet = false) {
+    const button = lock.querySelector('button')!;
+    button.disabled = true;
+    lockStatus.classList.remove('err');
+    lockStatus.textContent = quiet ? '' : '확인하는 중…';
+    const candidate = new Notes(repo, token);
+    try {
+      all = await candidate.list();
+      notes = candidate;
+      tokenStore.set(token, rememberIt);
+      tokenInput.value = '';
+      lockStatus.textContent = '';
+      route();
+      // fill in real titles, dates and tags a few at a time
+      let i = 0;
+      const worker = async () => {
+        while (i < all.length && notes === candidate) {
+          const at = i++;
+          try { all[at] = await candidate.describe(all[at]); } catch { /* keep the file name */ }
+          if (notes === candidate && !list.hidden && at % 4 === 3) drawList();
+        }
+      };
+      await Promise.all(Array.from({ length: 6 }, worker));
+      if (notes === candidate && !list.hidden) drawList();
+    } catch (e) {
+      candidate.dispose();
+      if (e instanceof NotesError && e.kind !== 'network' && e.kind !== 'rate') tokenStore.clear();
+      show('lock');
+      fail(lockStatus, e);
+    } finally { button.disabled = false; }
+  }
+
+  function lockAgain() {
+    notes?.dispose();
+    notes = null; all = [];
+    tokenStore.clear();
+    groups.innerHTML = ''; $('pn-body').innerHTML = ''; filter.value = '';
+    history.replaceState(null, '', location.pathname);
+    route();
+    tokenInput.focus();
+  }
+
+  lock.addEventListener('submit', (e) => { e.preventDefault(); const t = tokenInput.value.trim(); if (t) unlock(t, remember.checked); });
+  root.querySelectorAll('[data-lock]').forEach((b) => b.addEventListener('click', lockAgain));
+  filter.addEventListener('input', drawList);
+  addEventListener('hashchange', route);
+
+  route();
+  const saved = tokenStore.get();
+  if (saved) unlock(saved, !!localStorage.getItem('private-notes-token'), true);
+</script>
