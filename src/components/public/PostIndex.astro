@@ -3,12 +3,13 @@
 // On "전체" the newest post is featured above the grid.
 import PostCard from './PostCard.astro';
 import { CATEGORIES, PUBLIC } from '../../data/site';
-import { pinnedFirst, type Post } from '../../lib/posts';
+import type { Post } from '../../lib/posts';
 
 interface Props { all: Post[]; active?: string }
 const { all, active = '' } = Astro.props;
 const tabs = CATEGORIES.filter((c) => all.some((p) => p.category === c.slug)); // only categories that have posts
-const posts = pinnedFirst(active ? all.filter((p) => p.category === active) : all);
+// newest first by the post's own date; the first one is the large card
+const posts = active ? all.filter((p) => p.category === active) : all;
 const [first, ...rest] = posts;
 const featured = !active && first;
 ---

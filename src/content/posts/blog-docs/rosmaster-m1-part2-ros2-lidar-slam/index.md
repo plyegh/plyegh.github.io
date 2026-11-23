@@ -4,7 +4,6 @@ date: 2026-11-18T20:00:00+09:00
 tags: [ros2, rosmaster, yahboom, raspberry-pi, lidar, slam, rviz2, virtualbox, dds]
 description: "라즈베리파이5의 ROS2 Humble에서 라이다를 띄우고, 노트북 VM의 rviz2로 SLAM 지도를 확인하기까지 막힌 지점과 해결 과정"
 series: "ROSMASTER M1"
-pinned: true
 cover: ./18-slam-map-rviz.png
 ---
 ## 들어가며
