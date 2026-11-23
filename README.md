@@ -71,6 +71,20 @@ docs:
 Page images are generated at build time into `public/docs/` (gitignored) with pdf.js and
 `@napi-rs/canvas` (npm dev dependencies, so nothing extra to install).
 
+## Private notes
+
+`/personal/private/` shows notes that are **not** part of this site: they live in the private
+repository set in `PRIVATE_NOTES` (`src/data/site.ts`, default `plyegh/private-notes`) and are
+fetched in the browser with a token you paste in. Without a token the page only shows a lock.
+
+- Repository layout: any folders of markdown, e.g. `dreamhack/<problem>/index.md` with images next
+  to it (`![](./fig.png)`). Front matter `title`, `date`, `tags` is optional. `README.md` is skipped.
+- Token: GitHub → Settings → Developer settings → Fine-grained tokens → only that repository,
+  **Contents: Read-only**, with an expiry date.
+- The token stays in the tab (or on the device if you tick "Remember") and is sent only to
+  `api.github.com`. "Lock" forgets it.
+- Never put private notes in this repository: everything here is published.
+
 ## Search
 
 `npm run build` runs [Pagefind](https://pagefind.app) after Astro, so search (the `/personal/search/` page and the terminal's `grep`) only works on a build: `npm run build && npm run preview`.
