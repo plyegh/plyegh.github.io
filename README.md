@@ -35,7 +35,7 @@ tags: [CTF, Web]                 # playground posts get tag pages at /personal/t
 description: "One line shown in lists"
 series: "Heap study"             # optional — posts with the same name are linked in date order
 seriesOrder: 0                   # optional — 0 lists this post first as "0." (a part 0 written later)
-pinned: false                    # optional — true puts the post at the top of lists on /personal (/public always shows the newest date first)
+pinned: false                    # optional — true puts the post at the top of lists on /personal (/public always shows the newest date first, 9 cards per page — `PAGE_SIZE` in src/lib/posts.ts)
 draft: false
 cover: ./cover.jpg               # optional — card thumbnail on /public (default: first ./image, else page 1 of the first PDF)
 ```

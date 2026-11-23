@@ -1,0 +1,19 @@
+---
+// Page 2 and on of the /public home list (page 1 is /public/).
+import Public from '../../../layouts/Public.astro';
+import PostIndex from '../../../components/public/PostIndex.astro';
+import { PAGE_SIZE, getPublicPosts, pagesOf } from '../../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPublicPosts();
+  return pagesOf(posts, PAGE_SIZE + 1).slice(1).map((_, i) => ({ params: { page: String(i + 2) } }));
+}
+const page = Number(Astro.params.page);
+const posts = await getPublicPosts();
+---
+<Public title={`블로그 ${page}페이지`} description={`글 목록 ${page}페이지`}>
+  <div class="wrap">
+    <h1 class="p-page-title">블로그</h1>
+    <PostIndex all={posts} page={page} />
+  </div>
+</Public>

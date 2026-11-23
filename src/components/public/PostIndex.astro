@@ -1,25 +1,40 @@
 ---
-// Body of the /public list pages: category tabs, then the posts.
-// On "전체" the newest post is featured above the grid.
+// Body of the /public list pages: category tabs, one page of posts, then the pager.
+// Page 1 of "전체" shows the newest post as the large card above the grid.
+// Page 1 lives at `base`, page n at `${base}page/n/`.
 import PostCard from './PostCard.astro';
 import { CATEGORIES, PUBLIC } from '../../data/site';
-import type { Post } from '../../lib/posts';
+import { PAGE_SIZE, pagesOf, type Post } from '../../lib/posts';
 
-interface Props { all: Post[]; active?: string }
-const { all, active = '' } = Astro.props;
+interface Props { all: Post[]; active?: string; page?: number }
+const { all, active = '', page = 1 } = Astro.props;
 const tabs = CATEGORIES.filter((c) => all.some((p) => p.category === c.slug)); // only categories that have posts
-// newest first by the post's own date; the first one is the large card
-const posts = active ? all.filter((p) => p.category === active) : all;
-const [first, ...rest] = posts;
-const featured = !active && first;
+// newest first by the post's own date
+const list = active ? all.filter((p) => p.category === active) : all;
+const pages = pagesOf(list, active ? PAGE_SIZE : PAGE_SIZE + 1);
+const posts = pages[page - 1] ?? [];
+const featured = !active && page === 1 ? posts[0] : undefined;
+const cards = featured ? posts.slice(1) : posts;
+const base = active ? `${PUBLIC}/posts/${active}/` : `${PUBLIC}/`;
+const href = (n: number) => (n === 1 ? base : `${base}page/${n}/`);
+const total = pages.length;
 ---
 <nav class="p-tabs" aria-label="카테고리">
   <a class="p-tab" href={`${PUBLIC}/`} aria-current={active === '' ? 'page' : undefined}>전체</a>
   {tabs.map((c) => <a class="p-tab" href={`${PUBLIC}/posts/${c.slug}/`} aria-current={active === c.slug ? 'page' : undefined}>{c.ko}</a>)}
 </nav>
-{featured && <PostCard post={first} featured />}
+{featured && <PostCard post={featured} featured />}
 {posts.length ? (
-  <div class="p-grid">{(featured ? rest : posts).map((p) => <PostCard post={p} />)}</div>
+  <div class:list={['p-grid', { 'has-pager': total > 1 }]}>{cards.map((p) => <PostCard post={p} />)}</div>
 ) : (
   <p class="p-empty">아직 글이 없습니다.</p>
+)}
+{total > 1 && (
+  <nav class="p-pages" aria-label="페이지">
+    {page > 1 ? <a class="p-pages-step" href={href(page - 1)} rel="prev">← 이전</a> : <span class="p-pages-step" aria-disabled="true">← 이전</span>}
+    <span class="p-pages-nums">
+      {pages.map((_, i) => <a href={href(i + 1)} aria-current={i + 1 === page ? 'page' : undefined} aria-label={`${i + 1}페이지`}>{i + 1}</a>)}
+    </span>
+    {page < total ? <a class="p-pages-step" href={href(page + 1)} rel="next">다음 →</a> : <span class="p-pages-step" aria-disabled="true">다음 →</span>}
+  </nav>
 )}
