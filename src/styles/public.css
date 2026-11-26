@@ -171,6 +171,9 @@ a.p-pages-step:hover { border-color: var(--ink-3); }
 .p-toc a.active { color: var(--ink); border-left-color: var(--ink); font-weight: 600; }
 .p-post-foot { margin-top: 56px; display: grid; gap: 28px; }
 /* a post's pointer to its private note */
+/* private notes: links to files next to the note (PDF etc.) download on click */
+.pn-prose a.pn-file::after { content: " ↓"; }
+.pn-prose a.pn-file[aria-busy="true"] { opacity: .5; cursor: progress; }
 .p-private { display: flex; align-items: center; gap: 14px; padding: 18px 20px; border: 1px dashed var(--line); border-radius: var(--radius); background: var(--bg-soft); transition: border-color .15s; }
 .p-private:hover { border-color: var(--ink); }
 .p-private svg { flex: none; width: 22px; height: 22px; fill: none; stroke: var(--ink-2); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
