@@ -20,7 +20,7 @@ const fullTitle = title ? `${title} · ${PUBLIC_PROFILE.title}` : PUBLIC_PROFILE
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(PROFILE.avatar, Astro.site);
 const year = new Date().getFullYear();
-const SEARCH = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>';
+const SEARCH = '<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>';
 const NAV = [
   { id: 'blog', label: '블로그', href: `${PUBLIC}/` },
   { id: 'about', label: '소개', href: `${PUBLIC}/about/` },

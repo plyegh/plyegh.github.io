@@ -39,7 +39,7 @@ const byYear = years.map((year) => {
   const months = [...new Set(list.map((e) => e.date.slice(5, 7)))];
   return { year, count: list.length, months: months.map((mo) => ({ mo, items: list.filter((e) => e.date.slice(5, 7) === mo) })) };
 });
-const chevron = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
+const chevron = '<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
 
 interface Props { ko?: boolean }
 const { ko = false } = Astro.props;
@@ -68,7 +68,7 @@ const present = ko ? '현재' : 'Present';
               <span class="tl-chev" aria-hidden="true"></span>
               <h3 class="tl-date"><span class="yr">{y.year}.</span>{g.mo}</h3>
               <span class="tl-rule" aria-hidden="true"></span>
-              <span class="tl-icon" aria-hidden="true"><svg viewBox="0 0 24 24" set:html={ICON[g.items[0].kind]}></svg></span>
+              <span class="tl-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" set:html={ICON[g.items[0].kind]}></svg></span>
             </div>
             <ul class="tl-items">
               {g.items.map((it) => {
@@ -109,7 +109,7 @@ const present = ko ? '현재' : 'Present';
   </figure>
   <button type="button" class="pd-btn pd-prev" id="proofPrev" aria-label="Previous"><Fragment set:html={chevron} /></button>
   <button type="button" class="pd-btn pd-next" id="proofNext" aria-label="Next"><Fragment set:html={chevron} /></button>
-  <button type="button" class="pd-btn pd-close" id="proofClose" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <button type="button" class="pd-btn pd-close" id="proofClose" aria-label="Close"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
 </dialog>
 
 
