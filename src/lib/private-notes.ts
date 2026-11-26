@@ -113,6 +113,22 @@ export class Notes {
     return url;
   }
 
+  /** Any other file stored next to a note (a PDF, a zip …), fetched with the token and saved by the browser. */
+  async download(path: string) {
+    const entry = this.tree.find((e) => e.path === path);
+    if (!entry) throw new NotesError('repo', `${path} is not in the repository.`);
+    const blob = await (await this.api(`git/blobs/${entry.sha}`, true)).blob();
+    const type = path.toLowerCase().endsWith('.pdf') ? 'application/pdf' : 'application/octet-stream';
+    const url = URL.createObjectURL(new Blob([blob], { type }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = path.split('/').pop()!;
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60_000);
+  }
+
   /** Render a note into `target`. Returns its front matter. */
   async render(note: Note, target: HTMLElement, linkFor: (path: string) => string) {
     const { meta, body } = splitFrontMatter(await this.text(note));
@@ -142,8 +158,19 @@ export class Notes {
       if (!href || href.startsWith('#')) continue; // no target (or one the sanitizer removed), or an in-page anchor
       if (external(href)) { a.target = '_blank'; a.rel = 'noopener noreferrer'; continue; }
       const path = resolve(href);
-      const md = this.tree.find((e) => e.path === path || e.path === `${path}/index.md`);
-      if (md) a.setAttribute('href', linkFor(md.path)); else a.removeAttribute('href');
+      const md = this.tree.find((e) => (e.path === path && /\.md$/i.test(e.path)) || e.path === `${path}/index.md`);
+      if (md) { a.setAttribute('href', linkFor(md.path)); continue; }
+      // a file next to the note: download it with the token when clicked
+      const file = this.tree.find((e) => e.path === path);
+      if (!file) { a.removeAttribute('href'); continue; }
+      a.setAttribute('href', '#');
+      a.classList.add('pn-file');
+      a.addEventListener('click', async (ev) => {
+        ev.preventDefault();
+        if (a.getAttribute('aria-busy')) return;
+        a.setAttribute('aria-busy', 'true');
+        try { await this.download(file.path); } catch { a.title = '다운로드하지 못했습니다'; } finally { a.removeAttribute('aria-busy'); }
+      });
     }
     // > [!TIP] … callouts, as on the rest of the site
     for (const quote of target.querySelectorAll('blockquote')) {
