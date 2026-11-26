@@ -91,6 +91,9 @@ button, input { font: inherit; color: inherit; }
 .p-tab { font-size: 15px; font-weight: 600; color: var(--ink-2); padding: 9px 16px; border-radius: 999px; border: 1px solid var(--line); background: #fff; transition: border-color .15s, color .15s; }
 .p-tab:hover { border-color: var(--ink); color: var(--ink); }
 .p-tab[aria-current="page"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+/* post count after each category name */
+.p-tab-n { margin-left: 6px; font-size: 13px; font-weight: 500; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.p-tab[aria-current="page"] .p-tab-n { color: rgba(255, 255, 255, .7); }
 .p-page-title { margin-top: 48px; font-size: 32px; font-weight: 800; letter-spacing: -.03em; }
 .p-page-title + .p-tabs { margin-top: 24px; }
 

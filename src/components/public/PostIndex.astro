@@ -20,8 +20,11 @@ const href = (n: number) => (n === 1 ? base : `${base}page/${n}/`);
 const total = pages.length;
 ---
 <nav class="p-tabs" aria-label="카테고리">
-  <a class="p-tab" href={`${PUBLIC}/`} aria-current={active === '' ? 'page' : undefined}>전체</a>
-  {tabs.map((c) => <a class="p-tab" href={`${PUBLIC}/posts/${c.slug}/`} aria-current={active === c.slug ? 'page' : undefined}>{c.ko}</a>)}
+  <a class="p-tab" href={`${PUBLIC}/`} aria-current={active === '' ? 'page' : undefined}>전체<span class="p-tab-n" aria-label={`${all.length}개`}>{all.length}</span></a>
+  {tabs.map((c) => {
+    const n = all.filter((p) => p.category === c.slug).length;
+    return <a class="p-tab" href={`${PUBLIC}/posts/${c.slug}/`} aria-current={active === c.slug ? 'page' : undefined}>{c.ko}<span class="p-tab-n" aria-label={`${n}개`}>{n}</span></a>;
+  })}
 </nav>
 {featured && <PostCard post={featured} featured />}
 {posts.length ? (
