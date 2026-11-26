@@ -37,6 +37,8 @@ const redirects = {
   '/posts/kolla-ansible-통한-openstack-단일노드-구축': kolla,
   '/posts/blog-docs/kolla-ansible-openstack-single-node': kolla,
   '/posts/defcamp-2026': `${PUB}/posts/ctf-wargame/defcamp-2026-asicrimination/`,
+  // moved between categories
+  [`${PUB}/posts/contest-cert/kucis-2026-excellent-club-presentation`]: `${PUB}/posts/paper-conf/kucis-2026-excellent-club-presentation/`,
 };
 const redirectPaths = new Set(Object.keys(redirects));
 
