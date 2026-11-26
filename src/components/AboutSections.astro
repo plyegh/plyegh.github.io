@@ -10,7 +10,7 @@ const { ko = false } = Astro.props;
 const KO: Record<string, string> = { Affiliation: '소속', Projects: '프로젝트', Activities: '활동', CTF: 'CTF', Certifications: '자격증' };
 const t = (title: string) => (ko ? KO[title] ?? title : title);
 const loc = <T extends { date?: string }>(item: T) => (ko && item.date ? { ...item, date: item.date.replace('Present', '현재') } : item);
-const chevron = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+const chevron = '<svg width="20" height="20" class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
 const isTop = (item: { rank?: number }) => item.rank !== undefined && item.rank <= TOP_RANK;
 ---
 <div class="about-timeline">

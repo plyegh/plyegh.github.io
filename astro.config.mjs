@@ -43,6 +43,9 @@ const redirects = {
 const redirectPaths = new Set(Object.keys(redirects));
 
 export default defineConfig({
+  // CSS goes inside each page: right after a deploy, a cached page can no longer ask for a
+  // stylesheet name that the new deploy has already removed (which showed an unstyled page)
+  build: { inlineStylesheets: 'always' },
   site: 'https://plyegh.github.io',
   trailingSlash: 'ignore',
   redirects,
