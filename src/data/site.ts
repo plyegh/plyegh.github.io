@@ -79,6 +79,7 @@ export const CATEGORIES = [
   { slug: 'ctf-wargame', label: 'ctf&wargame', name: 'CTF / Wargame', ko: 'CTF · 워게임' },
   { slug: 'bug-bounty', label: 'bug-bounty', name: 'Bug Bounty', ko: '버그바운티' },
   { slug: 'blog-docs', label: 'blog&docs', name: 'Blog / Tech Docs', ko: '기술 문서' },
+  { slug: 'study', label: 'study', name: 'Study Notes', ko: '개인 공부' },
   { slug: 'paper-conf', label: 'paper&conf', name: 'Papers / Conferences', ko: '논문 · 컨퍼런스' },
   { slug: 'contest-cert', label: 'contest&cert', name: 'Contests / Certifications', ko: '공모전 · 자격증' },
   { slug: 'playground', label: 'playground', name: 'Playground', ko: 'Playground', personalOnly: true },

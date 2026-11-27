@@ -4,7 +4,7 @@ import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
 import { createInterface } from 'node:readline';
 import { stdin, stdout } from 'node:process';
 
-const CATEGORIES = ['dev', 'ctf-wargame', 'bug-bounty', 'blog-docs', 'paper-conf', 'contest-cert'];
+const CATEGORIES = ['dev', 'ctf-wargame', 'bug-bounty', 'blog-docs', 'study', 'paper-conf', 'contest-cert'];
 
 const rl = createInterface({ input: stdin });
 const lines = rl[Symbol.asyncIterator]();
