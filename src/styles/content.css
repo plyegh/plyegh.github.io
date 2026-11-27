@@ -77,7 +77,7 @@
 @media (max-width: 600px) { .proof-dlg { padding: 64px 12px 72px; } .pd-prev, .pd-next { top: auto; bottom: 16px; translate: none; } }
 
 /* ===== Document viewer (post `docs:`) ===== */
-.docs { display: grid; gap: 14px; margin: 0 0 36px; }
+.docs { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; margin: 0 0 36px; }
 .docs .doc-viewer { margin: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-2); overflow: hidden; }
 .docs .doc-bar { display: flex; align-items: center; gap: 10px; padding: 10px 12px 10px 16px; border-bottom: 1px solid var(--line); min-width: 0; text-align: left; font-style: normal; font-size: 1rem; color: var(--ink-2); margin: 0; }
 .doc-name { font-weight: 600; color: var(--ink); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -106,7 +106,7 @@
 .docs .doc-stage:fullscreen .doc-page { max-width: none; width: auto; max-height: calc(100vh - 90px); }
 .doc-fallback { padding: 18px 16px; color: var(--ink-2); }
 .docs .doc-files { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; }
-.docs .doc-files li { margin: 0; padding: 0; }
+.docs .doc-files li { margin: 0; padding: 0; min-width: 0; max-width: 100%; }
 .docs .doc-files li::before, .docs .doc-files li::marker { content: none; }
 .docs .doc-file { display: inline-flex; align-items: center; gap: 9px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg-2); color: var(--ink); text-decoration: none; transition: border-color .15s; max-width: 100%; }
 .doc-file svg { width: 16px; height: 16px; flex: none; fill: none; stroke: var(--ink-3); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
