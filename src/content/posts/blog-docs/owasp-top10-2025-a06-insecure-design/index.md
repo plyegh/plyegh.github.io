@@ -3,6 +3,7 @@ title: "OWASP Top 10:2025 동향 분석 - A06 Insecure Design, 코드보다 먼�
 date: 2026-11-27T18:45:00+09:00
 tags: [OWASP, Top10, Insecure Design, Threat Modeling, Secure by Design]
 description: "OWASP Top 10:2025 A06 Insecure Design 정리. 2021년판과 수치 비교, 위협 모델링(STRIDE) 직접 적용"
+cover: ./shift-left.webp
 ---
 
 ## 들어가며
@@ -81,12 +82,8 @@ OWASP 정의: 보안 통제가 설계에 없거나, 있어도 효과가 없는 �
 
 OWASP의 메시지는 그대로다. Shift-Left를 코드에서 멈추지 말고 요구사항·설계까지 당기라는 것.
 
-```text
-[요구사항] → [설계] → [구현] → [테스트] → [운영]
-     ^          ^         ^
-     |          |         └ 기존 Shift-Left (시큐어 코딩, 코드 리뷰)
-     └──────────┴── A06의 출발점
-```
+![요구사항, 설계, 구현, 테스트, 운영 순서에서 기존 Shift-Left는 구현 단계, A06은 요구사항과 설계 단계부터 시작한다](./shift-left.webp)
+_기존 Shift-Left는 구현 단계, A06은 요구사항·설계 단계부터_
 
 ---
 
@@ -132,11 +129,8 @@ OWASP가 A06 대책으로 가장 먼저 꼽는 것이 위협 모델링이다. Th
 
 **1. 무엇을 만드나**
 
-```text
-[사용자] --예매 요청--> [예매 서버] --좌석 확보--> [좌석 DB]
-                            |
-                            +--보증금 결제--> [결제 시스템]
-```
+![사용자가 예매 서버에 예매를 요청하고, 예매 서버가 좌석 DB에 좌석을 확보하고 결제 시스템에 보증금을 결제한다](./cinema-booking.webp)
+_영화관 단체 예매 시스템 구성_
 
 **2. 무엇이 잘못될 수 있나**
 
