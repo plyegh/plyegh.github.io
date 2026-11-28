@@ -1,5 +1,5 @@
 ---
-title: "OWASP Korea Day 2026 후기 - KUCIS 운영진으로 보낸 하루"
+title: "OWASP Korea Day 2026 참여 후기 및 KUCIS 부스 운영진으로 보낸 하루"
 date: 2026-11-28T23:00:00+09:00
 tags: [OWASP, KUCIS, AI Security, Agent Security, Guardrail, Conference]
 description: "KUCIS 운영진으로 부스와 커뮤니티 세션을 운영하고, 녹음과 슬라이드로 리젠시홀 메인 세션 일곱 개를 자세히 정리했다"
