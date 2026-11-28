@@ -45,6 +45,7 @@ Posts go to `/public/`, except categories marked `personalOnly` in `src/data/sit
 
 Video file: put it under `public/assets/video/<name>/` and use a `<video>` tag in the post
 (`<video controls playsinline preload="metadata" poster="/assets/video/<name>/poster.jpg"><source src="/assets/video/<name>/clip.mp4" type="video/mp4"></video>`).
+Put two images on consecutive lines (no blank line between) to show them side by side.
 Add `class="narrow"` to the `<video>` tag for a portrait clip so it does not fill the column.
 A YouTube link alone on a line becomes an embedded player.
 
