@@ -411,3 +411,11 @@ _합격은 끝이 아닌 새로운 시작: 끊임없는 학습과 버그바운�
 
 ![간식 테이블](./07-snack.webp)
 _쉬는 시간마다 보충했던 간식 테이블_
+
+클로징 엔딩 크레딧에 KUCIS 운영진으로 내 이름도 올라갔다.
+
+<video class="narrow" controls playsinline preload="metadata" poster="/assets/video/owasp-korea-day-2026/closing-credits-poster.jpg">
+  <source src="/assets/video/owasp-korea-day-2026/closing-credits.mp4" type="video/mp4">
+</video>
+
+_클로징 엔딩 크레딧. KUCIS 「대학생과 현직자가 익명으로 나눈 진로 이야기」 운영진 명단_
